@@ -30,3 +30,6 @@ func _physics_process(delta):
 	else:
 		movement = 0
 	move_and_slide()
+
+func player():
+	pass

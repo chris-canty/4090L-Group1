@@ -37,3 +37,15 @@ func _process(delta):
 			anim.play("move_down")
 		else:
 			anim.play("idle_down")
+
+func enable_bars():
+	$HP_Bar.visible = true
+	$HP_Text.visible = true
+	$MP_Bar.visible = true
+	$MP_Text.visible = true
+	
+func disable_bars():
+	$HP_Bar.visible = false
+	$HP_Text.visible = false
+	$MP_Bar.visible = false
+	$MP_Text.visible = false
