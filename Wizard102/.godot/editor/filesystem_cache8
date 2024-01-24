@@ -1,7 +1,8 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1705989057
+::res://::1706060160
+fire.gd::GDScript::-1::1706060131::0::1::::<>AnimatedSprite2D<>::
 icon.svg::CompressedTexture2D::6343777367713966123::1705943565::1705943565::1::::<><>::
-::res://Assets/::1705961816
+::res://Assets/::1706059183
 ::res://Assets/Card/::1705961832
 Ember.png::CompressedTexture2D::8376230718826754009::1705961832::1705961832::1::::<><>::
 Pass.png::CompressedTexture2D::1753603121130057491::1705961832::1705961832::1::::<><>::
@@ -9,24 +10,29 @@ Quake.png::CompressedTexture2D::4604893343681896958::1705961832::1705961832::1::
 ::res://Assets/Character Sprites/::1705956711
 player.png::CompressedTexture2D::4259380970563637784::1705948522::1705948522::1::::<><>::
 slime.png::CompressedTexture2D::3281418392216268651::1705956707::1705956711::1::::<><>::
+::res://Assets/Effects/::1706059184
+04.png::CompressedTexture2D::5306345755109906563::1706059179::1706059184::1::::<><>::
+26.png::CompressedTexture2D::8844861207192551726::1706059179::1706059184::1::::<><>::
 ::res://Assets/Tilesets/::1705955158
 dungeon_tiles_2.png::CompressedTexture2D::2697769506526582178::1705948132::1705948133::1::::<><>::
 ::res://Scenes/::1705980517
-::res://Scenes/Cards/::1705989367
-ember_card.tscn::PackedScene::4086700453916451899::1705989367::0::1::::<><>::uid://drlrkcmesam5n::::res://Assets/Card/Ember.png<>res://Scripts/card.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
-::res://Scenes/Characters/::1705989367
-player.tscn::PackedScene::3533054757929886243::1705989367::0::1::::<><>::res://Scripts/player.gd<>uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
-slime.tscn::PackedScene::2119252492763441584::1705989367::0::1::::<><>::res://Scripts/slime.gd<>uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
+::res://Scenes/Cards/::1706057813
+ember_card.tscn::PackedScene::4086700453916451899::1706057813::0::1::::<><>::uid://drlrkcmesam5n::::res://Assets/Card/Ember.png<>res://Scripts/card.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
+::res://Scenes/Characters/::1706057813
+player.tscn::PackedScene::3533054757929886243::1706057812::0::1::::<><>::res://Scripts/player.gd<>uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
+slime.tscn::PackedScene::2119252492763441584::1706057813::0::1::::<><>::res://Scripts/slime.gd<>uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
 ::res://Scenes/Effects/::1705980517
-::res://Scenes/Rooms/::1705989367
-room.tscn::PackedScene::4888644054509191608::1705989367::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav
-::res://Scenes/UI/::1705958099
-::res://Scripts/::1705989348
+::res://Scenes/Rooms/::1706059824
+room.tscn::PackedScene::4888644054509191608::1706059824::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav
+::res://Scenes/UI/::1706057813
+target.tscn::PackedScene::5534563366495192607::1706057813::0::1::::<><>::res://Scripts/target.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
+::res://Scripts/::1706057739
 card.gd::GDScript::-1::1705989298::0::1::::<>Button<>::
-character.gd::GDScript::-1::1705963005::0::1::::<>CharacterBody2D<>::
+character.gd::GDScript::-1::1706057578::0::1::::<>CharacterBody2D<>::
 player.gd::GDScript::-1::1705985503::0::1::::<>CharacterBody2D<>::
-room.gd::GDScript::-1::1705989348::0::1::::<>Node2D<>::
+room.gd::GDScript::-1::1706057739::0::1::::<>Node2D<>::
 slime.gd::GDScript::-1::1705960739::0::1::::<>CharacterBody2D<>::
+target.gd::GDScript::-1::1706057597::0::1::::<>Button<>::
 ::res://Sounds/::1705958173
 ::res://Sounds/Music/::1705983731
 Impatience.mp3::AudioStreamMP3::7598846505200118860::1705958197::1705983731::1::::<><>::

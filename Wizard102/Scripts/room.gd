@@ -38,7 +38,7 @@ func _process(delta):
 	$Camera2D.zoom.y = lerp($Camera2D.zoom.y, cam_zoom, cam_speed * delta)
 	$Camera2D.position.x = lerp($Camera2D.position.x,cam_pos.x,cam_speed * delta)
 	$Camera2D.position.y = lerp($Camera2D.position.y,cam_pos.y,cam_speed * delta)
-	for i in range(len(hand)):
+	for i in range(len(hand_ui)):
 		hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos[i].x,card_speed * delta)
 		hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos[i].y,card_speed * delta)
 
@@ -95,7 +95,8 @@ func next_turn():
 		combatants[curr_turn].MP += 1
 		if combatants[curr_turn].MP > combatants[curr_turn].MaxMP:
 			combatants[curr_turn].MP = combatants[curr_turn].MaxMP
-	
+		await get_tree().create_timer(2.0).timeout
+		next_turn()
 	
 func find_turn():
 	'''
@@ -174,7 +175,32 @@ func select_card(button: Button):
 			var instance = scene.instantiate()
 			combatants[i].add_child(instance)
 			await instance._ready()
-			instance.position = combatants[i].position - Vector2(6,5)
+			#instance.position 
 			possible_targets.push_back([i,instance])
 	cam_zoom = 4.5
 	cam_pos = Vector2(0,-100)
+
+func select_target(target_button):
+	$Select.play()
+	var counter = 0
+	for t in possible_targets:
+		if t[1] == target_button:
+			break
+		counter += 1
+	target = possible_targets[counter][0] 
+	execute_action()
+	
+func execute_action():
+	for t in possible_targets:
+		t[1].queue_free()
+	#hand.pop_at(card_select)
+	for card in hand_ui:
+		card.queue_free()
+	hand_ui.clear()
+	possible_targets.clear()
+	#$Camera2D/CText.text = ""
+	#pass_ui.visible = false
+	target = -1
+	card_select = -1
+	action_id = 0
+	next_turn()

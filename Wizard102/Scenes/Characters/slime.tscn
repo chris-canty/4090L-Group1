@@ -297,6 +297,7 @@ animations = [{
 
 [node name="Slime" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_capbs")
+MaxMP = 6
 SPD = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
