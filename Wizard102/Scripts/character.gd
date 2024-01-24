@@ -13,6 +13,7 @@ var movement = 0
 var combat_spot = Vector2(0,0)
 var in_combat = false
 var in_position = false
+var is_dead = false
 
 func _ready():
 	HP = MaxHP
@@ -71,3 +72,7 @@ func disable_bars():
 func move_character(spot: Vector2):
 	combat_spot = spot
 	in_position = false
+	
+func death():
+	$AnimatedSprite2D.play("death")
+	is_dead = true

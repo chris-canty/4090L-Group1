@@ -38,15 +38,21 @@ func _process(delta):
 	$Camera2D.zoom.y = lerp($Camera2D.zoom.y, cam_zoom, cam_speed * delta)
 	$Camera2D.position.x = lerp($Camera2D.position.x,cam_pos.x,cam_speed * delta)
 	$Camera2D.position.y = lerp($Camera2D.position.y,cam_pos.y,cam_speed * delta)
+	$BGM.volume_db = lerp($BGM.volume_db,bgm_volume,5 * delta)
 	for i in range(len(hand_ui)):
 		hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos[i].x,card_speed * delta)
 		hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos[i].y,card_speed * delta)
 
 func initiate_combat():
 	_state = States.COMBAT
+	$Camera2D.limit_left = -100000
+	$Camera2D.limit_right = 100000
+	$Camera2D.limit_top = -10000
+	$Camera2D.limit_bottom = 10000
 	$BGM.play()
 	deck = $Player.deck
 	deck.shuffle()
+	$Player.direction = "right"
 	$Player.move_character(player_spot)
 	$Player/AnimatedSprite2D.play("idle_side")
 	$Player/AnimatedSprite2D.flip_h = false
@@ -65,6 +71,10 @@ func initiate_combat():
 	
 	print(combatants)
 	print(initiative)
+	var scene = load("res://Scenes/UI/pass_card.tscn")
+	pass_ui = scene.instantiate()
+	pass_ui.visible = false
+	$Player.add_child(pass_ui)
 	cam_pos = Vector2(0,-100)
 	cam_zoom = 4.5
 	await get_tree().create_timer(2.0).timeout
@@ -81,6 +91,10 @@ func next_turn():
 		bgm_volume = -45.0
 		pass_ui.queue_free()
 		pass_ui = null
+		$Camera2D.limit_left = -223
+		$Camera2D.limit_right = 223
+		$Camera2D.limit_top = -219
+		$Camera2D.limit_bottom = 11
 		await get_tree().create_timer(3.0).timeout
 		$BGM.stop()
 		return
@@ -95,7 +109,13 @@ func next_turn():
 		combatants[curr_turn].MP += 1
 		if combatants[curr_turn].MP > combatants[curr_turn].MaxMP:
 			combatants[curr_turn].MP = combatants[curr_turn].MaxMP
+		for c in combatants:
+			c.disable_bars()
+		$Camera2D/CText.text = "Pass"
 		await get_tree().create_timer(2.0).timeout
+		$Camera2D/CText.text = ""
+		for c in combatants:
+			c.enable_bars()
 		next_turn()
 	
 func find_turn():
@@ -139,9 +159,17 @@ func player_turn():
 					instance.modulate = Color("3b3b3b")
 				instance.get_node("Card").scale = Vector2(0,0)
 				hand_ui.push_back(instance)
+	pass_ui.position = pass_pos
+	pass_ui.get_node("Card").scale = Vector2(0,0)
+	pass_ui.visible = true
+
+func select_pass():
+	$Select.play()
+	execute_action()
 
 func select_card(button: Button):
 	$Select.play()
+	pass_ui.visible = false
 	var target_type = -1
 	var counter = 0 
 	for card in hand_ui:
@@ -157,6 +185,7 @@ func select_card(button: Button):
 				return
 			action_id = 1
 			target_type = 1
+			$Camera2D/CText.text = "Select Target"
 	for card in hand_ui:
 		card.visible = false
 	
@@ -193,7 +222,41 @@ func select_target(target_button):
 func execute_action():
 	for t in possible_targets:
 		t[1].queue_free()
-	#hand.pop_at(card_select)
+	match action_id:
+		0:
+			for card in hand_ui:
+				card.queue_free()
+			hand_ui.clear()
+			possible_targets.clear()
+			$Camera2D/CText.text = ""
+			pass_ui.visible = false
+			next_turn()
+			return
+		1:
+			for c in combatants:
+				await c.disable_bars()
+			$Camera2D/CText.text = "Ember"
+			combatants[curr_turn].MP -= 1
+			cam_zoom = 6
+			cam_pos = combatants[target].position
+			await get_tree().create_timer(1.0).timeout
+			var scene = load("res://Scenes/Effects/fire.tscn")
+			var instance = scene.instantiate()
+			combatants[target].add_child(instance)
+			await instance._ready()
+			
+			#Damage Calculations
+			combatants[target].HP -= 8
+			if combatants[target].HP <= 0:
+				combatants[target].HP = 0
+				await combatants[target].death()
+				combatants.pop_at(target)
+				initiative.pop_at(target)
+				print(combatants)
+			await get_tree().create_timer(1.0).timeout
+			for c in combatants:
+				await c.enable_bars()
+	hand.pop_at(card_select)
 	for card in hand_ui:
 		card.queue_free()
 	hand_ui.clear()
@@ -203,4 +266,5 @@ func execute_action():
 	target = -1
 	card_select = -1
 	action_id = 0
+	$Camera2D/CText.text = ""
 	next_turn()

@@ -34,3 +34,8 @@ func _physics_process(delta):
 
 func player():
 	pass
+
+
+func _on_animated_sprite_2d_animation_finished():
+	if is_dead == true:
+		queue_free()

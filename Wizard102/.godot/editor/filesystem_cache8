@@ -1,6 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1706060160
-fire.gd::GDScript::-1::1706060131::0::1::::<>AnimatedSprite2D<>::
+::res://::1706114781
 icon.svg::CompressedTexture2D::6343777367713966123::1705943565::1705943565::1::::<><>::
 ::res://Assets/::1706059183
 ::res://Assets/Card/::1705961832
@@ -21,16 +20,20 @@ ember_card.tscn::PackedScene::4086700453916451899::1706057813::0::1::::<><>::uid
 ::res://Scenes/Characters/::1706057813
 player.tscn::PackedScene::3533054757929886243::1706057812::0::1::::<><>::res://Scripts/player.gd<>uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
 slime.tscn::PackedScene::2119252492763441584::1706057813::0::1::::<><>::res://Scripts/slime.gd<>uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
-::res://Scenes/Effects/::1705980517
-::res://Scenes/Rooms/::1706059824
-room.tscn::PackedScene::4888644054509191608::1706059824::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav
-::res://Scenes/UI/::1706057813
+::res://Scenes/Effects/::1706112953
+fire.tscn::PackedScene::6642546796834150863::1706112953::0::1::::<><>::uid://chuo0ewhysdtb::::res://Assets/Effects/04.png<>res://Scripts/fire.gd<>uid://bwbe7jo0b5vj6::::res://Sounds/Sound_Effects/fire.wav
+::res://Scenes/Rooms/::1706114739
+room.tscn::PackedScene::4888644054509191608::1706114739::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav
+::res://Scenes/UI/::1706113733
+pass_card.tscn::PackedScene::7949228046041054368::1706113733::0::1::::<><>::res://Scripts/pass_card.gd<>uid://y8pt72laxafr::::res://Assets/Card/Pass.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 target.tscn::PackedScene::5534563366495192607::1706057813::0::1::::<><>::res://Scripts/target.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
-::res://Scripts/::1706057739
+::res://Scripts/::1706114736
 card.gd::GDScript::-1::1705989298::0::1::::<>Button<>::
 character.gd::GDScript::-1::1706057578::0::1::::<>CharacterBody2D<>::
+fire.gd::GDScript::-1::1706113503::0::1::::<>AnimatedSprite2D<>::
+pass_card.gd::GDScript::-1::1706113733::0::1::::<>Button<>::
 player.gd::GDScript::-1::1705985503::0::1::::<>CharacterBody2D<>::
-room.gd::GDScript::-1::1706057739::0::1::::<>Node2D<>::
+room.gd::GDScript::-1::1706114736::0::1::::<>Node2D<>::
 slime.gd::GDScript::-1::1705960739::0::1::::<>CharacterBody2D<>::
 target.gd::GDScript::-1::1706057597::0::1::::<>Button<>::
 ::res://Sounds/::1705958173
