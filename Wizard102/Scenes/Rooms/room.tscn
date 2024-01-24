@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=9 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="2_wnatw"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
 [ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
 [ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_8adgd"]
+[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jhvmj"]
 texture = ExtResource("2_wnatw")
@@ -655,12 +656,13 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 position = Vector2(-1, -17)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(2, 155)
-offset = Vector2(0, -200)
-zoom = Vector2(3.5, 3.5)
+position = Vector2(0, -100)
+zoom = Vector2(5, 5)
 process_callback = 0
 limit_left = -223
+limit_top = -219
 limit_right = 223
+limit_bottom = 11
 position_smoothing_enabled = true
 position_smoothing_speed = 23.395
 
@@ -673,6 +675,10 @@ polygon = PackedVector2Array(-214, 12, 220, 13, 219, -192, -220, -191, -220, 12,
 [node name="Slime" parent="." instance=ExtResource("4_hqk4e")]
 position = Vector2(0, -80)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="BGM" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_8adgd")
 volume_db = -22.0
+
+[node name="Select" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -100)
+stream = ExtResource("6_tnkya")

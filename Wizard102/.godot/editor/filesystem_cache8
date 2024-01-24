@@ -1,30 +1,38 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1705958200
+::res://::1705989057
 icon.svg::CompressedTexture2D::6343777367713966123::1705943565::1705943565::1::::<><>::
-::res://Assets/::1705948503
+::res://Assets/::1705961816
+::res://Assets/Card/::1705961832
+Ember.png::CompressedTexture2D::8376230718826754009::1705961832::1705961832::1::::<><>::
+Pass.png::CompressedTexture2D::1753603121130057491::1705961832::1705961832::1::::<><>::
+Quake.png::CompressedTexture2D::4604893343681896958::1705961832::1705961832::1::::<><>::
 ::res://Assets/Character Sprites/::1705956711
 player.png::CompressedTexture2D::4259380970563637784::1705948522::1705948522::1::::<><>::
 slime.png::CompressedTexture2D::3281418392216268651::1705956707::1705956711::1::::<><>::
 ::res://Assets/Tilesets/::1705955158
 dungeon_tiles_2.png::CompressedTexture2D::2697769506526582178::1705948132::1705948133::1::::<><>::
-::res://Scenes/::1705958099
-::res://Scenes/Cards/::1705958087
-::res://Scenes/Characters/::1705958070
-player.tscn::PackedScene::3533054757929886243::1705957640::0::1::::<><>::res://Scripts/player.gd<>uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
-slime.tscn::PackedScene::2119252492763441584::1705957640::0::1::::<><>::res://Scripts/slime.gd<>uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
-::res://Scenes/Rooms/::1705958186
-room.tscn::PackedScene::4888644054509191608::1705958186::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn
+::res://Scenes/::1705980517
+::res://Scenes/Cards/::1705989367
+ember_card.tscn::PackedScene::4086700453916451899::1705989367::0::1::::<><>::uid://drlrkcmesam5n::::res://Assets/Card/Ember.png<>res://Scripts/card.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
+::res://Scenes/Characters/::1705989367
+player.tscn::PackedScene::3533054757929886243::1705989367::0::1::::<><>::res://Scripts/player.gd<>uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
+slime.tscn::PackedScene::2119252492763441584::1705989367::0::1::::<><>::res://Scripts/slime.gd<>uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
+::res://Scenes/Effects/::1705980517
+::res://Scenes/Rooms/::1705989367
+room.tscn::PackedScene::4888644054509191608::1705989367::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav
 ::res://Scenes/UI/::1705958099
-::res://Scripts/::1705958186
-character.gd::GDScript::-1::1705956555::0::1::::<>CharacterBody2D<>::
-player.gd::GDScript::-1::1705957600::0::1::::<>CharacterBody2D<>::
-room.gd::GDScript::-1::1705958186::0::1::::<>Node2D<>::
-slime.gd::GDScript::-1::1705957628::0::1::::<>CharacterBody2D<>::
+::res://Scripts/::1705989348
+card.gd::GDScript::-1::1705989298::0::1::::<>Button<>::
+character.gd::GDScript::-1::1705963005::0::1::::<>CharacterBody2D<>::
+player.gd::GDScript::-1::1705985503::0::1::::<>CharacterBody2D<>::
+room.gd::GDScript::-1::1705989348::0::1::::<>Node2D<>::
+slime.gd::GDScript::-1::1705960739::0::1::::<>CharacterBody2D<>::
 ::res://Sounds/::1705958173
-::res://Sounds/Music/::1705958200
-Impatience.mp3::AudioStreamMP3::7598846505200118860::1705958197::1705958200::1::::<><>::
-::res://Sounds/Sound_Effects/::1705958220
+::res://Sounds/Music/::1705983731
+Impatience.mp3::AudioStreamMP3::7598846505200118860::1705958197::1705983731::1::::<><>::
+::res://Sounds/Sound_Effects/::1705989437
+cancel.wav::AudioStreamWAV::1475004397088406333::1705958220::1705989057::1::::<><>::
 fire.wav::AudioStreamWAV::3932940130335734597::1705958220::1705958220::1::::<><>::
 flipcard.wav::AudioStreamWAV::5619499286540505445::1705958220::1705958220::1::::<><>::
 hitHurt.wav::AudioStreamWAV::5927518563018923575::1705958220::1705958220::1::::<><>::
-select.wav::AudioStreamWAV::1475004397088406333::1705958220::1705958220::1::::<><>::
+select.wav::AudioStreamWAV::2011324395981451108::1705989437::1705989437::1::::<><>::

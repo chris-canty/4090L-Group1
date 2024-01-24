@@ -323,6 +323,7 @@ height = 22.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_do6rg")
+MaxHP = 15
 MaxMP = 2
 SPD = 5
 
