@@ -4,7 +4,7 @@ extends "res://Scripts/character.gd"
 
 
 
-@export var deck: Array = [1,1]
+@export var deck: Array = [1,1,1,1,1,2,2]
 func _physics_process(delta):
 	if in_combat == false:
 		if Input.is_action_pressed('move_left'):
@@ -30,6 +30,14 @@ func _physics_process(delta):
 			movement = 1
 		else:
 			movement = 0
+		move_and_slide()
+	else:
+		velocity.y = 0
+		if velocity.x > 0:
+			velocity.x -= 100
+		elif velocity.x <= 0:
+			velocity.x = 0
+			in_position = false
 		move_and_slide()
 
 func player():

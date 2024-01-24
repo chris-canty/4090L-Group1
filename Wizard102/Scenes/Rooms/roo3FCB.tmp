@@ -684,6 +684,7 @@ polygon = PackedVector2Array(-214, 12, 220, 13, 219, -192, -220, -191, -220, 12,
 
 [node name="Slime" parent="." instance=ExtResource("4_hqk4e")]
 position = Vector2(0, -80)
+move_speed = 100.0
 
 [node name="BGM" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_8adgd")

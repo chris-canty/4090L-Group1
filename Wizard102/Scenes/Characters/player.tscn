@@ -323,11 +323,12 @@ height = 22.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_do6rg")
-MaxHP = 15
+MaxHP = 100
 MaxMP = 2
 SPD = 5
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
+position = Vector2(0, -10)
 sprite_frames = SubResource("SpriteFrames_d3t3p")
 animation = &"idle_up"
 autoplay = "idle_up"
@@ -348,9 +349,9 @@ shape = SubResource("CapsuleShape2D_fynqf")
 visible = false
 modulate = Color(0.878431, 0.152941, 0.156863, 1)
 offset_left = -27.0
-offset_top = -30.0
+offset_top = -41.0
 offset_right = 27.0
-offset_bottom = -18.0
+offset_bottom = -29.0
 max_value = 10.0
 value = 4.79
 show_percentage = false
@@ -358,9 +359,9 @@ show_percentage = false
 [node name="HP_Text" type="Label" parent="."]
 visible = false
 offset_left = -20.0
-offset_top = -37.0
+offset_top = -48.0
 offset_right = 20.0
-offset_bottom = -14.0
+offset_bottom = -25.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "10
@@ -371,9 +372,9 @@ horizontal_alignment = 1
 visible = false
 modulate = Color(0, 1, 1, 1)
 offset_left = -26.0
-offset_top = -16.0
+offset_top = -27.0
 offset_right = 26.0
-offset_bottom = -5.0
+offset_bottom = -16.0
 max_value = 1.0
 value = 1.0
 show_percentage = false
@@ -381,8 +382,9 @@ show_percentage = false
 [node name="MP_Text" type="Label" parent="."]
 visible = false
 offset_left = -20.0
-offset_top = -23.0
+offset_top = -34.0
 offset_right = 20.0
+offset_bottom = -11.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "1"

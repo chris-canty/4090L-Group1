@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://c1vx1mgwacic2"]
 
 [ext_resource type="Texture2D" uid="uid://chuo0ewhysdtb" path="res://Assets/Effects/04.png" id="1_moq6g"]
-[ext_resource type="Script" path="res://Scripts/fire.gd" id="2_5l2eb"]
+[ext_resource type="Script" path="res://Scripts/effect.gd" id="2_5l2eb"]
 [ext_resource type="AudioStream" uid="uid://bwbe7jo0b5vj6" path="res://Sounds/Sound_Effects/fire.wav" id="3_mc3x8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bckqh"]
@@ -102,6 +102,9 @@ autoplay = "default"
 frame = 11
 frame_progress = 1.0
 script = ExtResource("2_5l2eb")
+anim_time = 1.0
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_mc3x8")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

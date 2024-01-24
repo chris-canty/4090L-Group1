@@ -5,11 +5,14 @@ var cam_speed: float = 10
 var bgm_volume: float = -22.0
 enum States {COMBAT,EXPLORE}
 var _state : int = States.EXPLORE
-var player_spot: Vector2 = Vector2(-80,-109)
-var card_pos = [Vector2(-60,-75),Vector2(-40,-75),Vector2(-20,-75),Vector2(0,-75),Vector2(20,-75),Vector2(40,-75),Vector2(60,-75)]
-var pass_pos = Vector2(-60,0)
+var player_spot: Vector2 = Vector2(-80,-99)
+var card_pos = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
+var pass_pos = Vector2(-60,-10)
 
 #Variables for Combat
+enum Combat {Idle,P_Select,P_Target,P_Action,Enemy}
+var _cState: int = Combat.Idle
+var rng = RandomNumberGenerator.new()
 var combatants: Array = []
 var initiative: Array = []
 var possible_targets: Array = []
@@ -33,6 +36,22 @@ func _process(delta):
 	if _state == States.EXPLORE:
 		cam_zoom = 5
 		cam_pos = $Player.position
+	if _state == States.COMBAT:
+		if Input.is_action_pressed("ui_cancel") and _cState == Combat.P_Target:
+			$cancel.play()
+			for card in hand_ui:
+				card.queue_free()
+			for t in possible_targets:
+				t[1].queue_free()
+			hand_ui.clear()
+			possible_targets.clear()
+			#$Camera2D/CText.text = ""
+			#pass_ui.visible = false
+			target = -1
+			card_select = -1
+			action_id = 0
+			$Camera2D/CText.text = ""
+			player_turn()
 	var card_speed = 20
 	$Camera2D.zoom.x = lerp($Camera2D.zoom.x, cam_zoom, cam_speed * delta)
 	$Camera2D.zoom.y = lerp($Camera2D.zoom.y, cam_zoom, cam_speed * delta)
@@ -84,7 +103,13 @@ func next_turn():
 	'''
 	Switches the turn to the next combatant
 	'''
-	if combatants.size() == 1:
+	_cState = Combat.Idle
+	$Camera2D/CText.text = ""
+	if $Player == null:
+		$Camera2D/CText.text = "Game Over"
+		await get_tree().create_timer(3.0).timeout
+		queue_free()
+	elif combatants.size() == 1:
 		$Player.in_combat = false
 		_state = States.EXPLORE
 		$Player.disable_bars()
@@ -100,23 +125,30 @@ func next_turn():
 		return
 	curr_turn = find_turn()
 	print(curr_turn)
-	cam_pos = combatants[curr_turn].position - Vector2(0,20)
-	cam_zoom = 6
 	#Player
 	if curr_turn == 0:
 		player_turn()
 	else:
+		cam_pos = combatants[curr_turn].position - Vector2(0,20)
+		cam_zoom = 6
+		_cState = Combat.Enemy
 		combatants[curr_turn].MP += 1
 		if combatants[curr_turn].MP > combatants[curr_turn].MaxMP:
 			combatants[curr_turn].MP = combatants[curr_turn].MaxMP
-		for c in combatants:
-			c.disable_bars()
-		$Camera2D/CText.text = "Pass"
-		await get_tree().create_timer(2.0).timeout
-		$Camera2D/CText.text = ""
-		for c in combatants:
-			c.enable_bars()
-		next_turn()
+		#$Camera2D/CText.text = "Pass"
+		await get_tree().create_timer(0.5).timeout
+		var result: Array = combatants[curr_turn].enemy_ai(combatants) 
+		print(result)
+		if result[0] == 0:
+			$Camera2D/CText.text = "Pass"
+			await get_tree().create_timer(1.0).timeout
+			select_pass()
+		else:
+			for i in range(0,len(combatants)):
+				if combatants[i] == result[1]:
+					target = i
+			action_id = result[0]
+			execute_action()
 	
 func find_turn():
 	'''
@@ -142,33 +174,48 @@ func find_turn():
 
 func player_turn():
 	print("Player Turn")
-	$Player.MP += 1
+	var scene
+	var instance
+	cam_pos = combatants[curr_turn].position - Vector2(0,20)
+	cam_zoom = 6
+	if _cState == Combat.Idle:
+		$Player.MP += 1
+	_cState = Combat.P_Select
 	if $Player.MP > $Player.MaxMP:
 		$Player.MP = $Player.MaxMP
 	while hand.size() < 7 and deck.size() >= 1:
 		hand.push_back(deck.pop_front())
 	for card: int in hand:
+		var mp_cost
+
 		match card:
 			1:
-				var scene = load("res://Scenes/Cards/ember_card.tscn")
-				var instance = scene.instantiate()
-				$Player.add_child(instance)
-				await instance._ready()
-				instance.position = Vector2(0,0)
-				if $Player.MP < 1:
-					instance.modulate = Color("3b3b3b")
-				instance.get_node("Card").scale = Vector2(0,0)
-				hand_ui.push_back(instance)
+				scene = load("res://Scenes/Cards/ember_card.tscn")
+				mp_cost = 1
+			2:
+				scene = load("res://Scenes/Cards/bolt_card.tscn")
+				mp_cost = 1
+		instance = scene.instantiate()
+		$Player.add_child(instance)
+		await instance._ready()
+		instance.position = Vector2(0,0)
+		if $Player.MP < mp_cost:
+			instance.modulate = Color("3b3b3b")
+		instance.get_node("Card").scale = Vector2(0,0)
+		hand_ui.push_back(instance)
+			
 	pass_ui.position = pass_pos
 	pass_ui.get_node("Card").scale = Vector2(0,0)
 	pass_ui.visible = true
 
 func select_pass():
-	$Select.play()
+	if _cState != Combat.Enemy:
+		$Select.play()
 	execute_action()
 
 func select_card(button: Button):
 	$Select.play()
+	_cState = Combat.P_Target
 	pass_ui.visible = false
 	var target_type = -1
 	var counter = 0 
@@ -184,6 +231,13 @@ func select_card(button: Button):
 			if $Player.MP < 1:
 				return
 			action_id = 1
+			target_type = 1
+			$Camera2D/CText.text = "Select Target"
+		2:
+			print("Single Target")
+			if $Player.MP < 1:
+				return
+			action_id = 2
 			target_type = 1
 			$Camera2D/CText.text = "Select Target"
 	for card in hand_ui:
@@ -211,6 +265,7 @@ func select_card(button: Button):
 
 func select_target(target_button):
 	$Select.play()
+	_cState = Combat.P_Action
 	var counter = 0
 	for t in possible_targets:
 		if t[1] == target_button:
@@ -220,6 +275,13 @@ func select_target(target_button):
 	execute_action()
 	
 func execute_action():
+	var scene
+	var instance
+	var text
+	var text_instance
+	var damage
+	var accuracy
+	var mp_cost
 	for t in possible_targets:
 		t[1].queue_free()
 	match action_id:
@@ -228,25 +290,42 @@ func execute_action():
 				card.queue_free()
 			hand_ui.clear()
 			possible_targets.clear()
-			$Camera2D/CText.text = ""
 			pass_ui.visible = false
+			for c in combatants:
+				await c.enable_bars()
 			next_turn()
 			return
 		1:
+			#Ember I
+			damage = 8
+			accuracy = 80
+			mp_cost = 1
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Ember"
-			combatants[curr_turn].MP -= 1
 			cam_zoom = 6
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
-			var scene = load("res://Scenes/Effects/fire.tscn")
-			var instance = scene.instantiate()
-			combatants[target].add_child(instance)
-			await instance._ready()
-			
+			$Camera2D/CText.text = ""
+			scene = load("res://Scenes/Effects/fire.tscn")
+			instance = scene.instantiate()
+			instance.position = combatants[target].position
+			add_child(instance)
 			#Damage Calculations
-			combatants[target].HP -= 8
+			text = load("res://Scenes/UI/damage.tscn")
+			text_instance = text.instantiate()
+			if rng.randi_range(1,100) <= accuracy:
+				combatants[curr_turn].MP -= mp_cost
+				combatants[target].HP -= damage
+				text_instance.get_node("Text").text = str(damage)
+				text_instance.get_node("Text").modulate = 'ff7819'
+				if _cState == Combat.P_Action:
+					hand.pop_at(card_select)
+			else:
+				text_instance.get_node("Text").text = "MISS"
+				combatants[target].velocity.x = 700
+			await instance._ready()
+			combatants[target].add_child(text_instance)
 			if combatants[target].HP <= 0:
 				combatants[target].HP = 0
 				await combatants[target].death()
@@ -254,9 +333,84 @@ func execute_action():
 				initiative.pop_at(target)
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
+		2:
+			#Bolt I
+			damage = 10
+			accuracy = 80
+			mp_cost = 1
 			for c in combatants:
-				await c.enable_bars()
-	hand.pop_at(card_select)
+				await c.disable_bars()
+			$Camera2D/CText.text = "Bolt"
+			cam_zoom = 6
+			cam_pos = combatants[target].position
+			await get_tree().create_timer(1.0).timeout
+			$Camera2D/CText.text = ""
+			scene = load("res://Scenes/Effects/lightning.tscn")
+			instance = scene.instantiate()
+			instance.position = combatants[target].position - Vector2(0,64)
+			add_child(instance)
+			#Damage Calculations
+			text = load("res://Scenes/UI/damage.tscn")
+			text_instance = text.instantiate()
+			if rng.randi_range(1,100) <= accuracy:
+				combatants[curr_turn].MP -= mp_cost
+				combatants[target].HP -= damage
+				text_instance.get_node("Text").text = str(damage)
+				text_instance.get_node("Text").modulate = 'ffff00'
+				if _cState == Combat.P_Action:
+					hand.pop_at(card_select)
+			else:
+				text_instance.get_node("Text").text = "MISS"
+				combatants[target].velocity.x = 700
+			await instance._ready()
+			combatants[target].add_child(text_instance)
+			if combatants[target].HP <= 0:
+				combatants[target].HP = 0
+				await combatants[target].death()
+				combatants.pop_at(target)
+				initiative.pop_at(target)
+				print(combatants)
+			await get_tree().create_timer(1.0).timeout
+		99:
+			#Ultima
+			damage = 9999
+			accuracy = 100
+			mp_cost = 6
+			for c in combatants:
+				await c.disable_bars()
+			$Camera2D/CText.text = "Ultima"
+			cam_zoom = 6
+			cam_pos = combatants[target].position
+			await get_tree().create_timer(1.0).timeout
+			scene = load("res://Scenes/Effects/ultima.tscn")
+			instance = scene.instantiate()
+			combatants[target].add_child(instance)
+			await instance._ready()
+			$Camera2D/CText.text = ""
+			#Damage Calculations
+			scene = load("res://Scenes/UI/damage.tscn")
+			instance = scene.instantiate()
+			if rng.randi_range(1,100) <= accuracy:
+				combatants[curr_turn].MP -= mp_cost
+				combatants[target].HP -= damage
+				instance.get_node("Text").text = str(damage)
+				instance.get_node("Text").modulate = '00ff7d'
+				if _cState == Combat.P_Action:
+					hand.pop_at(card_select)
+			else:
+				instance.get_node("Text").text = "MISS"
+				combatants[target].velocity.x = 100
+			combatants[target].add_child(instance)
+			if combatants[target].HP <= 0:
+				combatants[target].HP = 0
+				await combatants[target].death()
+				combatants.pop_at(target)
+				initiative.pop_at(target)
+				print(combatants)
+			await get_tree().create_timer(1.0).timeout
+			
+	for c in combatants:
+		await c.enable_bars()
 	for card in hand_ui:
 		card.queue_free()
 	hand_ui.clear()
@@ -266,5 +420,4 @@ func execute_action():
 	target = -1
 	card_select = -1
 	action_id = 0
-	$Camera2D/CText.text = ""
 	next_turn()

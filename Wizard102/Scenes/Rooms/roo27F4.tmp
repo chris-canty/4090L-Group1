@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=9 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="2_wnatw"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
 [ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_8adgd"]
 [ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
-[ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jhvmj"]
 texture = ExtResource("2_wnatw")
@@ -692,6 +691,3 @@ volume_db = -22.0
 [node name="Select" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(0, -100)
 stream = ExtResource("6_tnkya")
-
-[node name="cancel" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("7_iasap")
