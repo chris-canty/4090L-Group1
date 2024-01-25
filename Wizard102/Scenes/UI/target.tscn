@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ck38pkih1kdf0"]
+
+[ext_resource type="Script" path="res://Scripts/target.gd" id="1_8adgj"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="2_fohtn"]
+
+[node name="Target" type="Button"]
+modulate = Color(1, 1, 1, 0.447059)
+offset_left = -7.0
+offset_top = -5.0
+offset_right = 7.0
+offset_bottom = 5.0
+script = ExtResource("1_8adgj")
+
+[node name="hover" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(7, 5)
+stream = ExtResource("2_fohtn")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]
