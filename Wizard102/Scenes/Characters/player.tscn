@@ -334,15 +334,13 @@ animation = &"idle_up"
 autoplay = "idle_up"
 
 [node name="Movement Box" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 13)
+position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_b4l7c")
 
 [node name="HitBox" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(0, 8)
+position = Vector2(0, -3)
 shape = SubResource("CapsuleShape2D_fynqf")
 
 [node name="HP_Bar" type="ProgressBar" parent="."]
