@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bqlo5pnx4653l"]
+[gd_scene load_steps=46 format=3 uid="uid://bqlo5pnx4653l"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_do6rg"]
 [ext_resource type="Texture2D" uid="uid://b1xjm86g8jffc" path="res://Assets/Character Sprites/player.png" id="1_jebjn"]
@@ -14,6 +14,10 @@ region = Rect2(48, 432, 48, 48)
 [sub_resource type="AtlasTexture" id="AtlasTexture_y7u7o"]
 atlas = ExtResource("1_jebjn")
 region = Rect2(96, 432, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ou8ew"]
+atlas = ExtResource("1_jebjn")
+region = Rect2(0, 432, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yrpkl"]
 atlas = ExtResource("1_jebjn")
@@ -177,6 +181,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_ou8ew")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_yrpkl")
 }, {
 "duration": 1.0,
@@ -315,23 +327,25 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b4l7c"]
-radius = 6.08276
+radius = 7.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fynqf"]
 radius = 6.0
-height = 22.0
+height = 26.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_do6rg")
-MaxHP = 100
+deck = [1, 8, 2, 3, 1, 2]
+MaxHP = 50
 MaxMP = 2
 SPD = 5
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["Player"]]
 position = Vector2(0, -10)
 sprite_frames = SubResource("SpriteFrames_d3t3p")
-animation = &"idle_up"
+animation = &"hurt"
 autoplay = "idle_up"
+frame_progress = 0.903777
 
 [node name="Movement Box" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5)
@@ -340,7 +354,7 @@ shape = SubResource("CircleShape2D_b4l7c")
 [node name="HitBox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(0, -3)
+position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_fynqf")
 
 [node name="HP_Bar" type="ProgressBar" parent="."]

@@ -4,7 +4,7 @@ extends "res://Scripts/character.gd"
 
 
 
-@export var deck: Array = [1,1,1,1,1,2,2]
+@export var deck: Array = []
 func _physics_process(delta):
 	if in_combat == false:
 		if Input.is_action_pressed('move_left'):
@@ -45,5 +45,6 @@ func player():
 
 
 func _on_animated_sprite_2d_animation_finished():
-	if is_dead == true:
-		queue_free()
+	#if is_dead == true:
+	#	queue_free()
+	pass

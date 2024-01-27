@@ -1,27 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://ts5jm1lbfoe1"]
+[gd_scene load_steps=4 format=3 uid="uid://ldr57yd85k3l"]
 
-[ext_resource type="Script" path="res://Scripts/card.gd" id="1_8l72f"]
-[ext_resource type="Texture2D" uid="uid://d3l8grjn1uhth" path="res://Assets/Card/Bolt.png" id="2_ledm5"]
-[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_g6u7o"]
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_d6n38"]
+[ext_resource type="Texture2D" uid="uid://yiucoa3x3ne5" path="res://Assets/Card/Frost.png" id="2_t0lkc"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_lyuq5"]
 
-[node name="bolt_card" type="Button"]
+[node name="frost_card" type="Button"]
 offset_left = -15.0
 offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
-script = ExtResource("1_8l72f")
-action_id = 2
+script = ExtResource("1_d6n38")
+action_id = 3
 mp_cost = 1
 target_type = 1
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(14, 19)
 scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_ledm5")
+texture = ExtResource("2_t0lkc")
 
 [node name="hover" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(342, 104)
-stream = ExtResource("3_g6u7o")
+stream = ExtResource("3_lyuq5")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

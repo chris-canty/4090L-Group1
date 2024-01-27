@@ -14,6 +14,7 @@ var combat_spot = Vector2(0,0)
 var in_combat = false
 var in_position = false
 var is_dead = false
+signal damage
 
 func _ready():
 	HP = MaxHP
@@ -72,6 +73,18 @@ func disable_bars():
 func move_character(spot: Vector2):
 	combat_spot = spot
 	in_position = false
+	
+func take_damage(dam: int):
+	if dam == 0:
+		return
+	$AnimatedSprite2D.play("hurt")
+	HP -= dam
+	if HP <= 0:
+		HP = 0
+		death()
+	else:
+		await get_tree().create_timer(.5).timeout
+		$AnimatedSprite2D.play("idle_side")
 	
 func death():
 	$AnimatedSprite2D.play("death")

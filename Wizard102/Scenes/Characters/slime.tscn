@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://5gt1qpbcghv1"]
+[gd_scene load_steps=44 format=3 uid="uid://5gt1qpbcghv1"]
 
 [ext_resource type="Script" path="res://Scripts/slime.gd" id="1_capbs"]
 [ext_resource type="Texture2D" uid="uid://bm0sqmu2451oh" path="res://Assets/Character Sprites/slime.png" id="2_6bgh3"]
@@ -22,6 +22,18 @@ region = Rect2(96, 128, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_uxvrq"]
 atlas = ExtResource("2_6bgh3")
 region = Rect2(128, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjsc0"]
+atlas = ExtResource("2_6bgh3")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gtpkg"]
+atlas = ExtResource("2_6bgh3")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4s8e"]
+atlas = ExtResource("2_6bgh3")
+region = Rect2(64, 96, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_83vom"]
 atlas = ExtResource("2_6bgh3")
@@ -171,6 +183,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_fjsc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gtpkg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4s8e")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_83vom")
 }, {
 "duration": 1.0,
@@ -297,15 +323,15 @@ animations = [{
 
 [node name="Slime" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_capbs")
-MaxHP = 36
+MaxHP = 20
 MaxMP = 6
 SPD = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tbr8t")
-animation = &"idle_side"
+animation = &"hurt"
 autoplay = "idle_side"
-frame_progress = 0.73758
+frame_progress = 0.351359
 
 [node name="Area2D" type="Area2D" parent="."]
 

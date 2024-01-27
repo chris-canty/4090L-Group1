@@ -11,6 +11,8 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	velocity.y = JUMP_VELOCITY
 	velocity.x = rng.randf_range(-50.0, 50.0)
+	if $Text.text != "Miss":
+		$damage.play()
 
 func _physics_process(delta):
 	# Add the gravity.

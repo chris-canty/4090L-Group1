@@ -3,18 +3,20 @@ var rng = RandomNumberGenerator.new()
 
 
 func _physics_process(delta):
-	if velocity.x > 0:
-		velocity.x -= 100
-	elif velocity.x <= 0:
-		velocity.x = 0
-		in_position = false
-	move_and_slide()
+	if in_combat == true:
+		$AnimatedSprite2D.flip_h = true
+		if velocity.x > 0:
+			velocity.x -= 100
+		elif velocity.x <= 0:
+			velocity.x = 0
+			in_position = false
+		move_and_slide()
 
 
 func _on_hitbox_entered(body):
 	if body.has_method("player") and is_dead == false:
 		$AnimatedSprite2D.play("idle_side")
-		$AnimatedSprite2D.flip_h = true
+
 		get_parent().initiate_combat()
 
 
@@ -37,7 +39,7 @@ func enemy_ai(combatants: Array):
 		6:
 			return [99,combatants[0]]
 		_:
-			if rng.randi_range(0,100) < 75:
-				return [1,combatants[0]]
+			if rng.randi_range(1,100) < 50:
+				return [3,combatants[0]]
 			else:
 				return [0,self]

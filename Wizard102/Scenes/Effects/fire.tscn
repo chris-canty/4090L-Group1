@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://chuo0ewhysdtb" path="res://Assets/Effects/04.png" id="1_moq6g"]
 [ext_resource type="Script" path="res://Scripts/effect.gd" id="2_5l2eb"]
-[ext_resource type="AudioStream" uid="uid://bwbe7jo0b5vj6" path="res://Sounds/Sound_Effects/fire.wav" id="3_mc3x8"]
+[ext_resource type="AudioStream" uid="uid://14l77vp2v4vo" path="res://Sounds/Sound_Effects/Ember.mp3" id="3_6os1b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bckqh"]
 atlas = ExtResource("1_moq6g")
@@ -102,9 +102,10 @@ autoplay = "default"
 frame = 11
 frame_progress = 1.0
 script = ExtResource("2_5l2eb")
-anim_time = 1.0
+damage_delay = 0.4
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_mc3x8")
+stream = ExtResource("3_6os1b")
+volume_db = -13.867
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]
