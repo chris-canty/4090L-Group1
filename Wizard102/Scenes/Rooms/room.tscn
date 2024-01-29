@@ -669,6 +669,9 @@ position = Vector2(0, -80)
 position = Vector2(86, -112)
 MaxHP = 20
 
+[node name="Slime3" parent="." instance=ExtResource("4_hqk4e")]
+position = Vector2(-92, -125)
+
 [node name="BGM" type="AudioStreamPlayer2D" parent="."]
 volume_db = -80.0
 

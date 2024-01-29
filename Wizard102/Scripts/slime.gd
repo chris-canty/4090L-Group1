@@ -14,9 +14,8 @@ func _physics_process(delta):
 
 
 func _on_hitbox_entered(body):
-	if body.has_method("player") and is_dead == false:
+	if body.has_method("player") and body.in_combat == false and is_dead == false:
 		$AnimatedSprite2D.play("idle_side")
-
 		get_parent().initiate_combat()
 
 

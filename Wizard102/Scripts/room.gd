@@ -94,7 +94,7 @@ func initiate_combat():
 	$Player/AnimatedSprite2D.play("idle_side")
 	$Player/AnimatedSprite2D.flip_h = false
 	combatants.push_back($Player)
-	var y_coor = -120
+	var y_coor = -150
 	for e in get_tree().get_nodes_in_group("Enemy"):
 		combatants.push_back(e)
 		e.move_character(Vector2(80,y_coor))
