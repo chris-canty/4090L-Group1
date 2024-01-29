@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://baudv7301o3ct"]
+
+[ext_resource type="Script" path="res://Scripts/effect_text.gd" id="1_lre5e"]
+[ext_resource type="AudioStream" uid="uid://b2xujg3ype3n" path="res://Sounds/Sound_Effects/boost.wav" id="2_whhsi"]
+
+[node name="effect" type="CharacterBody2D"]
+script = ExtResource("1_lre5e")
+
+[node name="Text" type="RichTextLabel" parent="."]
+offset_left = -66.0
+offset_top = -16.0
+offset_right = 66.0
+offset_bottom = 30.0
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]+40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+fit_content = true
+scroll_active = false
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="boost" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_whhsi")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -14,6 +14,21 @@ var combat_spot = Vector2(0,0)
 var in_combat = false
 var in_position = false
 var is_dead = false
+signal damage
+
+var status_effects: Array = []
+
+'''
+Not sure if we want to use these
+
+@export var fire_in: float = 1.0
+@export var ice_in: float = 1.0
+@export var lightning_in: float = 1.0
+@export var earth_in: float = 1.0
+@export var light_in: float = 1.0
+@export var void_in: float = 1.0
+'''
+
 
 func _ready():
 	HP = MaxHP
@@ -72,6 +87,43 @@ func disable_bars():
 func move_character(spot: Vector2):
 	combat_spot = spot
 	in_position = false
+
+func atk_status(dmg: int, element: String):
+	var counter = 0
+	while counter < len(status_effects):
+		if status_effects[counter].proc_id == 1 and (status_effects[counter].element == element or status_effects[counter].element == "universal"):
+			dmg = status_effects[counter].proc_effect(dmg)
+			if status_effects[counter].rounds < 0:
+				status_effects.pop_at(counter)
+			else:
+				counter += 1
+		else:
+			counter += 1
+	return dmg
+	
+func run_status():
+	var counter = 0
+	while counter < len(status_effects):
+		if status_effects[counter].proc_id == 0:
+			status_effects[counter].proc_effect(self)
+			if status_effects[counter].rounds == 0:
+				status_effects.pop_at(counter)
+			else:
+				counter += 1
+		else:
+			counter += 1
+
+func take_damage(dmg: int):
+	if dmg == 0:
+		return
+	$AnimatedSprite2D.play("hurt")
+	HP -= dmg
+	if HP <= 0:
+		HP = 0
+		death()
+	else:
+		await get_tree().create_timer(.5).timeout
+		$AnimatedSprite2D.play("idle_side")
 	
 func death():
 	$AnimatedSprite2D.play("death")

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c0vv65o10lqtk"]
+[gd_scene load_steps=3 format=3 uid="uid://c0vv65o10lqtk"]
 
 [ext_resource type="Script" path="res://Scripts/damage _text.gd" id="1_fw550"]
+[ext_resource type="AudioStream" uid="uid://cqplmnuvjfh7d" path="res://Sounds/Sound_Effects/hitHurt.wav" id="2_cvdgv"]
 
 [node name="Damage" type="CharacterBody2D"]
 script = ExtResource("1_fw550")
@@ -10,10 +11,17 @@ offset_left = -20.0
 offset_top = -11.0
 offset_right = 20.0
 offset_bottom = 12.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "10"
 horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
+
+[node name="damage" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_cvdgv")
+volume_db = -7.495
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

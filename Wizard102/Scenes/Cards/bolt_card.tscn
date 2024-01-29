@@ -10,6 +10,9 @@ offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_8l72f")
+action_id = 2
+mp_cost = 1
+target_type = 1
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(14, 19)

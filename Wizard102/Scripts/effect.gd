@@ -1,13 +1,17 @@
 extends AnimatedSprite2D
-@export var anim_time: float
-
+@export var damage_delay: float
+signal display_damage
+signal anim_done
+var init = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$sound.play()
-	play("default")
-	await get_tree().create_timer(anim_time).timeout
-	queue_free()
+	if !init:
+		init = true
+		$sound.play()
+		play("default")
+		await get_tree().create_timer(damage_delay).timeout
+		emit_signal("display_damage")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -15,4 +19,5 @@ func _process(delta):
 
 
 func _on_animation_finished():
-	visible = false
+	emit_signal("anim_done")
+	queue_free()

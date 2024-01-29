@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dt477vooy5yn5" path="res://Assets/Effects/Lightning.png" id="1_0fb74"]
 [ext_resource type="Script" path="res://Scripts/effect.gd" id="2_vd0ja"]
-[ext_resource type="AudioStream" uid="uid://bwbe7jo0b5vj6" path="res://Sounds/Sound_Effects/fire.wav" id="3_api8u"]
+[ext_resource type="AudioStream" uid="uid://c7117b4pgoalf" path="res://Sounds/Sound_Effects/Thunder_Shock.mp3" id="3_fvj6s"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o6p7f"]
 atlas = ExtResource("1_0fb74")
@@ -79,19 +79,21 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 15.0
+"speed": 10.0
 }]
 
 [node name="lightning" type="AnimatedSprite2D"]
-position = Vector2(0, -64)
+position = Vector2(0.499999, -58)
+scale = Vector2(0.640625, 0.90625)
 sprite_frames = SubResource("SpriteFrames_ptpct")
 autoplay = "default"
 frame = 9
 frame_progress = 1.0
 script = ExtResource("2_vd0ja")
-anim_time = 0.7
+damage_delay = 0.5
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_api8u")
+stream = ExtResource("3_fvj6s")
+volume_db = -10.0
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

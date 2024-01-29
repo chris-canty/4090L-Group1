@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c8gt63brxrxqn" path="res://Assets/Effects/Fire-bomb.png" id="1_buhs4"]
 [ext_resource type="Script" path="res://Scripts/effect.gd" id="2_54mg3"]
-[ext_resource type="AudioStream" uid="uid://bwbe7jo0b5vj6" path="res://Sounds/Sound_Effects/fire.wav" id="3_hdtht"]
+[ext_resource type="AudioStream" uid="uid://dsy7qudh8nrwr" path="res://Sounds/Sound_Effects/Outrage_part_2.mp3" id="3_86e87"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cb8ac"]
 atlas = ExtResource("1_buhs4")
@@ -107,18 +107,19 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 15.0
+"speed": 10.0
 }]
 
 [node name="Ultima" type="AnimatedSprite2D"]
+position = Vector2(0, -23)
 sprite_frames = SubResource("SpriteFrames_wf21j")
 autoplay = "default"
 frame = 13
 frame_progress = 1.0
 script = ExtResource("2_54mg3")
-anim_time = 1.0
+damage_delay = 0.8
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_hdtht")
+stream = ExtResource("3_86e87")
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]
