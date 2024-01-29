@@ -331,7 +331,7 @@ SPD = 2
 sprite_frames = SubResource("SpriteFrames_tbr8t")
 animation = &"hurt"
 autoplay = "idle_side"
-frame_progress = 0.351359
+frame_progress = 0.621048
 
 [node name="Area2D" type="Area2D" parent="."]
 

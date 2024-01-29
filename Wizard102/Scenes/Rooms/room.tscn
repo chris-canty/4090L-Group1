@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cbwdiu4gula2k"]
 
-[ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
+[ext_resource type="Script" path="res://Scenes/Rooms/action.gd" id="1_el1x6"]
 [ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="2_wnatw"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
 [ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
@@ -642,7 +642,7 @@ texture = ExtResource("2_wnatw")
 sources/0 = SubResource("TileSetAtlasSource_jhvmj")
 
 [node name="basic_room" type="Node2D"]
-script = ExtResource("1_6p8ux")
+script = ExtResource("1_el1x6")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_4p4cj")
