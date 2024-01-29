@@ -106,6 +106,6 @@ damage_delay = 0.4
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_6os1b")
-volume_db = -13.867
+volume_db = -10.0
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

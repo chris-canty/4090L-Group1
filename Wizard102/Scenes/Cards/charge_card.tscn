@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://nnditpb3m1sp"]
+
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_jugfh"]
+[ext_resource type="Texture2D" uid="uid://cfj5v53ofigva" path="res://Assets/Card/Charge.png" id="2_epfts"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_qcedd"]
+
+[node name="charge_card" type="Button"]
+offset_left = -15.0
+offset_top = -18.0
+offset_right = 13.0
+offset_bottom = 21.0
+script = ExtResource("1_jugfh")
+action_id = 16
+
+[node name="Card" type="Sprite2D" parent="."]
+position = Vector2(14, 19)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_epfts")
+
+[node name="hover" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(342, 104)
+stream = ExtResource("3_qcedd")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]

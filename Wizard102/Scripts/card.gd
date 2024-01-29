@@ -1,9 +1,9 @@
 extends Button
 var cardscale: float = .1
 var speed: float = 10
-@export var action_id: int
-@export var mp_cost: int
-@export var target_type: int
+@export var action_id: int = 0
+@export var mp_cost: int = 0
+@export var target_type: int = 0
 
 
 # Called when the node enters the scene tree for the first time.

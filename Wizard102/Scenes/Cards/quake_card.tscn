@@ -10,7 +10,7 @@ offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_fkiis")
-action_id = 8
+action_id = 11
 mp_cost = 2
 target_type = 2
 

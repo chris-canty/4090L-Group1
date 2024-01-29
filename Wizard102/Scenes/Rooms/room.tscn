@@ -1,10 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=9 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="2_wnatw"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
 [ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
-[ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_8adgd"]
 [ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
 [ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
 
@@ -655,6 +654,7 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
+deck = [1, 1, 15, 15, 8, 4, 16, 2, 3, 11]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 visible = false
@@ -665,9 +665,12 @@ polygon = PackedVector2Array(-214, 12, 220, 13, 219, -192, -220, -191, -220, 12,
 [node name="Slime" parent="." instance=ExtResource("4_hqk4e")]
 position = Vector2(0, -80)
 
+[node name="Slime2" parent="." instance=ExtResource("4_hqk4e")]
+position = Vector2(86, -112)
+MaxHP = 20
+
 [node name="BGM" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_8adgd")
-volume_db = -20.0
+volume_db = -80.0
 
 [node name="Select" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(0, -100)
@@ -675,9 +678,6 @@ stream = ExtResource("6_tnkya")
 
 [node name="cancel" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("7_iasap")
-
-[node name="Slime2" parent="." instance=ExtResource("4_hqk4e")]
-position = Vector2(-64, -143)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -100)

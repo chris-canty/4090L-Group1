@@ -27,7 +27,8 @@ func _on_animated_sprite_2d_animation_finished():
 func enemy_ai(combatants: Array):
 	'''
 	Slime Skills:
-		Ember: 1 MP - 8 Fire Damage
+		Frost: 1 MP - 7 Ice Damage
+		Cooldown: 0 MP - +35% Next Ice Attack
 		Ultima: 6 MP - 9999 Arcane Damage
 		
 	Returns:
@@ -39,7 +40,18 @@ func enemy_ai(combatants: Array):
 		6:
 			return [99,combatants[0]]
 		_:
-			if rng.randi_range(1,100) < 50:
+			if status_effects.size() > 0:
+				for s in status_effects:
+					print(s)
+					if s.element == "ice" and "augment" in s:
+						if s.augment > 1:
+							return [3,combatants[0]]
+			if rng.randi_range(1,10) < 5:
 				return [3,combatants[0]]
+			elif rng.randi_range(1,10) < 8:
+				while true:
+					var target = rng.randi_range(0,len(combatants)-1)
+					if combatants[target].is_in_group("Enemy"):
+						return [17,combatants[target]]
 			else:
 				return [0,self]
