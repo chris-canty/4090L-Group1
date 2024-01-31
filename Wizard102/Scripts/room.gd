@@ -2,12 +2,13 @@ extends Node2D
 const Boost_ATK = preload("res://Scripts/Status Effects/boost_atk.gd")
 const DoT = preload("res://Scripts/Status Effects/dot.gd")
 var cam_pos: Vector2 = Vector2(0,0)
-var cam_zoom: float = 5
+var cam_zoom: float = 1
 var cam_speed: float = 10
 var bgm_volume: float = -22.0
 enum States {COMBAT,EXPLORE}
 var _state : int = States.EXPLORE
 var player_spot: Vector2 = Vector2(-80,-99)
+var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
 var card_pos = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
 var pass_pos = Vector2(-60,-10)
 
@@ -22,6 +23,7 @@ var curr_turn: int = -1
 var target: int = -1
 var card_select: int = -1
 var action_id: int = 0
+@onready var init_ui = $TurnUI/Initiative
 
 var deck: Array = []
 var hand: Array = []
@@ -45,10 +47,17 @@ func _process(delta):
 		target = -1
 		card_select = -1
 		action_id = 0
-	if _state == States.COMBAT:
+	elif _state == States.COMBAT:
 		var counter = 0
+		for c in range(len(combatants)):
+			if combatants[c] == null:
+				init_ui.get_child(c).queue_free()
+			else:
+				var init_child = init_ui.get_child(c).get_node("Init_Bar")
+				init_child.value = lerp(init_child.value,float(100 - initiative[c]),10 * delta)
 		while counter < len(combatants):
 			if combatants[counter] == null:
+				print("Dead")
 				combatants.pop_at(counter)
 				initiative.pop_at(counter)
 			else:
@@ -94,11 +103,11 @@ func initiate_combat():
 	$Player/AnimatedSprite2D.play("idle_side")
 	$Player/AnimatedSprite2D.flip_h = false
 	combatants.push_back($Player)
-	var y_coor = -150
+	var counter = 0
 	for e in get_tree().get_nodes_in_group("Enemy"):
 		combatants.push_back(e)
-		e.move_character(Vector2(80,y_coor))
-		y_coor += 60
+		e.move_character(enemy_spot[counter])
+		counter += 1
 	for c in combatants:
 		initiative.push_back(100 - c.SPD)
 		c.enable_bars()
@@ -108,6 +117,12 @@ func initiate_combat():
 	
 	print(combatants)
 	print(initiative)
+	for i in range(len(combatants)):
+		var turn = load("res://Scenes/UI/turn.tscn")
+		var turn_i = turn.instantiate()
+		turn_i.get_node("Name").text = combatants[i].get_name()
+		turn_i.get_node("Init_Bar").value = 0
+		init_ui.add_child(turn_i)
 	var scene = load("res://Scenes/UI/pass_card.tscn")
 	pass_ui = scene.instantiate()
 	pass_ui.visible = false
@@ -130,7 +145,11 @@ func next_turn():
 	if combatants.size() == 1:
 		$Player.in_combat = false
 		_state = States.EXPLORE
+		init_ui.get_child(0).queue_free()
 		$Player.disable_bars()
+		$Player.status_effects.clear()
+		for s in $Player.status_ui.get_children():
+			s.texture = null
 		bgm_volume = -45.0
 		pass_ui.queue_free()
 		pass_ui = null
@@ -148,6 +167,7 @@ func next_turn():
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
 		initiative.pop_at(curr_turn)
+		init_ui.get_child(curr_turn).queue_free()
 		next_turn()
 		return
 	#Player
@@ -193,7 +213,7 @@ func find_turn():
 	#if it is your turn, the initiative is reset, otherwise subtract the lowest initiative
 	for i in range(initiative.size()):
 		if combatant == i:
-			initiative[i] = (100 - combatants[i].SPD)
+			initiative[i] = 0
 		else:
 			initiative[i] -= fast
 			
@@ -260,6 +280,15 @@ func select_pass():
 		$Select.play()
 	execute_action()
 
+func discard(card: Button):
+	print(hand)
+	for i in range(len(hand_ui)):
+		if hand_ui[i] == card:
+			hand_ui[i].queue_free()
+			hand_ui.pop_at(i)
+			hand.pop_at(i)
+			return
+			
 func select_card(button: Button, a_id: int, mp_cost: int, target_type: int):
 	_cState = Combat.P_Target
 	var counter = 0 
@@ -336,11 +365,11 @@ func execute_action():
 			pass_ui.visible = false
 			for c in combatants:
 				await c.enable_bars()
+			initiative[curr_turn] = 100 - combatants[curr_turn].SPD
 			next_turn()
 			return
 		1:
 			#Ember I
-			damage = combatants[curr_turn].atk_status(8,"fire")
 			accuracy = 80
 			mp_cost = 1
 			for c in combatants:
@@ -358,6 +387,7 @@ func execute_action():
 			text = load("res://Scenes/UI/damage.tscn")
 			text_instance = text.instantiate()
 			if roll <= accuracy:
+				damage = combatants[curr_turn].atk_status(8,"fire")
 				combatants[curr_turn].MP -= mp_cost
 				text_instance.get_node("Text").text = str(damage)
 				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
@@ -375,11 +405,11 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
+				init_ui.get_child(target).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		2:
 			#Bolt I
-			damage = combatants[curr_turn].atk_status(10,"lightning")
 			accuracy = 80
 			mp_cost = 1
 			for c in combatants:
@@ -397,6 +427,7 @@ func execute_action():
 			text = load("res://Scenes/UI/damage.tscn")
 			text_instance = text.instantiate()
 			if roll <= accuracy:
+				damage = combatants[curr_turn].atk_status(10,"lightning")
 				combatants[curr_turn].MP -= mp_cost
 				text_instance.get_node("Text").text = str(damage)
 				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("c3d511"))
@@ -414,11 +445,11 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
+				init_ui.get_child(target).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		3:
 			#Frost I
-			damage = combatants[curr_turn].atk_status(7,"ice")
 			accuracy = 90
 			mp_cost = 1
 			for c in combatants:
@@ -436,6 +467,7 @@ func execute_action():
 			text = load("res://Scenes/UI/damage.tscn")
 			text_instance = text.instantiate()
 			if roll <= accuracy:
+				damage = combatants[curr_turn].atk_status(7,"ice")
 				combatants[curr_turn].MP -= mp_cost
 				text_instance.get_node("Text").text = str(damage)
 				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("00ffff"))
@@ -453,11 +485,11 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
+				init_ui.get_child(target).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		4:
 			#Stone I
-			damage = combatants[curr_turn].atk_status(12,"earth")
 			accuracy = 90
 			mp_cost = 1
 			for c in combatants:
@@ -475,6 +507,7 @@ func execute_action():
 			text = load("res://Scenes/UI/damage.tscn")
 			text_instance = text.instantiate()
 			if roll <= accuracy:
+				damage = combatants[curr_turn].atk_status(12,"earth")
 				combatants[curr_turn].MP -= mp_cost
 				text_instance.get_node("Text").text = str(damage)
 				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("6e5003"))
@@ -492,14 +525,14 @@ func execute_action():
 			if  combatants[target] == null or combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
+				init_ui.get_child(target).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		8:
 			#Burn I
-			damage = combatants[curr_turn].atk_status(16,"fire")
-			var init_damage: int = damage * .25
-			var dot: int = damage - init_damage
-			accuracy = 100
+			var init_damage: int
+			var dot: int
+			accuracy = 80
 			mp_cost = 1
 			for c in combatants:
 				await c.disable_bars()
@@ -516,6 +549,9 @@ func execute_action():
 			text = load("res://Scenes/UI/damage.tscn")
 			text_instance = text.instantiate()
 			if roll <= accuracy:
+				damage = combatants[curr_turn].atk_status(16,"fire")
+				init_damage= damage * .25
+				dot = damage - init_damage
 				combatants[curr_turn].MP -= mp_cost
 				text_instance.get_node("Text").text = str(init_damage)
 				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
@@ -537,6 +573,7 @@ func execute_action():
 				dot_effect.element = "fire"
 				dot_effect.proc_id = 0
 				dot_effect.rounds = 2
+				dot_effect.icon = "dot"
 				dot_effect.damage_total = dot
 				dot_effect.damage_remaining = dot
 				combatants[target].status_effects.push_back(dot_effect)
@@ -545,11 +582,11 @@ func execute_action():
 			if  combatants[target] == null or combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
+				init_ui.get_child(target).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		11:
 			#Quake I
-			damage = combatants[curr_turn].atk_status(10,"earth")
 			accuracy = 75
 			mp_cost = 2
 			var dam_vals = []
@@ -573,6 +610,7 @@ func execute_action():
 				print(roll)
 				if roll <= accuracy:
 					if hit == false:
+						damage = combatants[curr_turn].atk_status(10,"earth")
 						if _cState == Combat.P_Action:
 							hand.pop_at(card_select)
 						combatants[curr_turn].MP -= mp_cost
@@ -591,13 +629,6 @@ func execute_action():
 				combatants[i].take_damage(dam_vals[i-1])
 				combatants[i].add_child(damages[i-1])
 			await instance.anim_done
-			var counter = 0
-			while counter < len(combatants):
-				if combatants[counter] == null or combatants[counter].is_dead == true:
-					combatants.pop_at(counter)
-					initiative.pop_at(counter)
-				else:
-					counter += 1
 			print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		15:
@@ -623,6 +654,7 @@ func execute_action():
 				boost.proc_id = 1
 				boost.rounds = -1
 				boost.augment = 1.4
+				boost.icon = "good"
 				combatants[target].status_effects.push_back(boost)
 				if _cState == Combat.P_Action:
 					hand.pop_at(card_select)
@@ -656,6 +688,7 @@ func execute_action():
 				boost.proc_id = 1
 				boost.rounds = -1
 				boost.augment = 1.45
+				boost.icon = "good"
 				combatants[target].status_effects.push_back(boost)
 				if _cState == Combat.P_Action:
 					hand.pop_at(card_select)
@@ -689,10 +722,45 @@ func execute_action():
 				boost.proc_id = 1
 				boost.rounds = -1
 				boost.augment = 1.35
+				boost.icon = "good"
 				combatants[target].status_effects.push_back(boost)
 				if _cState == Combat.P_Action:
 					hand.pop_at(card_select)
 				text_instance.get_node("Text").text = "[center]+35% to Next [img width=12]res://Assets/Icons/Ice.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			else:
+				text_instance.get_node("Text").text = "Miss"
+			combatants[target].add_child(text_instance)
+			#await instance.anim_done
+			await get_tree().create_timer(1.0).timeout
+		18:
+			#Growth I
+			accuracy = 100
+			mp_cost = 0
+			for c in combatants:
+				await c.disable_bars()
+			$Camera2D/CText.text = "Growth"
+			cam_zoom = 6
+			cam_pos = combatants[target].position
+			await get_tree().create_timer(1.0).timeout
+			$Camera2D/CText.text = ""
+			#scene = load("res://Scenes/Effects/ice.tscn")
+			#instance = scene.instantiate()
+			#instance.position = combatants[target].position
+			#add_child(instance)
+			#Damage Calculations
+			text = load("res://Scenes/UI/effect.tscn")
+			text_instance = text.instantiate()
+			if roll <= accuracy:
+				var boost = Boost_ATK.new()
+				boost.element = "earth"
+				boost.proc_id = 1
+				boost.rounds = -1
+				boost.augment = 1.5
+				boost.icon = "good"
+				combatants[target].status_effects.push_back(boost)
+				if _cState == Combat.P_Action:
+					hand.pop_at(card_select)
+				text_instance.get_node("Text").text = "[center]+50% to Next [img width=12]res://Assets/Icons/Earth.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			else:
 				text_instance.get_node("Text").text = "Miss"
 			combatants[target].add_child(text_instance)
@@ -749,4 +817,5 @@ func execute_action():
 	target = -1
 	card_select = -1
 	action_id = 0
+	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
 	next_turn()

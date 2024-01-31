@@ -10,5 +10,6 @@ rounds: how long it lasts, -1 for if it is infinite until trigger
 extends Node
 
 var element: String
-var proc_id
-var rounds
+var proc_id: int
+var rounds: int
+var icon: String

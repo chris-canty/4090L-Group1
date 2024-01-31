@@ -2,7 +2,7 @@ extends "res://Scripts/character.gd"
 var rng = RandomNumberGenerator.new()
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if in_combat == true:
 		$AnimatedSprite2D.flip_h = true
 		if velocity.x > 0:

@@ -8,7 +8,7 @@ var speed: float = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	gui_input.connect(_on_gui_input)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,6 +23,11 @@ func _on_mouse_entered():
 
 func _on_mouse_exited():
 	cardscale = .1
-
-func _on_pressed():
-		get_parent().get_parent().select_card(self,action_id,mp_cost,target_type)
+	
+func _on_gui_input(event):
+	if event is InputEventMouseButton and event.pressed:
+		match event.button_index:
+			MOUSE_BUTTON_LEFT:
+				get_parent().get_parent().select_card(self,action_id,mp_cost,target_type)
+			MOUSE_BUTTON_RIGHT:
+				get_parent().get_parent().discard(self)
