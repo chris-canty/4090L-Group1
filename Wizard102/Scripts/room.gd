@@ -2,7 +2,7 @@ extends Node2D
 const Boost_ATK = preload("res://Scripts/Status Effects/boost_atk.gd")
 const DoT = preload("res://Scripts/Status Effects/dot.gd")
 var cam_pos: Vector2 = Vector2(0,0)
-var cam_zoom: float = 5
+var cam_zoom: float = 4
 var cam_speed: float = 10
 var bgm_volume: float = -22.0
 enum States {COMBAT,EXPLORE}
@@ -36,7 +36,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if _state == States.EXPLORE:
-		cam_zoom = 5
+		cam_zoom = 3
 		cam_pos = $Player.position
 		for card in hand_ui:
 			card.queue_free()
@@ -204,7 +204,7 @@ func player_turn():
 	var scene
 	var instance
 	cam_pos = combatants[curr_turn].position - Vector2(0,20)
-	cam_zoom = 6
+	cam_zoom = 3
 	if _cState == Combat.Idle:
 		$Player.MP += 1
 	_cState = Combat.P_Select
@@ -301,7 +301,7 @@ func select_card(button: Button, a_id: int, mp_cost: int, target_type: int):
 			combatants[i].add_child(instance)
 			#instance.position 
 			possible_targets.push_back([i,instance])
-	cam_zoom = 4.5
+	cam_zoom = 2.5
 	cam_pos = Vector2(0,-100)
 
 func select_target(target_button):
@@ -346,7 +346,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Ember"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -385,7 +385,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Bolt"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -424,7 +424,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Frost"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -463,7 +463,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Stone"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -504,7 +504,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Burn"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -557,7 +557,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Quake"
-			cam_zoom = 5
+			cam_zoom = 4
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
 			scene = load("res://Scenes/Effects/earth.tscn")
@@ -607,7 +607,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Heat Up"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -639,7 +639,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Charge"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -672,7 +672,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Cooldown"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
@@ -706,7 +706,7 @@ func execute_action():
 			for c in combatants:
 				await c.disable_bars()
 			$Camera2D/CText.text = "Ultima"
-			cam_zoom = 6
+			cam_zoom = 4
 			cam_pos = combatants[target].position
 			await get_tree().create_timer(1.0).timeout
 			$Camera2D/CText.text = ""
