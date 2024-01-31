@@ -8,7 +8,7 @@ var speed: float = 10
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	gui_input.connect(_on_gui_input)
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
