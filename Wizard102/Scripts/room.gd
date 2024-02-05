@@ -11,6 +11,7 @@ var player_spot: Vector2 = Vector2(-80,-99)
 var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
 var card_pos = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
 var pass_pos = Vector2(-60,-10)
+var temp_init = 0
 
 #Variables for Combat
 enum Combat {Idle,P_Select,P_Target,P_Action,Enemy}
@@ -37,7 +38,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	$TurnUI/Label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if _state == States.EXPLORE:
+		init_ui.visible = false
 		cam_zoom = 5
 		cam_pos = $Player.position
 		for card in hand_ui:
@@ -48,12 +51,13 @@ func _process(delta):
 		card_select = -1
 		action_id = 0
 	elif _state == States.COMBAT:
+		init_ui.visible = true
 		var counter = 0
 		for c in range(len(combatants)):
 			if combatants[c] == null:
-				init_ui.get_child(c).queue_free()
+				init_ui.get_child(c + 1).queue_free()
 			else:
-				var init_child = init_ui.get_child(c).get_node("Init_Bar")
+				var init_child = init_ui.get_child(c + 1).get_node("Init_Bar")
 				init_child.value = lerp(init_child.value,float(100 - initiative[c]),10 * delta)
 		while counter < len(combatants):
 			if combatants[counter] == null:
@@ -68,6 +72,8 @@ func _process(delta):
 			target = len(combatants) - 1
 		if Input.is_action_pressed("ui_cancel") and _cState == Combat.P_Target:
 			$cancel.play()
+			initiative[0] = temp_init
+			init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
 			for card in hand_ui:
 				card.queue_free()
 			for t in possible_targets:
@@ -145,7 +151,7 @@ func next_turn():
 	if combatants.size() == 1:
 		$Player.in_combat = false
 		_state = States.EXPLORE
-		init_ui.get_child(0).queue_free()
+		init_ui.get_child(1).queue_free()
 		$Player.disable_bars()
 		$Player.status_effects.clear()
 		for s in $Player.status_ui.get_children():
@@ -167,7 +173,7 @@ func next_turn():
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
 		initiative.pop_at(curr_turn)
-		init_ui.get_child(curr_turn).queue_free()
+		init_ui.get_child(curr_turn + 1).queue_free()
 		next_turn()
 		return
 	#Player
@@ -332,9 +338,16 @@ func select_card(button: Button, a_id: int, mp_cost: int, target_type: int):
 			possible_targets.push_back([i,instance])
 	cam_zoom = 4.5
 	cam_pos = Vector2(0,-100)
+	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffff51")
+	temp_init = initiative[0]
+	initiative[0] = 100 - $Player.SPD
+	
+	
 
 func select_target(target_button):
 	$Select.play()
+	initiative[0] = temp_init
+	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
 	_cState = Combat.P_Action
 	var counter = 0
 	for t in possible_targets:
@@ -366,7 +379,7 @@ func execute_action():
 			for c in combatants:
 				await c.enable_bars()
 			initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-			init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
+			init_ui.get_child(curr_turn + 1).get_node("Init_Bar").value = 0
 			next_turn()
 			return
 		1:
@@ -406,7 +419,7 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
-				init_ui.get_child(target).queue_free()
+				init_ui.get_child(target + 1).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		2:
@@ -446,7 +459,7 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
-				init_ui.get_child(target).queue_free()
+				init_ui.get_child(target + 1).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		3:
@@ -486,7 +499,7 @@ func execute_action():
 			if combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
-				init_ui.get_child(target).queue_free()
+				init_ui.get_child(target + 1).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		4:
@@ -526,7 +539,7 @@ func execute_action():
 			if  combatants[target] == null or combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
-				init_ui.get_child(target).queue_free()
+				init_ui.get_child(target + 1).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		8:
@@ -583,7 +596,7 @@ func execute_action():
 			if  combatants[target] == null or combatants[target].is_dead == true:
 				combatants.pop_at(target)
 				initiative.pop_at(target)
-				init_ui.get_child(target).queue_free()
+				init_ui.get_child(target + 1).queue_free()
 				print(combatants)
 			await get_tree().create_timer(1.0).timeout
 		11:
@@ -819,5 +832,5 @@ func execute_action():
 	card_select = -1
 	action_id = 0
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-	init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
+	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 	next_turn()

@@ -721,13 +721,3 @@ offset_top = -20.0
 offset_right = 341.0
 offset_bottom = 114.0
 grow_vertical = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI/Initiative"]
-layout_mode = 2
-size_flags_vertical = 3
-bbcode_enabled = true
-text = "[b][u]Turn:[/u][/b]"
-
-[node name="Label" type="Label" parent="TurnUI"]
-offset_right = 40.0
-offset_bottom = 23.0
