@@ -366,6 +366,7 @@ func execute_action():
 			for c in combatants:
 				await c.enable_bars()
 			initiative[curr_turn] = 100 - combatants[curr_turn].SPD
+			init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
 			next_turn()
 			return
 		1:
@@ -421,11 +422,11 @@ func execute_action():
 			$Camera2D/CText.text = ""
 			scene = load("res://Scenes/Effects/lightning.tscn")
 			instance = scene.instantiate()
+			text = load("res://Scenes/UI/damage.tscn")
+			text_instance = text.instantiate()
 			instance.position = combatants[target].position - Vector2(0,58)
 			add_child(instance)
 			#Damage Calculations
-			text = load("res://Scenes/UI/damage.tscn")
-			text_instance = text.instantiate()
 			if roll <= accuracy:
 				damage = combatants[curr_turn].atk_status(10,"lightning")
 				combatants[curr_turn].MP -= mp_cost
@@ -818,4 +819,5 @@ func execute_action():
 	card_select = -1
 	action_id = 0
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
+	init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
 	next_turn()
