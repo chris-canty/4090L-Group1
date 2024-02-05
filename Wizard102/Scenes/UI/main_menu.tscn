@@ -1,19 +1,29 @@
-[gd_scene load_steps=6 format=3 uid="uid://u4v0t0ldiure"]
+[gd_scene load_steps=7 format=3 uid="uid://bxua73wqkyudc"]
 
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_keydh"]
 [ext_resource type="Texture2D" uid="uid://b7rev6hmerabe" path="res://Assets/Background Images/an-unlocked-entrance-at-a-historic-temple-in-pitsunda-free-photo.jpg" id="1_wlsdd"]
 [ext_resource type="Texture2D" uid="uid://bey0cawg5tbcq" path="res://Assets/Background Images/Cool Text - Wizard102 451535921826968.png" id="2_1e63c"]
 
-[sub_resource type="SystemFont" id="SystemFont_im8j4"]
+[sub_resource type="SystemFont" id="SystemFont_jeekd"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_qhmt4"]
+[sub_resource type="SystemFont" id="SystemFont_blxfq"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
-[sub_resource type="SystemFont" id="SystemFont_8glog"]
+[sub_resource type="SystemFont" id="SystemFont_ox0kv"]
 font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
 
-[node name="Node2D" type="Node2D"]
-position = Vector2(151, -70)
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_keydh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -57,15 +67,20 @@ layout_mode = 2
 
 [node name="StartButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_im8j4")
+focus_neighbor_top = NodePath("../QuitButton")
+theme_override_fonts/font = SubResource("SystemFont_jeekd")
 text = "Start"
 
 [node name="PlayerOptionsButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_qhmt4")
+theme_override_fonts/font = SubResource("SystemFont_blxfq")
 text = "Options"
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_8glog")
+focus_neighbor_bottom = NodePath("../StartButton")
+theme_override_fonts/font = SubResource("SystemFont_ox0kv")
 text = "Quit"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
