@@ -1,0 +1,86 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxua73wqkyudc"]
+
+[ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_keydh"]
+[ext_resource type="Texture2D" uid="uid://b7rev6hmerabe" path="res://Assets/Background Images/an-unlocked-entrance-at-a-historic-temple-in-pitsunda-free-photo.jpg" id="1_wlsdd"]
+[ext_resource type="Texture2D" uid="uid://bey0cawg5tbcq" path="res://Assets/Background Images/Cool Text - Wizard102 451535921826968.png" id="2_1e63c"]
+
+[sub_resource type="SystemFont" id="SystemFont_jeekd"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_blxfq"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[sub_resource type="SystemFont" id="SystemFont_ox0kv"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_keydh")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 1093.0
+offset_bottom = 604.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.515, 0.515)
+texture = ExtResource("1_wlsdd")
+expand_mode = 1
+
+[node name="TextureRect2" type="TextureRect" parent="CanvasLayer"]
+offset_left = 287.0
+offset_top = 34.0
+offset_right = 890.0
+offset_bottom = 178.0
+size_flags_horizontal = 6
+size_flags_vertical = 3
+texture = ExtResource("2_1e63c")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -251.0
+offset_top = -159.0
+offset_right = 285.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 18
+
+[node name="Seperator" type="Control" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../QuitButton")
+theme_override_fonts/font = SubResource("SystemFont_jeekd")
+text = "Start"
+
+[node name="PlayerOptionsButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_blxfq")
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../StartButton")
+theme_override_fonts/font = SubResource("SystemFont_ox0kv")
+text = "Quit"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
