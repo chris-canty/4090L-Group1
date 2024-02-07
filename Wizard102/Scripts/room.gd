@@ -357,6 +357,58 @@ func select_target(target_button):
 	target = possible_targets[counter][0] 
 	execute_action()
 	
+	
+func cardSingleTarget( 	rawDamage: int ,accuracy : int, 
+						mp_cost: int, nameSpell: String, status: String, addrScen: String, 
+						color: String,shadow: String, vector:Vector2=Vector2(0,0)):
+	var roll = rng.randi_range(1,100)	
+	var addrText = "res://Scenes/UI/damage.tscn"
+	var damage
+	for c in combatants:
+		await c.disable_bars()
+	$Camera2D/CText.text = nameSpell
+	cam_zoom = 6
+	cam_pos = combatants[target].position
+	await get_tree().create_timer(1.0).timeout
+	$Camera2D/CText.text = ""
+	var scene = load(addrScen)
+	var instance = scene.instantiate()
+	instance.position = combatants[target].position -vector
+	add_child(instance)
+	#Damage Calculations
+	var text = load(addrText)
+	var text_instance = text.instantiate()
+	#print("CURRENT TURN:")
+	#print(curr_turn)
+	# Having some problems with curr_turn cause combatants out of bounds
+	if roll <= accuracy:
+		damage = combatants[curr_turn].atk_status(rawDamage,status)
+		combatants[curr_turn].MP -= mp_cost
+		text_instance.get_node("Text").text = str(damage)
+		text_instance.get_node("Text").set("theme_override_colors/font_color",Color(color))
+		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(shadow))
+		if _cState == Combat.P_Action:
+			hand.pop_at(card_select)
+	else:
+		damage = 0
+		text_instance.get_node("Text").text = "Miss"
+		combatants[target].velocity.x = 700
+		
+	#wait for animation
+	await instance.display_damage
+	#perform damage
+	combatants[target].take_damage(damage)
+	#show damage
+	combatants[target].add_child(text_instance)
+	await instance.anim_done
+	
+	if combatants[target].is_dead == true:
+		combatants.pop_at(target)
+		initiative.pop_at(target)
+		print(combatants)
+	#delay for debugging
+	await get_tree().create_timer(1.0).timeout
+	
 func execute_action():
 	var scene
 	var instance
@@ -364,13 +416,20 @@ func execute_action():
 	var text_instance
 	var damage
 	var accuracy
+	var nameSpell
+	var status
+	var addrScen
+	var vector
+	var color
+	var shadow
+	var raw
 	var roll = rng.randi_range(1,100)
-	print(roll)
 	var mp_cost
 	for t in possible_targets:
 		t[1].queue_free()
 	match action_id:
 		0:
+			#Pass
 			for card in hand_ui:
 				card.queue_free()
 			hand_ui.clear()
@@ -384,44 +443,15 @@ func execute_action():
 			return
 		1:
 			#Ember I
+			raw = 8
 			accuracy = 80
 			mp_cost = 1
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Ember"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			scene = load("res://Scenes/Effects/fire.tscn")
-			instance = scene.instantiate()
-			instance.position = combatants[target].position
-			add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/damage.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				damage = combatants[curr_turn].atk_status(8,"fire")
-				combatants[curr_turn].MP -= mp_cost
-				text_instance.get_node("Text").text = str(damage)
-				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
-				text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-			else:
-				damage = 0
-				text_instance.get_node("Text").text = "Miss"
-				combatants[target].velocity.x = 700
-			await instance.display_damage
-			combatants[target].take_damage(damage)
-			combatants[target].add_child(text_instance)
-			await instance.anim_done
-			if combatants[target].is_dead == true:
-				combatants.pop_at(target)
-				initiative.pop_at(target)
-				init_ui.get_child(target + 1).queue_free()
-				print(combatants)
-			await get_tree().create_timer(1.0).timeout
+			nameSpell = "Ember"
+			status = "fire"
+			addrScen = "res://Scenes/Effects/fire.tscn"
+			color = "d5621f"
+			shadow = "ff0000"
+			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen, color, shadow)
 		2:
 			#Bolt I
 			accuracy = 80
