@@ -359,11 +359,23 @@ func select_target(target_button):
 	
 	
 func cardSingleTarget( 	rawDamage: int ,accuracy : int, 
-						mp_cost: int, nameSpell: String, status: String, addrScen: String, 
-						color: String,shadow: String, vector:Vector2=Vector2(0,0)):
-	var roll = rng.randi_range(1,100)	
+						mp_cost: int, nameSpell: String, element: String, addrScen: String, 
+						 vector:Vector2=Vector2(0,0)):
+	var roll = rng.randi_range(1,100)
 	var addrText = "res://Scenes/UI/damage.tscn"
 	var damage
+	var t_color
+	var t_shadow
+	match element:
+		"fire":
+			t_color = "d5621f"
+			t_shadow = "ff0000"
+		"lightning":
+			t_color = "c3d511"
+			t_shadow = "ef9926"
+		"ice":
+			t_color = "00ffff"
+			t_shadow = "0000ff"
 	for c in combatants:
 		await c.disable_bars()
 	$Camera2D/CText.text = nameSpell
@@ -382,11 +394,11 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	#print(curr_turn)
 	# Having some problems with curr_turn cause combatants out of bounds
 	if roll <= accuracy:
-		damage = combatants[curr_turn].atk_status(rawDamage,status)
+		damage = combatants[curr_turn].atk_status(rawDamage,element)
 		combatants[curr_turn].MP -= mp_cost
 		text_instance.get_node("Text").text = str(damage)
-		text_instance.get_node("Text").set("theme_override_colors/font_color",Color(color))
-		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(shadow))
+		text_instance.get_node("Text").set("theme_override_colors/font_color",Color(t_color))
+		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(t_shadow))
 		if _cState == Combat.P_Action:
 			hand.pop_at(card_select)
 	else:
@@ -419,7 +431,7 @@ func execute_action():
 	var nameSpell
 	var status
 	var addrScen
-	var vector
+	var vector = Vector2(0,0)
 	var color
 	var shadow
 	var raw
@@ -449,89 +461,26 @@ func execute_action():
 			nameSpell = "Ember"
 			status = "fire"
 			addrScen = "res://Scenes/Effects/fire.tscn"
-			color = "d5621f"
-			shadow = "ff0000"
-			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen, color, shadow)
+			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
 		2:
 			#Bolt I
+			raw = 10
 			accuracy = 80
 			mp_cost = 1
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Bolt"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			scene = load("res://Scenes/Effects/lightning.tscn")
-			instance = scene.instantiate()
-			text = load("res://Scenes/UI/damage.tscn")
-			text_instance = text.instantiate()
-			instance.position = combatants[target].position - Vector2(0,58)
-			add_child(instance)
-			#Damage Calculations
-			if roll <= accuracy:
-				damage = combatants[curr_turn].atk_status(10,"lightning")
-				combatants[curr_turn].MP -= mp_cost
-				text_instance.get_node("Text").text = str(damage)
-				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("c3d511"))
-				text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ef9926"))
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-			else:
-				damage = 0
-				text_instance.get_node("Text").text = "Miss"
-				combatants[target].velocity.x = 700
-			await instance.display_damage
-			combatants[target].take_damage(damage)
-			combatants[target].add_child(text_instance)
-			await instance.anim_done
-			if combatants[target].is_dead == true:
-				combatants.pop_at(target)
-				initiative.pop_at(target)
-				init_ui.get_child(target + 1).queue_free()
-				print(combatants)
-			await get_tree().create_timer(1.0).timeout
+			nameSpell = "Bolt"
+			status = "lightning"
+			addrScen = "res://Scenes/Effects/lightning.tscn"
+			vector = Vector2(0,58)
+			await cardSingleTarget(raw ,accuracy, mp_cost,nameSpell, status, addrScen, vector)
 		3:
 			#Frost I
+			raw = 7
 			accuracy = 90
 			mp_cost = 1
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Frost"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			scene = load("res://Scenes/Effects/ice.tscn")
-			instance = scene.instantiate()
-			instance.position = combatants[target].position
-			add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/damage.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				damage = combatants[curr_turn].atk_status(7,"ice")
-				combatants[curr_turn].MP -= mp_cost
-				text_instance.get_node("Text").text = str(damage)
-				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("00ffff"))
-				text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("0000ff"))
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-			else:
-				damage = 0
-				text_instance.get_node("Text").text = "Miss"
-				combatants[target].velocity.x = 700
-			await instance.display_damage
-			combatants[target].take_damage(damage)
-			combatants[target].add_child(text_instance)
-			await instance.anim_done
-			if combatants[target].is_dead == true:
-				combatants.pop_at(target)
-				initiative.pop_at(target)
-				init_ui.get_child(target + 1).queue_free()
-				print(combatants)
-			await get_tree().create_timer(1.0).timeout
+			nameSpell = "Frost"
+			status = "ice"
+			addrScen = "res://Scenes/Effects/ice.tscn"
+			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
 		4:
 			#Stone I
 			accuracy = 90
