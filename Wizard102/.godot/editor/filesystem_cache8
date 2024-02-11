@@ -1,5 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1707363162
+::res://::1707685023
 icon.svg::CompressedTexture2D::6343777367713966123::1705513705::1705513884::1::::<><>::
 ::res://Assets/::1707346682
 ::res://Assets/Card/::1707346708
@@ -51,9 +51,9 @@ Lightning_Good.png::CompressedTexture2D::6899855700904260520::1707346682::170734
 Light_Bad.png::CompressedTexture2D::1741772465702281517::1707346682::1707346708::1::::<><>::
 Light_Good.png::CompressedTexture2D::8711763589855892306::1707346682::1707346708::1::::<><>::
 Rounds.png::CompressedTexture2D::4949347725978346006::1706548268::1706548828::1::::<><>::
-::res://Assets/SpriteFrames/::1707346773
-player.tres::SpriteFrames::4912225516339987569::1707346773::0::1::::<><>::uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
-slime.tres::SpriteFrames::7746957289870678150::1707346773::0::1::::<><>::uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
+::res://Assets/SpriteFrames/::1707363164
+player.tres::SpriteFrames::4912225516339987569::1707363164::0::1::::<><>::uid://b1xjm86g8jffc::::res://Assets/Character Sprites/player.png
+slime.tres::SpriteFrames::7746957289870678150::1707363164::0::1::::<><>::uid://bm0sqmu2451oh::::res://Assets/Character Sprites/slime.png
 ::res://Assets/Tilesets/::1706116551
 dungeon_tiles_2.png::CompressedTexture2D::2697769506526582178::1706116548::1706116551::1::::<><>::
 ::res://Scenes/::1706548268
@@ -79,15 +79,15 @@ fire.tscn::PackedScene::6642546796834150863::1706548268::0::1::::<><>::uid://chu
 ice.tscn::PackedScene::8191049946442410551::1706548268::0::1::::<><>::uid://cp1nudmln4yb::::res://Assets/Effects/10.png<>res://Scripts/effect.gd<>uid://du2l0nxcyqodg::::res://Assets/Effects/09.png<>uid://bqytsgvpj8etu::::res://Sounds/Sound_Effects/Ice_Shard_part_1.mp3
 lightning.tscn::PackedScene::3996343242619018458::1706548268::0::1::::<><>::uid://dt477vooy5yn5::::res://Assets/Effects/Lightning.png<>res://Scripts/effect.gd<>uid://c7117b4pgoalf::::res://Sounds/Sound_Effects/Thunder_Shock.mp3
 ultima.tscn::PackedScene::8247635318892753608::1706548268::0::1::::<><>::uid://c8gt63brxrxqn::::res://Assets/Effects/Fire-bomb.png<>res://Scripts/effect.gd<>uid://dsy7qudh8nrwr::::res://Sounds/Sound_Effects/Outrage_part_2.mp3
-::res://Scenes/Rooms/::1707346773
-room.tscn::PackedScene::4888644054509191608::1707346773::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav<>uid://vardvul8qtwv::::res://Sounds/Sound_Effects/cancel.wav
+::res://Scenes/Rooms/::1707364350
+room.tscn::PackedScene::4888644054509191608::1707364350::0::1::::<><>::res://Scripts/room.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav<>uid://vardvul8qtwv::::res://Sounds/Sound_Effects/cancel.wav
 ::res://Scenes/UI/::1707346773
 damage.tscn::PackedScene::6572246406174361592::1707341910::0::1::::<><>::res://Scripts/damage _text.gd<>uid://cqplmnuvjfh7d::::res://Sounds/Sound_Effects/hitHurt.wav
 effect.tscn::PackedScene::2427929616597540087::1706548268::0::1::::<><>::res://Scripts/effect_text.gd<>uid://b2xujg3ype3n::::res://Sounds/Sound_Effects/boost.wav
 pass_card.tscn::PackedScene::7949228046041054368::1706548268::0::1::::<><>::res://Scripts/pass_card.gd<>uid://y8pt72laxafr::::res://Assets/Card/Pass.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 target.tscn::PackedScene::5534563366495192607::1706548268::0::1::::<><>::res://Scripts/target.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 turn.tscn::PackedScene::2702166647937680705::1707346773::0::1::::<><>::
-::res://Scripts/::1707363024
+::res://Scripts/::1707363998
 card.gd::GDScript::-1::1707346682::0::1::::<>Button<>::
 character.gd::GDScript::-1::1707346682::0::1::::<>CharacterBody2D<>::
 damage _text.gd::GDScript::-1::1706548268::0::1::::<>CharacterBody2D<>::
@@ -95,7 +95,7 @@ effect.gd::GDScript::-1::1706548268::0::1::::<>AnimatedSprite2D<>::
 effect_text.gd::GDScript::-1::1706548268::0::1::::<>CharacterBody2D<>::
 pass_card.gd::GDScript::-1::1706548268::0::1::::<>Button<>::
 player.gd::GDScript::-1::1707346682::0::1::::<>CharacterBody2D<>::
-room.gd::GDScript::-1::1707363024::0::1::::<>Node2D<>::
+room.gd::GDScript::-1::1707363998::0::1::::<>Node2D<>::
 slime.gd::GDScript::-1::1707346682::0::1::::<>CharacterBody2D<>::
 target.gd::GDScript::-1::1706548268::0::1::::<>Button<>::
 ::res://Scripts/Status Effects/::1707346682

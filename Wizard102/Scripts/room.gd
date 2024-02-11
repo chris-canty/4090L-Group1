@@ -489,6 +489,92 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 	print(combatants)
 	await get_tree().create_timer(1.0).timeout	
 	
+func cardBuff(rawDamage: int, nameSpell: String, element: String, addrScen: String):
+	for c in combatants:
+		await c.disable_bars()
+	$Camera2D/CText.text = nameSpell
+	cam_zoom = 6
+	cam_pos = combatants[target].position
+	await get_tree().create_timer(1.0).timeout
+	$Camera2D/CText.text = ""
+	var text = load("res://Scenes/UI/effect.tscn")
+	var text_instance = text.instantiate()
+
+	var boost = Boost_ATK.new()
+	boost.element = element
+	boost.proc_id = 1
+	boost.rounds = -1
+	boost.augment = 1 + rawDamage/100
+	boost.icon = "good"
+	combatants[target].status_effects.push_back(boost)
+	if _cState == Combat.P_Action:
+		hand.pop_at(card_select)
+	text_instance.get_node("Text").text = addrScen
+
+	combatants[target].add_child(text_instance)
+	#await instance.anim_done
+	await get_tree().create_timer(1.0).timeout
+	return boost
+
+func cardDoT(rawDamage: int ,accuracy : int, 
+			mp_cost: int, nameSpell: String, element: String, addrScen: String):
+	var init_damage: int
+	var dot: int
+	var damage
+	accuracy = 80
+	mp_cost = 1
+	for c in combatants:
+		await c.disable_bars()
+	$Camera2D/CText.text = "Burn"
+	cam_zoom = 6
+	cam_pos = combatants[target].position
+	await get_tree().create_timer(1.0).timeout
+	$Camera2D/CText.text = ""
+	var scene = load(addrScen)
+	var instance = scene.instantiate()
+	instance.position = combatants[target].position
+	add_child(instance)
+	#Damage Calculations
+	var text = load("res://Scenes/UI/damage.tscn")
+	var text_instance = text.instantiate()
+	var roll = rng.randi_range(1,100)
+	if roll <= accuracy:
+		damage = combatants[curr_turn].atk_status(16,"fire")
+		init_damage= damage * .25
+		dot = damage - init_damage
+		combatants[curr_turn].MP -= mp_cost
+		text_instance.get_node("Text").text = str(init_damage)
+		text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
+		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
+		if _cState == Combat.P_Action:
+			hand.pop_at(card_select)
+	else:
+		init_damage = 0
+		text_instance.get_node("Text").text = "Miss"
+		combatants[target].velocity.x = 700
+	await instance.display_damage
+	combatants[target].take_damage(init_damage)
+	combatants[target].add_child(text_instance)
+	await instance.anim_done
+	if roll <= accuracy:
+		var effect = load("res://Scenes/UI/effect.tscn")
+		var effect_instance = effect.instantiate()
+		var dot_effect = DoT.new()
+		dot_effect.element = "fire"
+		dot_effect.proc_id = 0
+		dot_effect.rounds = 2
+		dot_effect.icon = "dot"
+		dot_effect.damage_total = dot
+		dot_effect.damage_remaining = dot
+		combatants[target].status_effects.push_back(dot_effect)
+		effect_instance.get_node("Text").text = "[center]" + str(dot) + " [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img] 2 [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
+		combatants[target].add_child(effect_instance)
+	if  combatants[target] == null or combatants[target].is_dead == true:
+		combatants.pop_at(target)
+		initiative.pop_at(target)
+		init_ui.get_child(target + 1).queue_free()
+		print(combatants)
+	await get_tree().create_timer(1.0).timeout
 
 func execute_action():
 	var scene
@@ -597,61 +683,68 @@ func execute_action():
 			#await get_tree().create_timer(1.0).timeout
 		8:
 			#Burn I
-			var init_damage: int
-			var dot: int
+			raw = 8
 			accuracy = 80
 			mp_cost = 1
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Burn"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			scene = load("res://Scenes/Effects/fire.tscn")
-			instance = scene.instantiate()
-			instance.position = combatants[target].position
-			add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/damage.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				damage = combatants[curr_turn].atk_status(16,"fire")
-				init_damage= damage * .25
-				dot = damage - init_damage
-				combatants[curr_turn].MP -= mp_cost
-				text_instance.get_node("Text").text = str(init_damage)
-				text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
-				text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-			else:
-				init_damage = 0
-				text_instance.get_node("Text").text = "Miss"
-				combatants[target].velocity.x = 700
-			await instance.display_damage
-			combatants[target].take_damage(init_damage)
-			combatants[target].add_child(text_instance)
-			await instance.anim_done
-			if roll <= accuracy:
-				var effect = load("res://Scenes/UI/effect.tscn")
-				var effect_instance = effect.instantiate()
-				var dot_effect = DoT.new()
-				dot_effect.element = "fire"
-				dot_effect.proc_id = 0
-				dot_effect.rounds = 2
-				dot_effect.icon = "dot"
-				dot_effect.damage_total = dot
-				dot_effect.damage_remaining = dot
-				combatants[target].status_effects.push_back(dot_effect)
-				effect_instance.get_node("Text").text = "[center]" + str(dot) + " [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img] 2 [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
-				combatants[target].add_child(effect_instance)
-			if  combatants[target] == null or combatants[target].is_dead == true:
-				combatants.pop_at(target)
-				initiative.pop_at(target)
-				init_ui.get_child(target + 1).queue_free()
-				print(combatants)
-			await get_tree().create_timer(1.0).timeout
+			nameSpell = "Burn"
+			status = "fire"
+			addrScen = "res://Scenes/Effects/fire.tscn"
+			await cardDoT(raw,accuracy,mp_cost,nameSpell,status,addrScen)
+			#var init_damage: int
+			#var dot: int
+			#accuracy = 80
+			#mp_cost = 1
+			#for c in combatants:
+				#await c.disable_bars()
+			#$Camera2D/CText.text = "Burn"
+			#cam_zoom = 6
+			#cam_pos = combatants[target].position
+			#await get_tree().create_timer(1.0).timeout
+			#$Camera2D/CText.text = ""
+			#scene = load("res://Scenes/Effects/fire.tscn")
+			#instance = scene.instantiate()
+			#instance.position = combatants[target].position
+			#add_child(instance)
+			##Damage Calculations
+			#text = load("res://Scenes/UI/damage.tscn")
+			#text_instance = text.instantiate()
+			#if roll <= accuracy:
+				#damage = combatants[curr_turn].atk_status(16,"fire")
+				#init_damage= damage * .25
+				#dot = damage - init_damage
+				#combatants[curr_turn].MP -= mp_cost
+				#text_instance.get_node("Text").text = str(init_damage)
+				#text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
+				#text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
+				#if _cState == Combat.P_Action:
+					#hand.pop_at(card_select)
+			#else:
+				#init_damage = 0
+				#text_instance.get_node("Text").text = "Miss"
+				#combatants[target].velocity.x = 700
+			#await instance.display_damage
+			#combatants[target].take_damage(init_damage)
+			#combatants[target].add_child(text_instance)
+			#await instance.anim_done
+			#if roll <= accuracy:
+				#var effect = load("res://Scenes/UI/effect.tscn")
+				#var effect_instance = effect.instantiate()
+				#var dot_effect = DoT.new()
+				#dot_effect.element = "fire"
+				#dot_effect.proc_id = 0
+				#dot_effect.rounds = 2
+				#dot_effect.icon = "dot"
+				#dot_effect.damage_total = dot
+				#dot_effect.damage_remaining = dot
+				#combatants[target].status_effects.push_back(dot_effect)
+				#effect_instance.get_node("Text").text = "[center]" + str(dot) + " [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img] 2 [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
+				#combatants[target].add_child(effect_instance)
+			#if  combatants[target] == null or combatants[target].is_dead == true:
+				#combatants.pop_at(target)
+				#initiative.pop_at(target)
+				#init_ui.get_child(target + 1).queue_free()
+				#print(combatants)
+			#await get_tree().create_timer(1.0).timeout
 		11:
 			#Quake I
 			raw = 10
@@ -705,6 +798,11 @@ func execute_action():
 			#await get_tree().create_timer(1.0).timeout
 		15:
 			#Heat Up I
+			#raw = 40
+			#nameSpell = "Heat Up"
+			#status = "fire"
+			#addrScen = "[center]+"+ str(raw) +"% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			#var boost = await cardBuff(raw, nameSpell, status, addrScen)
 			accuracy = 100
 			mp_cost = 0
 			for c in combatants:
@@ -738,38 +836,44 @@ func execute_action():
 			await get_tree().create_timer(1.0).timeout
 		16:
 			#Charge I
-			accuracy = 100
-			mp_cost = 0
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Charge"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/ice.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/effect.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				var boost = Boost_ATK.new()
-				boost.element = "lightning"
-				boost.proc_id = 1
-				boost.rounds = -1
-				boost.augment = 1.45
-				boost.icon = "good"
-				combatants[target].status_effects.push_back(boost)
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-				text_instance.get_node("Text").text = "[center]+45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			else:
-				text_instance.get_node("Text").text = "Miss"
-			combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			await get_tree().create_timer(1.0).timeout
+			
+			raw = 45
+			nameSpell = "Charge"
+			status = "lightning"
+			addrScen = "[center]+"+ str(raw) +"% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await cardBuff(raw, nameSpell, status, addrScen)
+			#accuracy = 100
+			#mp_cost = 0
+			#for c in combatants:
+				#await c.disable_bars()
+			#$Camera2D/CText.text = "Charge"
+			#cam_zoom = 6
+			#cam_pos = combatants[target].position
+			#await get_tree().create_timer(1.0).timeout
+			#$Camera2D/CText.text = ""
+			##scene = load("res://Scenes/Effects/ice.tscn")
+			##instance = scene.instantiate()
+			##instance.position = combatants[target].position
+			##add_child(instance)
+			##Damage Calculations
+			#text = load("res://Scenes/UI/effect.tscn")
+			#text_instance = text.instantiate()
+			#if roll <= accuracy:
+				#var boost = Boost_ATK.new()
+				#boost.element = "lightning"
+				#boost.proc_id = 1
+				#boost.rounds = -1
+				#boost.augment = 1.45
+				#boost.icon = "good"
+				#combatants[target].status_effects.push_back(boost)
+				#if _cState == Combat.P_Action:
+					#hand.pop_at(card_select)
+				#text_instance.get_node("Text").text = "[center]+45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			#else:
+				#text_instance.get_node("Text").text = "Miss"
+			#combatants[target].add_child(text_instance)
+			##await instance.anim_done
+			#await get_tree().create_timer(1.0).timeout
 		17:
 			#Cooldown I
 			accuracy = 100
