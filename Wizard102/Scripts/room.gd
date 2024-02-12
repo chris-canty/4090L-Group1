@@ -489,7 +489,7 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 	print(combatants)
 	await get_tree().create_timer(1.0).timeout	
 	
-func cardBuff(rawDamage: int, nameSpell: String, element: String, addrScen: String):
+func cardBuff(rawDamage: float, nameSpell: String, element: String, addrScen: String):
 	for c in combatants:
 		await c.disable_bars()
 	$Camera2D/CText.text = nameSpell
@@ -499,18 +499,16 @@ func cardBuff(rawDamage: int, nameSpell: String, element: String, addrScen: Stri
 	$Camera2D/CText.text = ""
 	var text = load("res://Scenes/UI/effect.tscn")
 	var text_instance = text.instantiate()
-
 	var boost = Boost_ATK.new()
 	boost.element = element
 	boost.proc_id = 1
 	boost.rounds = -1
-	boost.augment = 1 + rawDamage/100
+	boost.augment = rawDamage
 	boost.icon = "good"
 	combatants[target].status_effects.push_back(boost)
 	if _cState == Combat.P_Action:
 		hand.pop_at(card_select)
 	text_instance.get_node("Text").text = addrScen
-
 	combatants[target].add_child(text_instance)
 	#await instance.anim_done
 	await get_tree().create_timer(1.0).timeout
@@ -641,46 +639,11 @@ func execute_action():
 			raw = 12
 			accuracy = 90
 			mp_cost = 1
-			nameSpell = "Frost"
-			status = "ice"
-			addrScen = "res://Scenes/Effects/ice.tscn"
+			nameSpell = "Stone"
+			status = "earth"
+			addrScen = "res://Scenes/Effects/earth.tscn"
 			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
-			#for c in combatants:
-				#await c.disable_bars()
-			#$Camera2D/CText.text = "Stone"
-			#cam_zoom = 6
-			#cam_pos = combatants[target].position
-			#await get_tree().create_timer(1.0).timeout
-			#$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/earth.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			##Damage Calculations
-			#text = load("res://Scenes/UI/damage.tscn")
-			#text_instance = text.instantiate()
-			#if roll <= accuracy:
-				#damage = combatants[curr_turn].atk_status(12,"earth")
-				#combatants[curr_turn].MP -= mp_cost
-				#text_instance.get_node("Text").text = str(damage)
-				#text_instance.get_node("Text").set("theme_override_colors/font_color",Color("6e5003"))
-				#text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("005000"))
-				#if _cState == Combat.P_Action:
-					#hand.pop_at(card_select)
-			#else:
-				#damage = 0
-				#text_instance.get_node("Text").text = "Miss"
-				#combatants[target].velocity.x = 700
-			#await instance.display_damage
-			#combatants[target].take_damage(damage)
-			#combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			#if  combatants[target] == null or combatants[target].is_dead == true:
-				#combatants.pop_at(target)
-				#initiative.pop_at(target)
-				#init_ui.get_child(target + 1).queue_free()
-				#print(combatants)
-			#await get_tree().create_timer(1.0).timeout
+			
 		8:
 			#Burn I
 			raw = 8
@@ -754,194 +717,40 @@ func execute_action():
 			status = "earth"
 			addrScen = "res://Scenes/Effects/earth.tscn"
 			await cardAoeTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen)
-			#var dam_vals = []
-			#var damages = []
-			#for c in combatants:
-				#await c.disable_bars()
-			#$Camera2D/CText.text = "Quake"
-			#cam_zoom = 5
-			#await get_tree().create_timer(1.0).timeout
-			#$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/earth.tscn")
-			#var hit = false
-			#for i in range(1,len(combatants)):
-				#instance = scene.instantiate()
-				#instance.position = combatants[i].position
-				#add_child(instance)
-				##Damage Calculations
-				#text = load("res://Scenes/UI/damage.tscn")
-				#text_instance = text.instantiate()
-				#roll = rng.randi_range(1,100)
-				#print(roll)
-				#if roll <= accuracy:
-					#if hit == false:
-						#damage = combatants[curr_turn].atk_status(10,"earth")
-						#if _cState == Combat.P_Action:
-							#hand.pop_at(card_select)
-						#combatants[curr_turn].MP -= mp_cost
-						#hit = true
-					#text_instance.get_node("Text").text = str(damage)
-					#text_instance.get_node("Text").set("theme_override_colors/font_color",Color("6e5003"))
-					#text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("005000"))
-					#dam_vals.push_back(damage)
-				#else:
-					#dam_vals.push_back(0)
-					#text_instance.get_node("Text").text = "Miss"
-					#combatants[i].velocity.x = 700
-				#damages.push_back(text_instance)
-			#await instance.display_damage
-			#for i in range(1,len(combatants)):
-				#combatants[i].take_damage(dam_vals[i-1])
-				#combatants[i].add_child(damages[i-1])
-			#await instance.anim_done
-			#print(combatants)
-			#await get_tree().create_timer(1.0).timeout
+			
 		15:
 			#Heat Up I
-			#raw = 40
-			#nameSpell = "Heat Up"
-			#status = "fire"
-			#addrScen = "[center]+"+ str(raw) +"% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			#var boost = await cardBuff(raw, nameSpell, status, addrScen)
-			accuracy = 100
-			mp_cost = 0
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Heat Up"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/ice.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			text = load("res://Scenes/UI/effect.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				var boost = Boost_ATK.new()
-				boost.element = "fire"
-				boost.proc_id = 1
-				boost.rounds = -1
-				boost.augment = 1.4
-				boost.icon = "good"
-				combatants[target].status_effects.push_back(boost)
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-				text_instance.get_node("Text").text = "[center]+40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			else:
-				text_instance.get_node("Text").text = "Miss"
-			combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			await get_tree().create_timer(1.0).timeout
+			raw = 1.4
+			nameSpell = "Heat Up"
+			status = "fire"
+			addrScen = "[center]+ 40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			var boost = await cardBuff(raw, nameSpell, status, addrScen)
+			
 		16:
 			#Charge I
 			
-			raw = 45
+			raw = 1.45
 			nameSpell = "Charge"
 			status = "lightning"
-			addrScen = "[center]+"+ str(raw) +"% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			addrScen = "[center]+ 45% to Next [img widt100h=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await cardBuff(raw, nameSpell, status, addrScen)
-			#accuracy = 100
-			#mp_cost = 0
-			#for c in combatants:
-				#await c.disable_bars()
-			#$Camera2D/CText.text = "Charge"
-			#cam_zoom = 6
-			#cam_pos = combatants[target].position
-			#await get_tree().create_timer(1.0).timeout
-			#$Camera2D/CText.text = ""
-			##scene = load("res://Scenes/Effects/ice.tscn")
-			##instance = scene.instantiate()
-			##instance.position = combatants[target].position
-			##add_child(instance)
-			##Damage Calculations
-			#text = load("res://Scenes/UI/effect.tscn")
-			#text_instance = text.instantiate()
-			#if roll <= accuracy:
-				#var boost = Boost_ATK.new()
-				#boost.element = "lightning"
-				#boost.proc_id = 1
-				#boost.rounds = -1
-				#boost.augment = 1.45
-				#boost.icon = "good"
-				#combatants[target].status_effects.push_back(boost)
-				#if _cState == Combat.P_Action:
-					#hand.pop_at(card_select)
-				#text_instance.get_node("Text").text = "[center]+45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			#else:
-				#text_instance.get_node("Text").text = "Miss"
-			#combatants[target].add_child(text_instance)
-			##await instance.anim_done
-			#await get_tree().create_timer(1.0).timeout
+			
 		17:
 			#Cooldown I
-			accuracy = 100
-			mp_cost = 0
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Cooldown"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/ice.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/effect.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				var boost = Boost_ATK.new()
-				boost.element = "ice"
-				boost.proc_id = 1
-				boost.rounds = -1
-				boost.augment = 1.35
-				boost.icon = "good"
-				combatants[target].status_effects.push_back(boost)
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-				text_instance.get_node("Text").text = "[center]+35% to Next [img width=12]res://Assets/Icons/Ice.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			else:
-				text_instance.get_node("Text").text = "Miss"
-			combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			await get_tree().create_timer(1.0).timeout
+			raw = 1.35
+			nameSpell = "Cooldown"
+			status = "ice"
+			addrScen = "[center]+35% to Next [img width=12]res://Assets/Icons/Ice.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await cardBuff(raw, nameSpell, status, addrScen)
+			
 		18:
 			#Growth I
-			accuracy = 100
-			mp_cost = 0
-			for c in combatants:
-				await c.disable_bars()
-			$Camera2D/CText.text = "Growth"
-			cam_zoom = 6
-			cam_pos = combatants[target].position
-			await get_tree().create_timer(1.0).timeout
-			$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/ice.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			#Damage Calculations
-			text = load("res://Scenes/UI/effect.tscn")
-			text_instance = text.instantiate()
-			if roll <= accuracy:
-				var boost = Boost_ATK.new()
-				boost.element = "earth"
-				boost.proc_id = 1
-				boost.rounds = -1
-				boost.augment = 1.5
-				boost.icon = "good"
-				combatants[target].status_effects.push_back(boost)
-				if _cState == Combat.P_Action:
-					hand.pop_at(card_select)
-				text_instance.get_node("Text").text = "[center]+50% to Next [img width=12]res://Assets/Icons/Earth.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			else:
-				text_instance.get_node("Text").text = "Miss"
-			combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			await get_tree().create_timer(1.0).timeout
+			raw = 1.5
+			nameSpell = "Growth"
+			status = "earth"
+			addrScen = "[center]+50% to Next [img width=12]res://Assets/Icons/Earth.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await cardBuff(raw, nameSpell, status, addrScen)
+			
 		99:
 			#Ultima
 			damage = 9999
