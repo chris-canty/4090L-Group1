@@ -723,7 +723,8 @@ func execute_action():
 			raw = 1.4
 			nameSpell = "Heat Up"
 			status = "fire"
-			addrScen = "[center]+ 40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			addrScen = "[center]+ 40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] 
+			[img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			var boost = await cardBuff(raw, nameSpell, status, addrScen)
 			
 		16:
@@ -732,7 +733,8 @@ func execute_action():
 			raw = 1.45
 			nameSpell = "Charge"
 			status = "lightning"
-			addrScen = "[center]+ 45% to Next [img widt100h=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			addrScen = "[center]+ 45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] 
+			[img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await cardBuff(raw, nameSpell, status, addrScen)
 			
 		17:
