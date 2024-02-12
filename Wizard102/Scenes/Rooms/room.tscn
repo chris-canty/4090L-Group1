@@ -655,7 +655,7 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
-deck = [1, 1, 15, 18, 8, 4, 16, 2, 3, 11, 4, 3, 1, 2]
+deck = [1, 1, 15, 18, 8, 4, 16, 2, 3, 11, 4, 3, 1]
 MaxHP = 100
 MaxMP = 3
 SPD = 60
