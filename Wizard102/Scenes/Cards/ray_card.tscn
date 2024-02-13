@@ -10,7 +10,7 @@ offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_7krsr")
-action_id = 6
+action_id = "Ray"
 mp_cost = 1
 target_type = 1
 

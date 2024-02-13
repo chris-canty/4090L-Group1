@@ -10,7 +10,7 @@ offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_pkfcn")
-action_id = 18
+action_id = "Growth"
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(15, 19)

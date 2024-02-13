@@ -127,7 +127,7 @@ func move_character(spot: Vector2):
 	combat_spot = spot
 	in_position = false
 
-func atk_status(dmg: int, element: String):
+func atk_status(dmg: float, element: String):
 	var counter = 0
 	while counter < len(status_effects):
 		if status_effects[counter].proc_id == 1 and (status_effects[counter].element == element or status_effects[counter].element == "universal"):

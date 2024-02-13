@@ -23,7 +23,7 @@ var possible_targets: Array = []
 var curr_turn: int = -1
 var target: int = -1
 var card_select: int = -1
-var action_id: int = 0
+var action_id: String = ""
 @onready var init_ui = $TurnUI/Initiative
 
 var deck: Array = []
@@ -49,7 +49,7 @@ func _process(delta):
 		possible_targets.clear()
 		target = -1
 		card_select = -1
-		action_id = 0
+		action_id = ""
 	elif _state == States.COMBAT:
 		init_ui.visible = true
 		var counter = 0
@@ -82,7 +82,7 @@ func _process(delta):
 			possible_targets.clear()
 			target = -1
 			card_select = -1
-			action_id = 0
+			action_id = ""
 			$Camera2D/CText.text = ""
 			player_turn()
 	var card_speed = 20
@@ -190,7 +190,7 @@ func next_turn():
 		await get_tree().create_timer(0.5).timeout
 		var result: Array = combatants[curr_turn].enemy_ai(combatants) 
 		print(result)
-		if result[0] == 0:
+		if result[0] == "":
 			for c in combatants:
 				c.disable_bars()
 			$Camera2D/CText.text = "Pass"
@@ -238,8 +238,9 @@ func player_turn():
 		$Player.MP = $Player.MaxMP
 	while hand.size() < 7 and deck.size() >= 1:
 		hand.push_back(deck.pop_front())
-	for card: int in hand:
+	for card: String in hand:
 		var mp_cost
+		'''
 		match card:
 			1:
 				scene = load("res://Scenes/Cards/ember_card.tscn")
@@ -268,7 +269,13 @@ func player_turn():
 			18:
 				scene = load("res://Scenes/Cards/growth_card.tscn")
 				mp_cost = 0
+		'''
+		var load_str = card.replace(' ', '')
+		load_str = load_str.to_lower()
+		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
+		scene = load(load_str)
 		instance = scene.instantiate()
+		mp_cost = instance.mp_cost
 		$Player.add_child(instance)
 		await instance._ready()
 		instance.position = Vector2(0,0)
@@ -295,7 +302,7 @@ func discard(card: Button):
 			hand.pop_at(i)
 			return
 			
-func select_card(button: Button, a_id: int, mp_cost: int, target_type: int):
+func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
 	_cState = Combat.P_Target
 	var counter = 0 
 	for card in hand_ui:
@@ -358,12 +365,26 @@ func select_target(target_button):
 	execute_action()
 	
 	
+'''
+FUNCTIONS FOR ACTIONS	
+'''
+
+func moveCamAction(type: String):
+	match type:
+		"single":
+			cam_zoom = 6
+			cam_pos = combatants[target].position
+		"multi":
+			cam_zoom = 5
+	await get_tree().create_timer(1.0).timeout
+	$Camera2D/CText.text = ""
+	
 func cardSingleTarget( 	rawDamage: int ,accuracy : int, 
-						mp_cost: int, nameSpell: String, element: String, addrScen: String, 
+						mp_cost: int, element: String, addrScen: String, 
 						 vector:Vector2=Vector2(0,0)):
 	var roll = rng.randi_range(1,100)
 	var addrText = "res://Scenes/UI/damage.tscn"
-	var damage
+	var damage: float = 0
 	var t_color
 	var t_shadow
 	match element:
@@ -379,15 +400,6 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
-			
-			
-	for c in combatants:
-		await c.disable_bars()
-	$Camera2D/CText.text = nameSpell
-	cam_zoom = 6
-	cam_pos = combatants[target].position
-	await get_tree().create_timer(1.0).timeout
-	$Camera2D/CText.text = ""
 	var scene = load(addrScen)
 	var instance = scene.instantiate()
 	instance.position = combatants[target].position -vector
@@ -401,7 +413,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	if roll <= accuracy:
 		damage = combatants[curr_turn].atk_status(rawDamage,element)
 		combatants[curr_turn].MP -= mp_cost
-		text_instance.get_node("Text").text = str(damage)
+		text_instance.get_node("Text").text = str(int(damage))
 		text_instance.get_node("Text").set("theme_override_colors/font_color",Color(t_color))
 		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(t_shadow))
 		if _cState == Combat.P_Action:
@@ -414,7 +426,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	#wait for animation
 	await instance.display_damage
 	#perform damage
-	combatants[target].take_damage(damage)
+	combatants[target].take_damage(int(damage))
 	#show damage
 	combatants[target].add_child(text_instance)
 	await instance.anim_done
@@ -423,11 +435,10 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		combatants.pop_at(target)
 		initiative.pop_at(target)
 		print(combatants)
-	#delay for debugging
-	await get_tree().create_timer(1.0).timeout
+	return [(roll <= accuracy),float(damage)/rawDamage]
 
 func cardAoeTarget(rawDamage: int ,accuracy : int, 
-					mp_cost: int, nameSpell: String, element: String, addrScen: String):
+					mp_cost: int, element: String, addrScen: String):
 	var dam_vals = []
 	var damages = []
 	var damage
@@ -447,13 +458,6 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
-	#var instance
-	for c in combatants:
-		await c.disable_bars()
-	$Camera2D/CText.text = nameSpell
-	cam_zoom = 5
-	await get_tree().create_timer(1.0).timeout
-	$Camera2D/CText.text = ""
 	var scene = load(addrScen)
 	var hit = false
 	for i in range(1,len(combatants)):
@@ -472,10 +476,10 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 					hand.pop_at(card_select)
 				combatants[curr_turn].MP -= mp_cost
 				hit = true
-			text_instance.get_node("Text").text = str(damage)
+			text_instance.get_node("Text").text = str(int(damage))
 			text_instance.get_node("Text").set("theme_override_colors/font_color",Color(t_color))
 			text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(t_shadow))
-			dam_vals.push_back(damage)
+			dam_vals.push_back(int(damage))
 		else:
 			dam_vals.push_back(0)
 			text_instance.get_node("Text").text = "Miss"
@@ -487,43 +491,47 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 		combatants[i].add_child(damages[i-1])
 	await instance.anim_done
 	print(combatants)
-	await get_tree().create_timer(1.0).timeout	
+	return hit
 	
-func cardBuff(rawDamage: float, nameSpell: String, element: String, addrScen: String):
-	for c in combatants:
-		await c.disable_bars()
-	$Camera2D/CText.text = nameSpell
-	cam_zoom = 6
-	cam_pos = combatants[target].position
-	await get_tree().create_timer(1.0).timeout
-	$Camera2D/CText.text = ""
+	
+func cardBuff(multiplier: float, element: String, info: String):
 	var text = load("res://Scenes/UI/effect.tscn")
 	var text_instance = text.instantiate()
 	var boost = Boost_ATK.new()
 	boost.element = element
 	boost.proc_id = 1
 	boost.rounds = -1
-	boost.augment = rawDamage
+	boost.augment = multiplier
 	boost.icon = "good"
 	combatants[target].status_effects.push_back(boost)
 	if _cState == Combat.P_Action:
 		hand.pop_at(card_select)
-	text_instance.get_node("Text").text = addrScen
+	text_instance.get_node("Text").text = info
 	combatants[target].add_child(text_instance)
-	#await instance.anim_done
-	await get_tree().create_timer(1.0).timeout
 	return boost
 
-func cardDoT(rawDamage: int ,accuracy : int, 
-			mp_cost: int, nameSpell: String, element: String, addrScen: String):
-	var init_damage: int
-	var dot: int
-	var damage
-	accuracy = 80
-	mp_cost = 1
+func cardDoT(over_time: int,rounds: int, element: String):
+	var effect = load("res://Scenes/UI/effect.tscn")
+	var effect_instance = effect.instantiate()
+	var dot_effect = DoT.new()
+	dot_effect.element = element
+	dot_effect.proc_id = 0
+	dot_effect.rounds = rounds
+	dot_effect.icon = "dot"
+	dot_effect.damage_total = over_time
+	dot_effect.damage_remaining = over_time
+	combatants[target].status_effects.push_back(dot_effect)
+	var effect_string = "[center]" + str(over_time)
+	match element:
+		"fire":
+			effect_string += " [img width=12]res://Assets/Icons/Fire.png[/img] "
+	effect_string += "[img width=12]res://Assets/Icons/Attack.png[/img] " + str(rounds) + " [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
+	effect_instance.get_node("Text").text  = effect_string
+	combatants[target].add_child(effect_instance)		
+	'''
 	for c in combatants:
 		await c.disable_bars()
-	$Camera2D/CText.text = "Burn"
+	$Camera2D/CText.text = action_id
 	cam_zoom = 6
 	cam_pos = combatants[target].position
 	await get_tree().create_timer(1.0).timeout
@@ -555,24 +563,14 @@ func cardDoT(rawDamage: int ,accuracy : int,
 	combatants[target].add_child(text_instance)
 	await instance.anim_done
 	if roll <= accuracy:
-		var effect = load("res://Scenes/UI/effect.tscn")
-		var effect_instance = effect.instantiate()
-		var dot_effect = DoT.new()
-		dot_effect.element = "fire"
-		dot_effect.proc_id = 0
-		dot_effect.rounds = 2
-		dot_effect.icon = "dot"
-		dot_effect.damage_total = dot
-		dot_effect.damage_remaining = dot
-		combatants[target].status_effects.push_back(dot_effect)
-		effect_instance.get_node("Text").text = "[center]" + str(dot) + " [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img] 2 [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
-		combatants[target].add_child(effect_instance)
+		
 	if  combatants[target] == null or combatants[target].is_dead == true:
 		combatants.pop_at(target)
 		initiative.pop_at(target)
 		init_ui.get_child(target + 1).queue_free()
 		print(combatants)
 	await get_tree().create_timer(1.0).timeout
+	'''
 
 func execute_action():
 	var scene
@@ -592,67 +590,71 @@ func execute_action():
 	var mp_cost
 	for t in possible_targets:
 		t[1].queue_free()
+	if action_id == "":
+		#Pass
+		for card in hand_ui:
+			card.queue_free()
+		hand_ui.clear()
+		possible_targets.clear()
+		pass_ui.visible = false
+		for c in combatants:
+			await c.enable_bars()
+		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
+		init_ui.get_child(curr_turn + 1).get_node("Init_Bar").value = 0
+		next_turn()
+		return
+	for c in combatants:
+		await c.disable_bars()
+	$Camera2D/CText.text = action_id
 	match action_id:
-		0:
-			#Pass
-			for card in hand_ui:
-				card.queue_free()
-			hand_ui.clear()
-			possible_targets.clear()
-			pass_ui.visible = false
-			for c in combatants:
-				await c.enable_bars()
-			initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-			init_ui.get_child(curr_turn + 1).get_node("Init_Bar").value = 0
-			next_turn()
-			return
-		1:
+		"Ember":
 			#Ember I
-			raw = 8
-			accuracy = 80
-			mp_cost = 1
-			nameSpell = "Ember"
-			status = "fire"
-			addrScen = "res://Scenes/Effects/fire.tscn"
-			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
-		2:
+			#raw = 8
+			#accuracy = 80
+			#mp_cost = 1
+			#nameSpell = "Ember"
+			#status = "fire"
+			#addrScen = "res://Scenes/Effects/fire.tscn"
+			await moveCamAction("single")
+			await cardSingleTarget(8, 80, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+		"Bolt":
 			#Bolt I
-			raw = 10
-			accuracy = 80
-			mp_cost = 1
-			nameSpell = "Bolt"
-			status = "lightning"
-			addrScen = "res://Scenes/Effects/lightning.tscn"
-			vector = Vector2(0,58)
-			await cardSingleTarget(raw ,accuracy, mp_cost,nameSpell, status, addrScen, vector)
-		3:
+			#raw = 10
+			#accuracy = 80
+			#mp_cost = 1
+			#nameSpell = "Bolt"
+			#status = "lightning"
+			#addrScen = "res://Scenes/Effects/lightning.tscn"
+			#vector = Vector2(0,58)
+			await moveCamAction("single")
+			await cardSingleTarget(10 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+		"Frost":
 			#Frost I
-			raw = 7
-			accuracy = 90
-			mp_cost = 1
-			nameSpell = "Frost"
-			status = "ice"
-			addrScen = "res://Scenes/Effects/ice.tscn"
-			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
-		4:
+			#raw = 7
+			#accuracy = 90
+			#mp_cost = 1
+			#nameSpell = "Frost"
+			#status = "ice"
+			#addrScen = "res://Scenes/Effects/ice.tscn"
+			await moveCamAction("single")
+			await cardSingleTarget(7 ,90,1, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
+		"Stone":
 			#Stone I
-			raw = 12
-			accuracy = 90
-			mp_cost = 1
-			nameSpell = "Stone"
-			status = "earth"
-			addrScen = "res://Scenes/Effects/earth.tscn"
-			await cardSingleTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen,vector)
-			
-		8:
+			#raw = 12
+			#accuracy = 90
+			#mp_cost = 1
+			#nameSpell = "Stone"
+			#status = "earth"
+			#addrScen = "res://Scenes/Effects/earth.tscn"
+			await moveCamAction("single")
+			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
+		"Burn":
 			#Burn I
-			raw = 8
-			accuracy = 80
-			mp_cost = 1
-			nameSpell = "Burn"
-			status = "fire"
-			addrScen = "res://Scenes/Effects/fire.tscn"
-			await cardDoT(raw,accuracy,mp_cost,nameSpell,status,addrScen)
+			await moveCamAction("single")
+			var res = await cardSingleTarget(4, 80, 1, "fire", "res://Scenes/Effects/fire.tscn", Vector2(0,0))
+			if res[0] == true:
+				print(res[1])
+				await cardDoT((12 * res[1]), 2,"fire")
 			#var init_damage: int
 			#var dot: int
 			#accuracy = 80
@@ -708,52 +710,55 @@ func execute_action():
 				#init_ui.get_child(target + 1).queue_free()
 				#print(combatants)
 			#await get_tree().create_timer(1.0).timeout
-		11:
+		"Quake":
 			#Quake I
-			raw = 10
-			accuracy = 75
-			mp_cost = 2
-			nameSpell = "Quake"
-			status = "earth"
-			addrScen = "res://Scenes/Effects/earth.tscn"
-			await cardAoeTarget(raw ,accuracy,mp_cost, nameSpell, status, addrScen)
+			#raw = 10
+			#accuracy = 75
+			#mp_cost = 2
+			#nameSpell = "Quake"
+			#status = "earth"
+			#addrScen = "res://Scenes/Effects/earth.tscn"
+			await moveCamAction("multi")
+			await cardAoeTarget(10, 75, 2, "earth", "res://Scenes/Effects/earth.tscn")
 			
-		15:
+		"Heat Up":
 			#Heat Up I
 			raw = 1.4
 			nameSpell = "Heat Up"
 			status = "fire"
-			addrScen = "[center]+ 40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] 
-			[img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			var boost = await cardBuff(raw, nameSpell, status, addrScen)
+			addrScen = "[center]+40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await moveCamAction("single")
+			await cardBuff(raw, status, addrScen)
 			
-		16:
+		"Charge":
 			#Charge I
 			
 			raw = 1.45
 			nameSpell = "Charge"
 			status = "lightning"
-			addrScen = "[center]+ 45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] 
-			[img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			await cardBuff(raw, nameSpell, status, addrScen)
+			addrScen = "[center]+45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await moveCamAction("single")
+			await cardBuff(raw, status, addrScen)
 			
-		17:
+		"Cooldown":
 			#Cooldown I
 			raw = 1.35
 			nameSpell = "Cooldown"
 			status = "ice"
 			addrScen = "[center]+35% to Next [img width=12]res://Assets/Icons/Ice.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			await cardBuff(raw, nameSpell, status, addrScen)
+			await moveCamAction("single")
+			await cardBuff(raw, status, addrScen)
 			
-		18:
+		"Growth":
 			#Growth I
 			raw = 1.5
 			nameSpell = "Growth"
 			status = "earth"
 			addrScen = "[center]+50% to Next [img width=12]res://Assets/Icons/Earth.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-			await cardBuff(raw, nameSpell, status, addrScen)
+			await moveCamAction("single")
+			await cardBuff(raw, status, addrScen)
 			
-		99:
+		"Ultima":
 			#Ultima
 			damage = 9999
 			accuracy = 100
@@ -791,8 +796,7 @@ func execute_action():
 				combatants.pop_at(target)
 				initiative.pop_at(target)
 				print(combatants)
-			await get_tree().create_timer(1.0).timeout
-			
+	await get_tree().create_timer(1.0).timeout
 	for c in combatants:
 		await c.enable_bars()
 	for card in hand_ui:
@@ -803,7 +807,7 @@ func execute_action():
 	#pass_ui.visible = false
 	target = -1
 	card_select = -1
-	action_id = 0
+	action_id = ""
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
 	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 	next_turn()

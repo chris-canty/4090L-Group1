@@ -1,7 +1,7 @@
 extends Button
 var cardscale: float = .1
 var speed: float = 10
-@export var action_id: int = 0
+@export var action_id: String = ""
 @export var mp_cost: int = 0
 @export var target_type: int = 0
 
