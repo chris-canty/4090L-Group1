@@ -11,9 +11,9 @@ var MP: int = 0
 var direction = 'up'
 var movement = 0
 var combat_spot = Vector2(0,0)
-var in_combat = false
-var in_position = false
-var is_dead = false
+var in_combat : bool = false
+var in_position: bool = false
+var is_dead: bool = false
 signal damage
 @onready var status_ui = $"StatusEffects"
 

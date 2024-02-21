@@ -528,49 +528,6 @@ func cardDoT(over_time: int,rounds: int, element: String):
 	effect_string += "[img width=12]res://Assets/Icons/Attack.png[/img] " + str(rounds) + " [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
 	effect_instance.get_node("Text").text  = effect_string
 	combatants[target].add_child(effect_instance)		
-	'''
-	for c in combatants:
-		await c.disable_bars()
-	$Camera2D/CText.text = action_id
-	cam_zoom = 6
-	cam_pos = combatants[target].position
-	await get_tree().create_timer(1.0).timeout
-	$Camera2D/CText.text = ""
-	var scene = load(addrScen)
-	var instance = scene.instantiate()
-	instance.position = combatants[target].position
-	add_child(instance)
-	#Damage Calculations
-	var text = load("res://Scenes/UI/damage.tscn")
-	var text_instance = text.instantiate()
-	var roll = rng.randi_range(1,100)
-	if roll <= accuracy:
-		damage = combatants[curr_turn].atk_status(16,"fire")
-		init_damage= damage * .25
-		dot = damage - init_damage
-		combatants[curr_turn].MP -= mp_cost
-		text_instance.get_node("Text").text = str(init_damage)
-		text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
-		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
-		if _cState == Combat.P_Action:
-			hand.pop_at(card_select)
-	else:
-		init_damage = 0
-		text_instance.get_node("Text").text = "Miss"
-		combatants[target].velocity.x = 700
-	await instance.display_damage
-	combatants[target].take_damage(init_damage)
-	combatants[target].add_child(text_instance)
-	await instance.anim_done
-	if roll <= accuracy:
-		
-	if  combatants[target] == null or combatants[target].is_dead == true:
-		combatants.pop_at(target)
-		initiative.pop_at(target)
-		init_ui.get_child(target + 1).queue_free()
-		print(combatants)
-	await get_tree().create_timer(1.0).timeout
-	'''
 
 func execute_action():
 	var scene
@@ -608,44 +565,15 @@ func execute_action():
 	$Camera2D/CText.text = action_id
 	match action_id:
 		"Ember":
-			#Ember I
-			#raw = 8
-			#accuracy = 80
-			#mp_cost = 1
-			#nameSpell = "Ember"
-			#status = "fire"
-			#addrScen = "res://Scenes/Effects/fire.tscn"
 			await moveCamAction("single")
 			await cardSingleTarget(8, 80, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
-			#Bolt I
-			#raw = 10
-			#accuracy = 80
-			#mp_cost = 1
-			#nameSpell = "Bolt"
-			#status = "lightning"
-			#addrScen = "res://Scenes/Effects/lightning.tscn"
-			#vector = Vector2(0,58)
 			await moveCamAction("single")
 			await cardSingleTarget(10 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
 		"Frost":
-			#Frost I
-			#raw = 7
-			#accuracy = 90
-			#mp_cost = 1
-			#nameSpell = "Frost"
-			#status = "ice"
-			#addrScen = "res://Scenes/Effects/ice.tscn"
 			await moveCamAction("single")
 			await cardSingleTarget(7 ,90,1, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
 		"Stone":
-			#Stone I
-			#raw = 12
-			#accuracy = 90
-			#mp_cost = 1
-			#nameSpell = "Stone"
-			#status = "earth"
-			#addrScen = "res://Scenes/Effects/earth.tscn"
 			await moveCamAction("single")
 			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
 		"Burn":
@@ -655,72 +583,9 @@ func execute_action():
 			if res[0] == true:
 				print(res[1])
 				await cardDoT((12 * res[1]), 2,"fire")
-			#var init_damage: int
-			#var dot: int
-			#accuracy = 80
-			#mp_cost = 1
-			#for c in combatants:
-				#await c.disable_bars()
-			#$Camera2D/CText.text = "Burn"
-			#cam_zoom = 6
-			#cam_pos = combatants[target].position
-			#await get_tree().create_timer(1.0).timeout
-			#$Camera2D/CText.text = ""
-			#scene = load("res://Scenes/Effects/fire.tscn")
-			#instance = scene.instantiate()
-			#instance.position = combatants[target].position
-			#add_child(instance)
-			##Damage Calculations
-			#text = load("res://Scenes/UI/damage.tscn")
-			#text_instance = text.instantiate()
-			#if roll <= accuracy:
-				#damage = combatants[curr_turn].atk_status(16,"fire")
-				#init_damage= damage * .25
-				#dot = damage - init_damage
-				#combatants[curr_turn].MP -= mp_cost
-				#text_instance.get_node("Text").text = str(init_damage)
-				#text_instance.get_node("Text").set("theme_override_colors/font_color",Color("d5621f"))
-				#text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("ff0000"))
-				#if _cState == Combat.P_Action:
-					#hand.pop_at(card_select)
-			#else:
-				#init_damage = 0
-				#text_instance.get_node("Text").text = "Miss"
-				#combatants[target].velocity.x = 700
-			#await instance.display_damage
-			#combatants[target].take_damage(init_damage)
-			#combatants[target].add_child(text_instance)
-			#await instance.anim_done
-			#if roll <= accuracy:
-				#var effect = load("res://Scenes/UI/effect.tscn")
-				#var effect_instance = effect.instantiate()
-				#var dot_effect = DoT.new()
-				#dot_effect.element = "fire"
-				#dot_effect.proc_id = 0
-				#dot_effect.rounds = 2
-				#dot_effect.icon = "dot"
-				#dot_effect.damage_total = dot
-				#dot_effect.damage_remaining = dot
-				#combatants[target].status_effects.push_back(dot_effect)
-				#effect_instance.get_node("Text").text = "[center]" + str(dot) + " [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img] 2 [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
-				#combatants[target].add_child(effect_instance)
-			#if  combatants[target] == null or combatants[target].is_dead == true:
-				#combatants.pop_at(target)
-				#initiative.pop_at(target)
-				#init_ui.get_child(target + 1).queue_free()
-				#print(combatants)
-			#await get_tree().create_timer(1.0).timeout
 		"Quake":
-			#Quake I
-			#raw = 10
-			#accuracy = 75
-			#mp_cost = 2
-			#nameSpell = "Quake"
-			#status = "earth"
-			#addrScen = "res://Scenes/Effects/earth.tscn"
 			await moveCamAction("multi")
 			await cardAoeTarget(10, 75, 2, "earth", "res://Scenes/Effects/earth.tscn")
-			
 		"Heat Up":
 			#Heat Up I
 			raw = 1.4
@@ -731,8 +596,7 @@ func execute_action():
 			await cardBuff(raw, status, addrScen)
 			
 		"Charge":
-			#Charge I
-			
+			#Charge I	
 			raw = 1.45
 			nameSpell = "Charge"
 			status = "lightning"
