@@ -1,26 +1,26 @@
-[gd_scene load_steps=4 format=3 uid="uid://dvwrtwo2t0a1y"]
+[gd_scene load_steps=4 format=3 uid="uid://dkl1135ptl6nn"]
 
-[ext_resource type="Script" path="res://Scripts/card.gd" id="1_k6fp5"]
-[ext_resource type="Texture2D" uid="uid://decs1x0jxcy42" path="res://Assets/Card/Growth.png" id="2_4v6m3"]
-[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_0mlk0"]
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_pkfcn"]
+[ext_resource type="Texture2D" uid="uid://decs1x0jxcy42" path="res://Assets/Card/Growth.png" id="2_30luo"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_f80ve"]
 
 [node name="growth_card" type="Button"]
 offset_left = -15.0
 offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
-script = ExtResource("1_k6fp5")
-action_id = 18
+script = ExtResource("1_pkfcn")
+action_id = "Growth"
 
 [node name="Card" type="Sprite2D" parent="."]
-position = Vector2(14, 19)
+position = Vector2(15, 19)
 scale = Vector2(0.1, 0.1)
-texture = ExtResource("2_4v6m3")
+texture = ExtResource("2_30luo")
 
 [node name="hover" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(342, 104)
-stream = ExtResource("3_0mlk0")
+stream = ExtResource("3_f80ve")
 
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="pressed" from="." to="." method="_on_pressed"]

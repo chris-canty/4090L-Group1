@@ -11,10 +11,11 @@ var MP: int = 0
 var direction = 'up'
 var movement = 0
 var combat_spot = Vector2(0,0)
-var in_combat = false
-var in_position = false
-var is_dead = false
+var in_combat : bool = false
+var in_position: bool = false
+var is_dead: bool = false
 signal damage
+@onready var status_ui = $"StatusEffects"
 
 var status_effects: Array = []
 
@@ -41,6 +42,42 @@ func _process(delta):
 		$"MP_Bar".value = MP
 		$"MP_Text".text = str(MP)
 		$"HP_Text".text = str(HP)
+		for s in status_ui.get_children():
+			s.texture = null
+		for i in range(min(8,len(status_effects))):
+			match status_effects[i].element:
+				"fire":
+					match status_effects[i].icon:
+						"good":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Fire_Good.png")
+						"bad":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Fire_Bad.png")
+						"dot":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Fire_OT.png")
+				"lightning":
+					match status_effects[i].icon:
+						"good":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Lightning_Good.png")
+						"bad":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Lightning_Bad.png")
+						"dot":
+							pass
+				"ice":
+					match status_effects[i].icon:
+						"good":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Ice_Good.png")
+						"bad":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Ice_Bad.png")
+						"dot":
+							pass
+				"earth":
+					match status_effects[i].icon:
+						"good":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Earth_Good.png")
+						"bad":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Earth_Bad.png")
+						"dot":
+							pass
 		if in_position == false:
 			var speed: float = 5 #set this to whatever you want, 5ish is a good start
 			position.x = lerp(position.x,combat_spot.x,speed * delta)
@@ -77,18 +114,20 @@ func enable_bars():
 	$HP_Text.visible = true
 	$MP_Bar.visible = true
 	$MP_Text.visible = true
+	$StatusEffects.visible = true
 	
 func disable_bars():
 	$HP_Bar.visible = false
 	$HP_Text.visible = false
 	$MP_Bar.visible = false
 	$MP_Text.visible = false
+	$StatusEffects.visible = false
 
 func move_character(spot: Vector2):
 	combat_spot = spot
 	in_position = false
 
-func atk_status(dmg: int, element: String):
+func atk_status(dmg: float, element: String):
 	var counter = 0
 	while counter < len(status_effects):
 		if status_effects[counter].proc_id == 1 and (status_effects[counter].element == element or status_effects[counter].element == "universal"):

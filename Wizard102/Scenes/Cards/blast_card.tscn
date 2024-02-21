@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cjnx45m7m17kq"]
+
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_70tkk"]
+[ext_resource type="Texture2D" uid="uid://bpxkvnslyh1k5" path="res://Assets/Card/Blast.png" id="2_yk7du"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_irdbh"]
+
+[node name="blast_card" type="Button"]
+offset_left = -15.0
+offset_top = -18.0
+offset_right = 13.0
+offset_bottom = 21.0
+script = ExtResource("1_70tkk")
+action_id = "Blast"
+mp_cost = 1
+target_type = 1
+
+[node name="Card" type="Sprite2D" parent="."]
+position = Vector2(14, 19)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_yk7du")
+
+[node name="hover" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(342, 104)
+stream = ExtResource("3_irdbh")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

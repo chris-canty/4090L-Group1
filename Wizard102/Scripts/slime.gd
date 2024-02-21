@@ -2,7 +2,7 @@ extends "res://Scripts/character.gd"
 var rng = RandomNumberGenerator.new()
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if in_combat == true:
 		$AnimatedSprite2D.flip_h = true
 		if velocity.x > 0:
@@ -35,22 +35,22 @@ func enemy_ai(combatants: Array):
 	'''
 	match MP:
 		0:
-			return [0,self]
+			return ["",self]
 		6:
-			return [99,combatants[0]]
+			return ["Ultima",combatants[0]]
 		_:
 			if status_effects.size() > 0:
 				for s in status_effects:
 					print(s)
 					if s.element == "ice" and "augment" in s:
 						if s.augment > 1:
-							return [3,combatants[0]]
+							return ["Frost",combatants[0]]
 			if rng.randi_range(1,10) < 5:
-				return [3,combatants[0]]
+				return ["Frost",combatants[0]]
 			elif rng.randi_range(1,10) < 8:
 				while true:
 					var target = rng.randi_range(0,len(combatants)-1)
 					if combatants[target].is_in_group("Enemy"):
-						return [17,combatants[target]]
+						return ["Cooldown",combatants[target]]
 			else:
-				return [0,self]
+				return ["",self]

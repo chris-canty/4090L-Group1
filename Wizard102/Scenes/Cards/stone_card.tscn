@@ -10,7 +10,7 @@ offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_i5ogh")
-action_id = 4
+action_id = "Stone"
 mp_cost = 1
 target_type = 1
 
@@ -23,6 +23,6 @@ texture = ExtResource("2_s1vht")
 position = Vector2(342, 104)
 stream = ExtResource("3_v8bqe")
 
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
-[connection signal="pressed" from="." to="." method="_on_pressed"]

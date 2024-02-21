@@ -5,7 +5,7 @@ extends "res://Scripts/character.gd"
 
 
 @export var deck: Array = []
-func _physics_process(delta):
+func _physics_process(_delta):
 	if in_combat == false:
 		if Input.is_action_pressed('move_left'):
 			direction = 'left'
