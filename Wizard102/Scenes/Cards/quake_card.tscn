@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2tagv5p77mvt"]
+
+[ext_resource type="Script" path="res://Scripts/card.gd" id="1_fkiis"]
+[ext_resource type="Texture2D" uid="uid://b6uv6kg0xmyi5" path="res://Assets/Card/Quake.png" id="2_xwgkp"]
+[ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_fk7bf"]
+
+[node name="quake_card" type="Button"]
+offset_left = -15.0
+offset_top = -18.0
+offset_right = 13.0
+offset_bottom = 21.0
+script = ExtResource("1_fkiis")
+action_id = 11
+mp_cost = 2
+target_type = 2
+
+[node name="Card" type="Sprite2D" parent="."]
+position = Vector2(14, 19)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_xwgkp")
+
+[node name="hover" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(342, 104)
+stream = ExtResource("3_fk7bf")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="pressed" from="." to="." method="_on_pressed"]
