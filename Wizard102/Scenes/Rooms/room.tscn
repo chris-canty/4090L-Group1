@@ -690,7 +690,8 @@ stream = ExtResource("7_iasap")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -100)
-zoom = Vector2(2, 2)
+offset = Vector2(0, 18.22)
+zoom = Vector2(5, 5)
 process_callback = 0
 limit_left = -223
 limit_top = -219
