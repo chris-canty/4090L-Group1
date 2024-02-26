@@ -2,7 +2,7 @@
 Base Class for all Character Entities
 '''
 extends CharacterBody2D
-@export var MaxHP: int = 10
+@export var MaxHP: int = 100
 var HP: int = MaxHP
 @export var MaxMP: int = 1
 var MP: int = 0
@@ -33,6 +33,9 @@ Not sure if we want to use these
 
 func _ready():
 	HP = MaxHP
+	if PlayerData.player_start_position != Vector2.ZERO:
+		position = PlayerData.player_start_position
+
 
 func _process(delta):
 	if in_combat == true:
