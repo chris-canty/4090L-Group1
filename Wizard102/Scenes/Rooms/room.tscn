@@ -22,7 +22,7 @@ script = ExtResource("1_6p8ux")
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Burn", "Heat Up", "Blast", "Burn", "Dark"]
+deck = ["Ember", "Ember", "Burn", "Heat Up", "Blast", "Burn", "Dark", "Ray"]
 MaxMP = 3
 SPD = 60
 move_speed = null

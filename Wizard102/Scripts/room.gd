@@ -406,6 +406,9 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		"dark":
 			t_color = "#8e43f7"
 			t_shadow = "#572f8f"
+		"light":
+			t_color = "#f5ff69"
+			t_shadow = "#aab058"
 	var scene = load(addrScen)
 	var instance = scene.instantiate()
 	instance.position = combatants[target].position -vector
@@ -600,6 +603,9 @@ func execute_action():
 		"Dark":
 			await moveCamAction("single")
 			await cardSingleTarget(8 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
+		"Ray":
+			await moveCamAction("single")
+			await cardSingleTarget(7 ,80, 1, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
