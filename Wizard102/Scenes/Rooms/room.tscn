@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
-[ext_resource type="PackedScene" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
-[ext_resource type="PackedScene" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
+[ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
+[ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
 [ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
 [ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_5rje6"]
-[ext_resource type="PackedScene" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_ojv2w"]
-[ext_resource type="PackedScene" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
+[ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_ojv2w"]
+[ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
 [ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
 [ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
 [ext_resource type="Script" path="res://Scenes/Rooms/Area2D.gd" id="11_ckco5"]
@@ -22,7 +22,7 @@ script = ExtResource("1_6p8ux")
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Burn", "Heat Up"]
+deck = ["Ember", "Ember", "Burn", "Heat Up", "Blast", "Burn", "Dark"]
 MaxMP = 3
 SPD = 60
 move_speed = null

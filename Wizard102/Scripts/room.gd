@@ -400,6 +400,12 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
+		"arcane":
+			t_color = "#4fffbe"
+			t_shadow = "#61c780"
+		"dark":
+			t_color = "#8e43f7"
+			t_shadow = "#572f8f"
 	var scene = load(addrScen)
 	var instance = scene.instantiate()
 	instance.position = combatants[target].position -vector
@@ -458,6 +464,15 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
+		"light":
+			t_color = "#f5ff69"
+			t_shadow = "#aab058"
+		"arcane":
+			t_color = "#4fffbe"
+			t_shadow = "#61c780"
+		"dark":
+			t_color = "#8e43f7"
+			t_shadow = "#572f8f"
 	var scene = load(addrScen)
 	var hit = false
 	for i in range(1,len(combatants)):
@@ -576,6 +591,15 @@ func execute_action():
 		"Stone":
 			await moveCamAction("single")
 			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
+		"Blast":
+			await moveCamAction("single")
+			await cardSingleTarget(6, 75, 1, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
+		"Stun":
+			await moveCamAction("single")
+			await cardSingleTarget(3 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+		"Dark":
+			await moveCamAction("single")
+			await cardSingleTarget(8 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
