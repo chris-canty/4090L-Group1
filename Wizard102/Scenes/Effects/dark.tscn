@@ -590,16 +590,17 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 30.0
+"speed": 60.0
 }]
 
 [node name="dark" type="AnimatedSprite2D"]
+scale = Vector2(0.62, 0.59)
 sprite_frames = SubResource("SpriteFrames_jbcrf")
 autoplay = "default"
-frame = 73
+frame = 82
 frame_progress = 1.0
 script = ExtResource("2_tss7v")
-damage_delay = 0.4
+damage_delay = 0.5
 
 [node name="sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_h7ktt")

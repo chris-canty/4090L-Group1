@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
 [ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
 [ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
-[ext_resource type="Script" path="res://Scenes/Rooms/Area2D.gd" id="11_ckco5"]
-[ext_resource type="Script" path="res://Scenes/Rooms/Area2D2.gd" id="12_du7ju"]
+[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
+[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
 
 [node name="basic_room" type="Node2D"]
 script = ExtResource("1_6p8ux")
@@ -22,10 +22,9 @@ script = ExtResource("1_6p8ux")
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Burn", "Heat Up", "Blast", "Burn", "Dark", "Ray"]
+deck = ["Ember", "Bolt", "Frost", "Stone", "Ray", "Dark", "Blast", "Heat Up", "Burn", "Quake", "Chill"]
 MaxMP = 3
 SPD = 60
-move_speed = null
 
 [node name="TileMap3" parent="." instance=ExtResource("5_ojv2w")]
 
