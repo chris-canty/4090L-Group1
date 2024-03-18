@@ -1,6 +1,10 @@
 extends Node2D
+
+#Status Effects Scripts
 const Boost_ATK = preload("res://Scripts/Status Effects/boost_atk.gd")
 const DoT = preload("res://Scripts/Status Effects/dot.gd")
+const Stun = preload("res://Scripts/Status Effects/stun.gd")
+
 var cam_pos: Vector2 = Vector2(0,0)
 var cam_zoom: float = 1
 var cam_speed: float = 10
@@ -168,12 +172,16 @@ func next_turn():
 		return
 	curr_turn = find_turn()
 	print(curr_turn)
-	combatants[curr_turn].run_status()
+	combatants[curr_turn].run_status()		
 	if combatants[curr_turn].is_dead == true:
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
 		initiative.pop_at(curr_turn)
 		init_ui.get_child(curr_turn + 1).queue_free()
+		next_turn()
+		return
+	if combatants[curr_turn].is_stun == true:
+		combatants[curr_turn].is_stun = false
 		next_turn()
 		return
 	#Player
@@ -400,6 +408,15 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
+		"arcane":
+			t_color = "#4fffbe"
+			t_shadow = "#61c780"
+		"dark":
+			t_color = "#8e43f7"
+			t_shadow = "#572f8f"
+		"light":
+			t_color = "#f5ff69"
+			t_shadow = "#aab058"
 	var scene = load(addrScen)
 	var instance = scene.instantiate()
 	instance.position = combatants[target].position -vector
@@ -458,6 +475,15 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 		"earth":
 			t_color = "6e5003"
 			t_shadow = "005000"
+		"light":
+			t_color = "#f5ff69"
+			t_shadow = "#aab058"
+		"arcane":
+			t_color = "#4fffbe"
+			t_shadow = "#61c780"
+		"dark":
+			t_color = "#8e43f7"
+			t_shadow = "#572f8f"
 	var scene = load(addrScen)
 	var hit = false
 	for i in range(1,len(combatants)):
@@ -494,7 +520,7 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 	return hit
 	
 	
-func cardBuff(multiplier: float, element: String, info: String):
+func cardBuff(multiplier: float, element: String, info: String, icon: String):
 	var text = load("res://Scenes/UI/effect.tscn")
 	var text_instance = text.instantiate()
 	var boost = Boost_ATK.new()
@@ -502,7 +528,7 @@ func cardBuff(multiplier: float, element: String, info: String):
 	boost.proc_id = 1
 	boost.rounds = -1
 	boost.augment = multiplier
-	boost.icon = "good"
+	boost.icon = icon
 	combatants[target].status_effects.push_back(boost)
 	if _cState == Combat.P_Action:
 		hand.pop_at(card_select)
@@ -566,7 +592,7 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(8, 80, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(8, 20, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
 			await cardSingleTarget(10 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
@@ -576,6 +602,18 @@ func execute_action():
 		"Stone":
 			await moveCamAction("single")
 			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
+		"Blast":
+			await moveCamAction("single")
+			await cardSingleTarget(6, 75, 1, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
+		"Stun":
+			await moveCamAction("single")
+			await cardSingleTarget(3 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+		"Dark":
+			await moveCamAction("single")
+			await cardSingleTarget(8 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
+		"Ray":
+			await moveCamAction("single")
+			await cardSingleTarget(7 ,80, 1, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
@@ -593,7 +631,7 @@ func execute_action():
 			status = "fire"
 			addrScen = "[center]+40% to Next [img width=12]res://Assets/Icons/Fire.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await moveCamAction("single")
-			await cardBuff(raw, status, addrScen)
+			await cardBuff(raw, status, addrScen, "good")
 			
 		"Charge":
 			#Charge I	
@@ -602,16 +640,15 @@ func execute_action():
 			status = "lightning"
 			addrScen = "[center]+45% to Next [img width=12]res://Assets/Icons/Lightning.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await moveCamAction("single")
-			await cardBuff(raw, status, addrScen)
+			await cardBuff(raw, status, addrScen, "good")
 			
 		"Cooldown":
 			#Cooldown I
 			raw = 1.35
-			nameSpell = "Cooldown"
 			status = "ice"
 			addrScen = "[center]+35% to Next [img width=12]res://Assets/Icons/Ice.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await moveCamAction("single")
-			await cardBuff(raw, status, addrScen)
+			await cardBuff(raw, status, addrScen, "good")
 			
 		"Growth":
 			#Growth I
@@ -620,8 +657,18 @@ func execute_action():
 			status = "earth"
 			addrScen = "[center]+50% to Next [img width=12]res://Assets/Icons/Earth.png[/img] [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
 			await moveCamAction("single")
-			await cardBuff(raw, status, addrScen)
+			await cardBuff(raw, status, addrScen, "good")
+		"Chill":
+			#Chill I
+			raw = 0.75
+			status = "universal"
+			addrScen = "[center]-25% to Next [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
+			await moveCamAction("single")
+			await cardBuff(raw, status, addrScen, "bad")
 			
+		"Stun":
+			#Stun I
+			pass
 		"Ultima":
 			#Ultima
 			damage = 9999

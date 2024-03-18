@@ -2,8 +2,8 @@
 Base Class for all Character Entities
 '''
 extends CharacterBody2D
-@export var MaxHP: int = 10
-var HP: int = MaxHP
+@export var MaxHP: int
+@onready var HP: int = MaxHP
 @export var MaxMP: int = 1
 var MP: int = 0
 @export var SPD: int = 0
@@ -13,6 +13,7 @@ var movement = 0
 var combat_spot = Vector2(0,0)
 var in_combat : bool = false
 var in_position: bool = false
+var is_stun: bool = false
 var is_dead: bool = false
 signal damage
 @onready var status_ui = $"StatusEffects"
@@ -32,7 +33,9 @@ Not sure if we want to use these
 
 
 func _ready():
-	HP = MaxHP
+	if PlayerData.player_start_position != Vector2.ZERO:
+		position = PlayerData.player_start_position
+
 
 func _process(delta):
 	if in_combat == true:
@@ -76,6 +79,14 @@ func _process(delta):
 							status_ui.get_child(i).texture = load("res://Assets/Icons/Earth_Good.png")
 						"bad":
 							status_ui.get_child(i).texture = load("res://Assets/Icons/Earth_Bad.png")
+						"dot":
+							pass
+				"universal":
+					match status_effects[i].icon:
+						"good":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Attack_Good.png")
+						"bad":
+							status_ui.get_child(i).texture = load("res://Assets/Icons/Attack_Bad.png")
 						"dot":
 							pass
 		if in_position == false:
