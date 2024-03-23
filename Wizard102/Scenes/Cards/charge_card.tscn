@@ -11,6 +11,7 @@ offset_right = 13.0
 offset_bottom = 21.0
 script = ExtResource("1_jugfh")
 action_id = "Charge"
+card_type = "buff"
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(14, 19)

@@ -11,14 +11,15 @@ var cam_speed: float = 10
 var bgm_volume: float = -22.0
 enum States {COMBAT,EXPLORE}
 var _state : int = States.EXPLORE
-var player_spot: Vector2 = Vector2(-80,-99)
+var player_spot: Vector2 = Vector2(-80,-79)
 var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
 var card_pos = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
+var alt_card_pos = [Vector2(20,-12),Vector2(40,-12),Vector2(60,-12)]
 var pass_pos = Vector2(-60,-10)
 var temp_init = 0
 
 #Variables for Combat
-enum Combat {Idle,P_Select,P_Target,P_Action,Enemy}
+enum Combat {Idle,P_Select,P_Enchant,P_Target,P_Action,Enemy}
 var _cState: int = Combat.Idle
 var rng = RandomNumberGenerator.new()
 var combatants: Array = []
@@ -28,12 +29,19 @@ var curr_turn: int = -1
 var target: int = -1
 var card_select: int = -1
 var action_id: String = ""
+var alt_action_id: String = ""
+var alt_action_index = -1
 @onready var init_ui = $TurnUI/Initiative
 
 var deck: Array = []
 var hand: Array = []
+var alt_hand: Array = []
+var alt_deck: Array = []
 var hand_ui: Array = []
+var hand_enchants: Array = ["","","","","","",""]
+var alt_hand_ui: Array = []
 var pass_ui = null
+var active_card : Button
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
@@ -74,15 +82,19 @@ func _process(delta):
 			curr_turn = len(combatants) - 1
 		if target >= len(combatants):
 			target = len(combatants) - 1
-		if Input.is_action_pressed("ui_cancel") and _cState == Combat.P_Target:
+		if Input.is_action_pressed("ui_cancel") and (_cState == Combat.P_Target or _cState == Combat.P_Enchant):
 			$cancel.play()
+			active_card = null
 			initiative[0] = temp_init
 			init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
 			for card in hand_ui:
 				card.queue_free()
+			for card in alt_hand_ui:
+				card.queue_free()
 			for t in possible_targets:
 				t[1].queue_free()
 			hand_ui.clear()
+			alt_hand_ui.clear()
 			possible_targets.clear()
 			target = -1
 			card_select = -1
@@ -98,7 +110,9 @@ func _process(delta):
 	for i in range(len(hand_ui)):
 		hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos[i].x,card_speed * delta)
 		hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos[i].y,card_speed * delta)
-
+	for i in range(len(alt_hand_ui)):
+		alt_hand_ui[i].position.x = lerp(alt_hand_ui[i].position.x,alt_card_pos[i].x,card_speed * delta)
+		alt_hand_ui[i].position.y = lerp(alt_hand_ui[i].position.y,alt_card_pos[i].y,card_speed * delta)
 func initiate_combat():
 	_state = States.COMBAT
 	$Camera2D.limit_left = -100000
@@ -108,6 +122,8 @@ func initiate_combat():
 	$BGM.play()
 	deck = $Player.deck
 	deck.shuffle()
+	alt_deck = PlayerData.alt_deck
+	alt_deck.shuffle()
 	$Player.direction = "right"
 	$Player.move_character(player_spot)
 	$Player/AnimatedSprite2D.play("idle_side")
@@ -154,6 +170,7 @@ func next_turn():
 		queue_free()
 	if combatants.size() == 1:
 		$Player.in_combat = false
+		PlayerData.alt_deck = alt_deck + alt_hand
 		_state = States.EXPLORE
 		init_ui.get_child(1).queue_free()
 		$Player.disable_bars()
@@ -172,7 +189,7 @@ func next_turn():
 		return
 	curr_turn = find_turn()
 	print(curr_turn)
-	combatants[curr_turn].run_status()		
+	await combatants[curr_turn].run_status()		
 	if combatants[curr_turn].is_dead == true:
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
@@ -182,13 +199,15 @@ func next_turn():
 		return
 	if combatants[curr_turn].is_stun == true:
 		combatants[curr_turn].is_stun = false
+		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
+		init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 		next_turn()
 		return
 	#Player
 	if curr_turn == 0:
 		player_turn()
 	else:
-		cam_pos = combatants[curr_turn].position - Vector2(0,20)
+		cam_pos = combatants[curr_turn].position + Vector2(0,-20)
 		cam_zoom = 6
 		_cState = Combat.Enemy
 		combatants[curr_turn].MP += 1
@@ -237,7 +256,7 @@ func player_turn():
 	print("Player Turn")
 	var scene
 	var instance
-	cam_pos = combatants[curr_turn].position - Vector2(0,20)
+	cam_pos = combatants[curr_turn].position - Vector2(0,40)
 	cam_zoom = 6
 	if _cState == Combat.Idle:
 		$Player.MP += 1
@@ -246,38 +265,10 @@ func player_turn():
 		$Player.MP = $Player.MaxMP
 	while hand.size() < 7 and deck.size() >= 1:
 		hand.push_back(deck.pop_front())
+	while alt_hand.size() < 3 and alt_deck.size() >= 1:
+		alt_hand.push_back(alt_deck.pop_front())
 	for card: String in hand:
 		var mp_cost
-		'''
-		match card:
-			1:
-				scene = load("res://Scenes/Cards/ember_card.tscn")
-				mp_cost = 1
-			2:
-				scene = load("res://Scenes/Cards/bolt_card.tscn")
-				mp_cost = 1
-			3:
-				scene = load("res://Scenes/Cards/frost_card.tscn")
-				mp_cost = 1
-			4:
-				scene = load("res://Scenes/Cards/stone_card.tscn")
-				mp_cost = 1
-			8:
-				scene = load("res://Scenes/Cards/burn_card.tscn")
-				mp_cost = 1
-			11:
-				scene = load("res://Scenes/Cards/quake_card.tscn")
-				mp_cost = 2
-			15:
-				scene = load("res://Scenes/Cards/heatup_card.tscn")
-				mp_cost = 0
-			16:
-				scene = load("res://Scenes/Cards/charge_card.tscn")
-				mp_cost = 0
-			18:
-				scene = load("res://Scenes/Cards/growth_card.tscn")
-				mp_cost = 0
-		'''
 		var load_str = card.replace(' ', '')
 		load_str = load_str.to_lower()
 		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
@@ -291,6 +282,25 @@ func player_turn():
 			instance.modulate = Color("3b3b3b")
 		instance.get_node("Card").scale = Vector2(0,0)
 		hand_ui.push_back(instance)
+	for i in range(len(hand_ui)):
+		if hand_enchants[i] != "":
+			enchant_card(hand_ui[i],hand_enchants[i])
+	for card: String in alt_hand:
+		var mp_cost
+		var load_str = card.replace(' ', '')
+		load_str = load_str.to_lower()
+		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
+		scene = load(load_str)
+		instance = scene.instantiate()
+		mp_cost = instance.mp_cost
+		$Player.add_child(instance)
+		await instance._ready()
+		instance.position = Vector2(0,0)
+		if $Player.MP < mp_cost:
+			instance.modulate = Color("3b3b3b")
+		instance.get_node("Card").scale = Vector2(0,0)
+		alt_hand_ui.push_back(instance)
+			
 			
 	pass_ui.position = pass_pos
 	pass_ui.get_node("Card").scale = Vector2(0,0)
@@ -310,7 +320,35 @@ func discard(card: Button):
 			hand.pop_at(i)
 			return
 			
+func enchant_card(button: Button, alt_a_id: String):
+	button.get_node("Card").texture = load("res://Assets/Card/" + str(button.action_id) + "_" + str(alt_a_id) + ".png")
+	match alt_a_id:
+		"Surge":
+			button.damage_init += 5
+	
+	
+			
 func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
+	
+	#Enchanting Cards
+	if _cState == Combat.P_Enchant:
+		if button.modulate == Color("ffffff"):
+			$enchant.play()
+			for i in range(len(hand_ui)):
+				if hand_ui[i] == button:
+					hand_enchants[i] = alt_action_id
+			enchant_card(button, alt_action_id)
+			alt_hand_ui.pop_at(alt_action_index)
+			alt_hand.pop_at(alt_action_index)
+			#Resetting Stuff
+			for card in hand_ui:
+				card.modulate = Color("ffffff")
+			for card in alt_hand_ui:
+				card.visible = true
+			_cState = Combat.P_Select
+		else:
+			$cancel.play()
+		return
 	_cState = Combat.P_Target
 	var counter = 0 
 	for card in hand_ui:
@@ -336,6 +374,8 @@ func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
 	action_id = a_id
 	for card in hand_ui:
 		card.visible = false
+	for card in alt_hand_ui:
+		card.visible = false
 	pass_ui.visible = false
 	for i in range(len(combatants)):
 		if i == 0:
@@ -356,7 +396,22 @@ func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
 	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffff51")
 	temp_init = initiative[0]
 	initiative[0] = 100 - $Player.SPD
+	active_card = button
 	
+func select_alt_card(button : Button, a_id: String, mp_cost: int):
+	print("Alt Card")
+	$Select.play()
+	_cState = Combat.P_Enchant
+	for card in hand_ui:
+		if card.enchant_type.match(button.enchant_type) == false:
+			card.modulate = Color("3b3b3b")
+	for card in alt_hand_ui:
+		card.visible = false
+	alt_action_id = a_id
+	for i in range(len(alt_hand_ui)):
+		if alt_hand_ui[i] == button:
+			alt_action_index = i
+			print(i)
 	
 
 func select_target(target_button):
@@ -435,6 +490,9 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 		text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color(t_shadow))
 		if _cState == Combat.P_Action:
 			hand.pop_at(card_select)
+			hand_enchants.pop_at(card_select)
+			hand_enchants.push_back("")
+			
 	else:
 		damage = 0
 		text_instance.get_node("Text").text = "Miss"
@@ -451,6 +509,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	if combatants[target].is_dead == true:
 		combatants.pop_at(target)
 		initiative.pop_at(target)
+		init_ui.get_child(curr_turn + 1).queue_free()
 		print(combatants)
 	return [(roll <= accuracy),float(damage)/rawDamage]
 
@@ -500,6 +559,8 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 				damage = combatants[curr_turn].atk_status(rawDamage,element)
 				if _cState == Combat.P_Action:
 					hand.pop_at(card_select)
+					hand_enchants.pop_at(card_select)
+					hand_enchants.push_back("")
 				combatants[curr_turn].MP -= mp_cost
 				hit = true
 			text_instance.get_node("Text").text = str(int(damage))
@@ -532,6 +593,8 @@ func cardBuff(multiplier: float, element: String, info: String, icon: String):
 	combatants[target].status_effects.push_back(boost)
 	if _cState == Combat.P_Action:
 		hand.pop_at(card_select)
+		hand_enchants.pop_at(card_select)
+		hand_enchants.push_back("")
 	text_instance.get_node("Text").text = info
 	combatants[target].add_child(text_instance)
 	return boost
@@ -554,6 +617,19 @@ func cardDoT(over_time: int,rounds: int, element: String):
 	effect_string += "[img width=12]res://Assets/Icons/Attack.png[/img] " + str(rounds) + " [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
 	effect_instance.get_node("Text").text  = effect_string
 	combatants[target].add_child(effect_instance)		
+
+func cardStun(rounds: int):
+	var effect = load("res://Scenes/UI/effect.tscn")
+	var effect_instance = effect.instantiate()
+	var stun_effect = Stun.new()
+	stun_effect.element = "universal"
+	stun_effect.proc_id = 0
+	stun_effect.rounds = rounds
+	stun_effect.icon = "stun"
+	combatants[target].status_effects.push_back(stun_effect)
+	var effect_string = "[center] Stun " + str(rounds) + " [img width=12]res://Assets/Icons/Rounds.png[/img][/center]"
+	effect_instance.get_node("Text").text  = effect_string
+	combatants[target].add_child(effect_instance)
 
 func execute_action():
 	var scene
@@ -592,38 +668,35 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(8, 20, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
-			await cardSingleTarget(10 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
 		"Frost":
 			await moveCamAction("single")
-			await cardSingleTarget(7 ,90,1, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
 		"Stone":
 			await moveCamAction("single")
-			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
 		"Blast":
 			await moveCamAction("single")
-			await cardSingleTarget(6, 75, 1, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
-		"Stun":
-			await moveCamAction("single")
-			await cardSingleTarget(3 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
 		"Dark":
 			await moveCamAction("single")
-			await cardSingleTarget(8 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
 		"Ray":
 			await moveCamAction("single")
-			await cardSingleTarget(7 ,80, 1, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
-			var res = await cardSingleTarget(4, 80, 1, "fire", "res://Scenes/Effects/fire.tscn", Vector2(0,0))
+			var res = await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn", Vector2(0,0))
 			if res[0] == true:
 				print(res[1])
-				await cardDoT((12 * res[1]), 2,"fire")
+				await cardDoT((active_card.damage_ot * res[1]), 2,"fire")
 		"Quake":
 			await moveCamAction("multi")
-			await cardAoeTarget(10, 75, 2, "earth", "res://Scenes/Effects/earth.tscn")
+			await cardAoeTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "earth", "res://Scenes/Effects/earth.tscn")
 		"Heat Up":
 			#Heat Up I
 			raw = 1.4
@@ -668,9 +741,13 @@ func execute_action():
 			
 		"Stun":
 			#Stun I
-			pass
+			await moveCamAction("single")
+			var res = await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+			if res[0] == true:
+				print("stun")
+				await cardStun(1)
 		"Ultima":
-			#Ultima
+			#Ultima (This is how we used to this)
 			damage = 9999
 			accuracy = 100
 			mp_cost = 1
@@ -695,6 +772,8 @@ func execute_action():
 				text_instance.get_node("Text").set("theme_override_colors/font_shadow_color",Color("00a31e"))
 				if _cState == Combat.P_Action:
 					hand.pop_at(card_select)
+					hand_enchants.pop_at(card_select)
+					hand_enchants.push_back("")
 			else:
 				damage = 0
 				text_instance.get_node("Text").text = "Miss"
@@ -713,6 +792,9 @@ func execute_action():
 	for card in hand_ui:
 		card.queue_free()
 	hand_ui.clear()
+	for card in alt_hand_ui:
+		card.queue_free()
+	alt_hand_ui.clear()
 	possible_targets.clear()
 	#$Camera2D/CText.text = ""
 	#pass_ui.visible = false
