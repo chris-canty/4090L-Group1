@@ -217,7 +217,7 @@ func next_turn():
 		await get_tree().create_timer(0.5).timeout
 		var result: Array = combatants[curr_turn].enemy_ai(combatants) 
 		print(result)
-		if result[0] == "":
+		if result[0] == null:
 			for c in combatants:
 				c.disable_bars()
 			$Camera2D/CText.text = "Pass"
@@ -227,7 +227,8 @@ func next_turn():
 			for i in range(0,len(combatants)):
 				if combatants[i] == result[1]:
 					target = i
-			action_id = result[0]
+			action_id = result[0].action_id
+			active_card = result[0]
 			execute_action()
 	
 func find_turn():
