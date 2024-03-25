@@ -326,6 +326,7 @@ func enchant_card(button: Button, alt_a_id: String):
 	match alt_a_id:
 		"Surge":
 			button.damage_init += 5
+	button.is_enchant = true
 	
 	
 			
@@ -404,7 +405,7 @@ func select_alt_card(button : Button, a_id: String, mp_cost: int):
 	$Select.play()
 	_cState = Combat.P_Enchant
 	for card in hand_ui:
-		if card.enchant_type.match(button.enchant_type) == false:
+		if card.enchant_type.match(button.enchant_type) == false or card.is_enchant:
 			card.modulate = Color("3b3b3b")
 	for card in alt_hand_ui:
 		card.visible = false

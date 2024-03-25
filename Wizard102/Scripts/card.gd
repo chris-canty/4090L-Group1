@@ -8,6 +8,7 @@ var speed: float = 10
 @export var damage_init = 0
 @export var damage_ot = 0
 @export var accuracy = 100
+var is_enchant : bool = false
 
 
 # Called when the node enters the scene tree for the first time.
