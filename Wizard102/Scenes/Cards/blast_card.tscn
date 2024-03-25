@@ -13,6 +13,8 @@ script = ExtResource("1_70tkk")
 action_id = "Blast"
 mp_cost = 1
 target_type = 1
+damage_init = 6
+accuracy = 90
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(14, 19)
