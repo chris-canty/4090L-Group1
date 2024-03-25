@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=14 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
 [ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
 [ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
+[ext_resource type="PackedScene" uid="uid://cpoldisytgwur" path="res://Scenes/Characters/loot_drop.tscn" id="13_csaxg"]
 
 [node name="basic_room" type="Node2D"]
 script = ExtResource("1_6p8ux")
@@ -117,3 +118,6 @@ script = ExtResource("12_du7ju")
 position = Vector2(4.79303, 394.647)
 scale = Vector2(0.781342, 2.01041)
 polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
+
+[node name="lootDrop" parent="." instance=ExtResource("13_csaxg")]
+position = Vector2(-14, -122)

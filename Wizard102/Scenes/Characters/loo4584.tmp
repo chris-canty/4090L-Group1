@@ -1,0 +1,97 @@
+[gd_scene load_steps=9 format=3 uid="uid://cpoldisytgwur"]
+
+[ext_resource type="Script" path="res://Scenes/Characters/loot_drop.gd" id="1_1637u"]
+[ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="1_gsw0q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_terf8"]
+atlas = ExtResource("1_gsw0q")
+region = Rect2(288, 128, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tafac"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_terf8")
+}],
+"loop": true,
+"name": &"drop",
+"speed": 0.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"picked",
+"speed": 0.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bouq5"]
+size = Vector2(20, 28)
+
+[sub_resource type="GDScript" id="GDScript_c2kdf"]
+script/source = "extends CollisionShape2D
+
+var inPickArea= false
+var itemToPick = preload(\"res://Scenes/Characters/loot_drop.tscn\")
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	if inPickArea:
+		if Input.is_action_just_pressed(\"e\"):
+			
+			
+			
+
+func _on_pickable_area_body_entered(body):
+	if body.has_method(\"player\"):
+		inPickArea = true
+
+
+func _on_pickable_area_body_exited(body):
+	if body.has_method(\"player\"):
+		inPickArea = false
+"
+
+[sub_resource type="Animation" id="Animation_gbbr4"]
+resource_name = "fade"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qmkgx"]
+_data = {
+"fade": SubResource("Animation_gbbr4")
+}
+
+[node name="lootDrop" type="Node2D"]
+script = ExtResource("1_1637u")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_tafac")
+animation = &"drop"
+
+[node name="pickableArea" type="Area2D" parent="AnimatedSprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/pickableArea"]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_bouq5")
+script = SubResource("GDScript_c2kdf")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimatedSprite2D"]
+libraries = {
+"": SubResource("AnimationLibrary_qmkgx")
+}
+
+[connection signal="body_entered" from="AnimatedSprite2D/pickableArea" to="." method="_on_pickable_area_body_entered"]
+[connection signal="body_exited" from="AnimatedSprite2D/pickableArea" to="." method="_on_pickable_area_body_exited"]
