@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=15 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
 [ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
 [ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_jc4y6"]
+[ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vbblp"]
 
 [node name="basic_room" type="Node2D"]
 script = ExtResource("1_6p8ux")
@@ -118,3 +119,8 @@ polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
 [node name="enchant" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_jc4y6")
 volume_db = -11.143
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vbblp")]
+metadata/_edit_use_anchors_ = true
