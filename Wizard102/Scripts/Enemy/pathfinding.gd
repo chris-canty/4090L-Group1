@@ -15,11 +15,12 @@ func _physics_process(_delta: float) -> void:
      move_and_slide()
 
 func makepath() -> void:
-     nav.nav_agent = player.global_position
+     nav_agent.target_position = player.global_position
 
 
 
 
 func _on_timer_timeout():
      makepath()
-     
+
+
