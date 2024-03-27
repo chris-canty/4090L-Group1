@@ -121,6 +121,7 @@ stream = ExtResource("13_jc4y6")
 volume_db = -11.143
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vbblp")]
 metadata/_edit_use_anchors_ = true
