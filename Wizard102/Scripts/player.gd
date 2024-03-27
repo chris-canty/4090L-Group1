@@ -6,6 +6,9 @@ func _ready():
 		PlayerData.player_start_position = Vector2.ZERO
 
 @export var deck: Array = []
+@export var alt_deck: Array = []
+
+
 func _physics_process(_delta):
 	if in_combat == false:
 		if Input.is_action_pressed('move_left'):

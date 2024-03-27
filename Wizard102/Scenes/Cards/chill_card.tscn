@@ -12,6 +12,7 @@ offset_bottom = 21.0
 script = ExtResource("1_sh2x1")
 action_id = "Chill"
 target_type = 1
+card_type = "debuff"
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(15, 19)

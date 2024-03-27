@@ -155,7 +155,7 @@ func run_status():
 	var counter = 0
 	while counter < len(status_effects):
 		if status_effects[counter].proc_id == 0:
-			status_effects[counter].proc_effect(self)
+			await status_effects[counter].proc_effect(self)
 			if status_effects[counter].rounds == 0:
 				status_effects.pop_at(counter)
 			else:
@@ -185,3 +185,5 @@ func dropLoot():
 	lootInstance.global_position = $AnimatedSprite2D.global_position
 	get_parent().add_child(lootInstance)
 
+	await $AnimatedSprite2D.animation_finished
+	queue_free()

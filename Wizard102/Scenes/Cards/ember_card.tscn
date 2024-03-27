@@ -1,18 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://byhvmhp6j4p8f"]
+[gd_scene load_steps=5 format=3 uid="uid://byhvmhp6j4p8f"]
 
 [ext_resource type="Texture2D" uid="uid://drlrkcmesam5n" path="res://Assets/Card/Ember.png" id="1_biha7"]
 [ext_resource type="Script" path="res://Scripts/card.gd" id="1_vp2pu"]
 [ext_resource type="AudioStream" uid="uid://cmcelkb8gcdpl" path="res://Sounds/Sound_Effects/flipcard.wav" id="3_oljiu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uwour"]
 
 [node name="ember_card" type="Button"]
 offset_left = -15.0
 offset_top = -18.0
 offset_right = 13.0
 offset_bottom = 21.0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uwour")
 script = ExtResource("1_vp2pu")
 action_id = "Ember"
 mp_cost = 1
 target_type = 1
+damage_init = 8
+accuracy = 80
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(14, 19)

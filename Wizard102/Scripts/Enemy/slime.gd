@@ -1,6 +1,10 @@
 extends "res://Scripts/character.gd"
 var rng = RandomNumberGenerator.new()
 
+#SKILLS
+@onready var frost = load("res://Scenes/Cards/frost_card.tscn").instantiate()
+@onready var cooldown = load("res://Scenes/Cards/cooldown_card.tscn").instantiate()
+
 
 func _physics_process(_delta):
 	if in_combat == true:
@@ -33,6 +37,7 @@ func enemy_ai(combatants: Array):
 	Returns:
 		[Skill ID, Target]
 	'''
+	
 	match MP:
 		0:
 			return ["",self]
@@ -44,13 +49,13 @@ func enemy_ai(combatants: Array):
 					print(s)
 					if s.element == "ice" and "augment" in s:
 						if s.augment > 1:
-							return ["Frost",combatants[0]]
+							return [frost,combatants[0]]
 			if rng.randi_range(1,10) < 5:
-				return ["Frost",combatants[0]]
+				return [frost,combatants[0]]
 			elif rng.randi_range(1,10) < 8:
 				while true:
 					var target = rng.randi_range(0,len(combatants)-1)
 					if combatants[target].is_in_group("Enemy"):
-						return ["Cooldown",combatants[target]]
+						return [cooldown,combatants[target]]
 			else:
-				return ["",self]
+				return [null,self]

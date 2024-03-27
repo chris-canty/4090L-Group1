@@ -17,7 +17,7 @@ config/icon="res://wizard102.png"
 
 [autoload]
 
-PlayerData="*res://player_data.gd"
+PlayerData="*res://Scripts/player_data.gd"
 
 [display]
 

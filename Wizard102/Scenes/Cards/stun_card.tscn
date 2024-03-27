@@ -13,6 +13,8 @@ script = ExtResource("1_wboo4")
 action_id = "Stun"
 mp_cost = 1
 target_type = 1
+damage_init = 3
+accuracy = 70
 
 [node name="Card" type="Sprite2D" parent="."]
 position = Vector2(15, 19)
