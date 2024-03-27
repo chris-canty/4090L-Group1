@@ -592,28 +592,36 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(8, 20, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			#8
+			await cardSingleTarget(50, 20, 1, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
-			await cardSingleTarget(10 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+			#10
+			await cardSingleTarget(50 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
 		"Frost":
 			await moveCamAction("single")
-			await cardSingleTarget(7 ,90,1, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
+			#7
+			await cardSingleTarget(50 ,90,1, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
 		"Stone":
 			await moveCamAction("single")
-			await cardSingleTarget(12 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
+			#12
+			await cardSingleTarget(50 , 75, 1, "earth", "res://Scenes/Effects/earth.tscn", Vector2(0,0))
 		"Blast":
 			await moveCamAction("single")
-			await cardSingleTarget(6, 75, 1, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
+			#6
+			await cardSingleTarget(50, 75, 1, "arcane", "res://Scenes/Effects/arcane.tscn", Vector2(0,0))
 		"Stun":
 			await moveCamAction("single")
-			await cardSingleTarget(3 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
+			#3
+			await cardSingleTarget(50 ,80, 1, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
 		"Dark":
 			await moveCamAction("single")
-			await cardSingleTarget(8 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
+			#8
+			await cardSingleTarget(50 ,80, 1, "dark", "res://Scenes/Effects/dark.tscn", Vector2(0,0))
 		"Ray":
 			await moveCamAction("single")
-			await cardSingleTarget(7 ,80, 1, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
+			#7
+			await cardSingleTarget(50 ,80, 1, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
