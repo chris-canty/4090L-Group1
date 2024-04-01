@@ -273,7 +273,7 @@ func find_turn():
 
 func player_turn():
 	
-	deck.shuffle()
+	hand.shuffle()
 	
 	print("Player Turn")
 	var scene
@@ -830,7 +830,7 @@ func execute_action():
 
 
 func _on_loot_drop_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun", "Ultima"]
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 	var randomInt = randi( )% len(randomLoot)
 	
 	for items in deck:
@@ -842,7 +842,7 @@ func _on_loot_drop_picked():
 
 
 func _on_loot_drop_2_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun", "Ultima"]
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 	var randomInt = randi( )% len(randomLoot)
 	
 	for items in deck:
@@ -854,7 +854,7 @@ func _on_loot_drop_2_picked():
 
 
 func _on_loot_drop_3_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun", "Ultima"]
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 	var randomInt = randi( )% len(randomLoot)
 	
 	for items in deck:
