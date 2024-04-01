@@ -12,7 +12,7 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed("x") and tilemap2.visible:
-		reload_room(-17)
+		load_next_room()
 
 func _on_body_entered(body: Node):
 	if body.has_method("player"):
@@ -35,11 +35,59 @@ func toggle_tilemaps(entered: bool):
 		tilemap.visible = true
 		tilemap2.visible = false
 
-func reload_room(new_y_position: float = -17.0):
+#func load_next_room():
+	#PlayerData.next_room()
+	#var scene_path = "res://Scenes/Rooms/"
+	#if PlayerData.is_current_room_cleared():
+		#scene_path += "room_without_enemies.tscn"
+	#else:
+		#scene_path += "room.tscn"
+	#var current_scene = get_tree().current_scene
+	#var player = current_scene.get_node_or_null("Player")
+	#if player and player.has_method("player"):
+		#PlayerData.player_start_position = Vector2(player.position.x, -17)
+	#else:
+		#PlayerData.player_start_position = Vector2.ZERO
+		#
+	#var scene = load(scene_path).instantiate()
+	#get_tree().change_scene_to_packed(scene)
+	#
+func load_next_room():
+	PlayerData.next_room()
+	var scene_path
+	if PlayerData.is_current_room_cleared():
+		scene_path = "res://Scenes/Rooms/room_without_enemies.tscn"
+	else:
+		scene_path = "res://Scenes/Rooms/room.tscn"
 	var current_scene = get_tree().current_scene
 	var player = current_scene.get_node_or_null("Player")
 	if player and player.has_method("player"):
-		PlayerData.player_start_position = Vector2(player.position.x, new_y_position)
+		PlayerData.player_start_position = Vector2(player.position.x, -17)
 	else:
 		PlayerData.player_start_position = Vector2.ZERO
-	get_tree().reload_current_scene()
+
+	# Change to the next room based on whether it's cleared
+	get_tree().change_scene_to_file(scene_path)
+	
+	#var scene_resource = load(scene_path)
+	#if scene_resource and scene_resource is PackedScene:
+		#var scene = scene_resource.instantiate()
+		#var current_scene = get_tree().current_scene
+		#var player = current_scene.get_node_or_null("Player")
+		#if player and player.has_method("player"):
+			#PlayerData.player_start_position = Vector2(player.position.x, -17)
+		#else:
+			#PlayerData.player_start_position = Vector2.ZERO
+		#get_tree().change_scene_to_file("res://Scenes/Rooms/room_without_enemies.tscn")
+	#else:
+		#print("Failed to load scene at path: ", scene_path)
+
+
+#func reload_room(new_y_position: float = -17.0):
+	#var current_scene = get_tree().current_scene
+	#var player = current_scene.get_node_or_null("Player")
+	#if player and player.has_method("player"):
+		#PlayerData.player_start_position = Vector2(player.position.x, new_y_position)
+	#else:
+		#PlayerData.player_start_position = Vector2.ZERO
+	#get_tree().reload_current_scene()

@@ -1,0 +1,121 @@
+[gd_scene load_steps=14 format=3 uid="uid://7axkkhc1yeqx"]
+
+[ext_resource type="Script" path="res://Scripts/room.gd" id="1_ddip5"]
+[ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_13qmo"]
+[ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_o4hjb"]
+[ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="4_n3srr"]
+[ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_2viqb"]
+[ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_6oma6"]
+[ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="8_dvin1"]
+[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="9_elp1g"]
+[ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="10_ohgac"]
+[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_jxd3k"]
+[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_mfwe4"]
+[ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_s451y"]
+[ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vxvrc"]
+
+[node name="basic_room" type="Node2D"]
+script = ExtResource("1_ddip5")
+
+[node name="TileMap" parent="." instance=ExtResource("2_13qmo")]
+
+[node name="TileMap2" parent="." instance=ExtResource("3_o4hjb")]
+
+[node name="Player" parent="." instance=ExtResource("4_n3srr")]
+position = Vector2(-1, -17)
+deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
+alt_deck = ["Surge", "Surge", "Surge"]
+MaxMP = 3
+SPD = 60
+
+[node name="TileMap3" parent="." instance=ExtResource("5_2viqb")]
+
+[node name="TileMap4" parent="." instance=ExtResource("6_6oma6")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-204, 32, -172, 32, 220, 30, 219, -192, -220, -191, -220, 12, -245, -48, -241, -127, -227, -235, -153, -229, -39, -229, 53, -230, 140, -229, 242, -226, 244, -184, 253, -121, 239, -60, 237, -1, 238, 38, 160, 44, 93, 38, 3, 40, -81, 39, -125, 37, -203, 35, -219, 12)
+
+[node name="BGM" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_dvin1")
+volume_db = -80.0
+
+[node name="Select" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -100)
+stream = ExtResource("9_elp1g")
+
+[node name="cancel" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(68, -25)
+stream = ExtResource("10_ohgac")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -100)
+offset = Vector2(0, 18.22)
+zoom = Vector2(5, 5)
+process_callback = 0
+limit_left = -223
+limit_top = -219
+limit_right = 223
+limit_bottom = 11
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 23.395
+
+[node name="CText" type="Label" parent="Camera2D"]
+offset_left = -114.0
+offset_top = -64.0
+offset_right = 115.0
+offset_bottom = -41.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="TurnUI" type="CanvasLayer" parent="."]
+
+[node name="Initiative" type="VBoxContainer" parent="TurnUI"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 341.0
+offset_bottom = 114.0
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI/Initiative"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b][u]Turn:[/u][/b]"
+
+[node name="Label" type="Label" parent="TurnUI"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("11_jxd3k")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+position = Vector2(4.68189, -1.00005)
+scale = Vector2(0.84938, 1)
+polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
+
+[node name="Area2D2" type="Area2D" parent="."]
+script = ExtResource("12_mfwe4")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D2"]
+position = Vector2(4.79303, 394.647)
+scale = Vector2(0.781342, 2.01041)
+polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
+
+[node name="enchant" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_s451y")
+volume_db = -11.143
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vxvrc")]
+metadata/_edit_use_anchors_ = true

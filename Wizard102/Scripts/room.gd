@@ -169,6 +169,7 @@ func next_turn():
 		await get_tree().create_timer(3.0).timeout
 		queue_free()
 	if combatants.size() == 1:
+		PlayerData.clear_current_room()
 		$Player.in_combat = false
 		PlayerData.alt_deck = alt_deck + alt_hand
 		_state = States.EXPLORE
