@@ -8,7 +8,7 @@ const Stun = preload("res://Scripts/Status Effects/stun.gd")
 var cam_pos: Vector2 = Vector2(0,0)
 var cam_zoom: float = 1
 var cam_speed: float = 10
-var bgm_volume: float = -22.0
+var bgm_volume: float = -25.0
 enum States {COMBAT,EXPLORE}
 var _state : int = States.EXPLORE
 var player_spot: Vector2 = Vector2(-80,-79)
@@ -655,7 +655,10 @@ func execute_action():
 		#Pass
 		for card in hand_ui:
 			card.queue_free()
+		for card in alt_hand_ui:
+			card.queue_free()
 		hand_ui.clear()
+		alt_hand_ui.clear()
 		possible_targets.clear()
 		pass_ui.visible = false
 		for c in combatants:
