@@ -1,42 +1,36 @@
-[gd_scene load_steps=15 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=14 format=3 uid="uid://7axkkhc1yeqx"]
 
-[ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
-[ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
-[ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
-[ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
-[ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
-[ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_5rje6"]
-[ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_ojv2w"]
-[ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
-[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
-[ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
-[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
-[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
-[ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_jc4y6"]
-[ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vbblp"]
+[ext_resource type="Script" path="res://Scripts/room.gd" id="1_ddip5"]
+[ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_13qmo"]
+[ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_o4hjb"]
+[ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="4_n3srr"]
+[ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_2viqb"]
+[ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_6oma6"]
+[ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="8_dvin1"]
+[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="9_elp1g"]
+[ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="10_ohgac"]
+[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_jxd3k"]
+[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_mfwe4"]
+[ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_s451y"]
+[ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vxvrc"]
 
 [node name="basic_room" type="Node2D"]
-script = ExtResource("1_6p8ux")
+script = ExtResource("1_ddip5")
 
-[node name="TileMap" parent="." instance=ExtResource("2_g2xdv")]
+[node name="TileMap" parent="." instance=ExtResource("2_13qmo")]
 
-[node name="TileMap2" parent="." instance=ExtResource("3_61yxp")]
+[node name="TileMap2" parent="." instance=ExtResource("3_o4hjb")]
 
-[node name="Player" parent="." instance=ExtResource("3_w1mit")]
+[node name="Player" parent="." instance=ExtResource("4_n3srr")]
 position = Vector2(-1, -17)
 deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
 alt_deck = ["Surge", "Surge", "Surge"]
 MaxMP = 3
 SPD = 60
 
-[node name="TileMap3" parent="." instance=ExtResource("5_ojv2w")]
+[node name="TileMap3" parent="." instance=ExtResource("5_2viqb")]
 
-[node name="TileMap4" parent="." instance=ExtResource("6_e77aj")]
-
-[node name="TankySlime" parent="." instance=ExtResource("4_hqk4e")]
-position = Vector2(80, -143)
-MaxHP = 50
-SPD = 10
+[node name="TileMap4" parent="." instance=ExtResource("6_6oma6")]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
@@ -44,16 +38,16 @@ SPD = 10
 polygon = PackedVector2Array(-204, 32, -172, 32, 220, 30, 219, -192, -220, -191, -220, 12, -245, -48, -241, -127, -227, -235, -153, -229, -39, -229, 53, -230, 140, -229, 242, -226, 244, -184, 253, -121, 239, -60, 237, -1, 238, 38, 160, 44, 93, 38, 3, 40, -81, 39, -125, 37, -203, 35, -219, 12)
 
 [node name="BGM" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_5rje6")
+stream = ExtResource("8_dvin1")
 volume_db = -80.0
 
 [node name="Select" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(0, -100)
-stream = ExtResource("6_tnkya")
+stream = ExtResource("9_elp1g")
 
 [node name="cancel" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(68, -25)
-stream = ExtResource("7_iasap")
+stream = ExtResource("10_ohgac")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -100)
@@ -101,7 +95,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="Area2D" type="Area2D" parent="."]
-script = ExtResource("11_ckco5")
+script = ExtResource("11_jxd3k")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
 position = Vector2(4.68189, -1.00005)
@@ -109,7 +103,7 @@ scale = Vector2(0.84938, 1)
 polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
 
 [node name="Area2D2" type="Area2D" parent="."]
-script = ExtResource("12_du7ju")
+script = ExtResource("12_mfwe4")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D2"]
 position = Vector2(4.79303, 394.647)
@@ -117,11 +111,11 @@ scale = Vector2(0.781342, 2.01041)
 polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
 
 [node name="enchant" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("13_jc4y6")
+stream = ExtResource("13_s451y")
 volume_db = -11.143
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 visible = false
 
-[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vbblp")]
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vxvrc")]
 metadata/_edit_use_anchors_ = true

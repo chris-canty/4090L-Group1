@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxua73wqkyudc"]
+[gd_scene load_steps=8 format=3 uid="uid://bxua73wqkyudc"]
 
 [ext_resource type="Script" path="res://Scripts/main_menu.gd" id="1_keydh"]
 [ext_resource type="Texture2D" uid="uid://b7rev6hmerabe" path="res://Assets/Background Images/an-unlocked-entrance-at-a-historic-temple-in-pitsunda-free-photo.jpg" id="1_wlsdd"]
 [ext_resource type="Texture2D" uid="uid://bey0cawg5tbcq" path="res://Assets/Background Images/Cool Text - Wizard102 451535921826968.png" id="2_1e63c"]
+[ext_resource type="Theme" uid="uid://bkam3wnj62fi7" path="res://Scenes/UI/orange_button_theme.tres" id="4_ufrge"]
 
 [sub_resource type="SystemFont" id="SystemFont_jeekd"]
 font_names = PackedStringArray("Impact")
@@ -70,17 +71,20 @@ layout_mode = 2
 [node name="StartButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../QuitButton")
+theme = ExtResource("4_ufrge")
 theme_override_fonts/font = SubResource("SystemFont_jeekd")
 text = "Start"
 
 [node name="PlayerOptionsButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("4_ufrge")
 theme_override_fonts/font = SubResource("SystemFont_blxfq")
 text = "Options"
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../StartButton")
+theme = ExtResource("4_ufrge")
 theme_override_fonts/font = SubResource("SystemFont_ox0kv")
 text = "Quit"
 

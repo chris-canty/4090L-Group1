@@ -14,7 +14,7 @@ func _ready():
 
 func _process(delta):
 	if Input.is_action_just_pressed("x") and tilemap4.visible:
-		reload_room(-170)
+		load_previous_room()
 
 func _on_body_entered(body: Node):
 	if body.has_method("player"):
@@ -37,11 +37,29 @@ func toggle_tilemaps(entered: bool):
 		tilemap3.visible = true
 		tilemap4.visible = false
 
-func reload_room(new_y_position: float = -170.0):
+func load_previous_room():
+	PlayerData.previous_room()  # Adjust the PlayerData to the previous room state
+	var scene_path
+	if PlayerData.is_current_room_cleared():
+		scene_path = "res://Scenes/Rooms/room_without_enemies.tscn"  # Load without enemies if cleared
+	else:
+		scene_path = "res://Scenes/Rooms/room.tscn"  # Load with enemies if not cleared
 	var current_scene = get_tree().current_scene
 	var player = current_scene.get_node_or_null("Player")
 	if player and player.has_method("player"):
-		PlayerData.player_start_position = Vector2(player.position.x, new_y_position)
+		# Make sure to update the Y position for the previous room
+		PlayerData.player_start_position = Vector2(player.position.x, -170)
 	else:
 		PlayerData.player_start_position = Vector2.ZERO
-	get_tree().reload_current_scene()
+	
+	# Change to the previous room based on whether it's cleared
+	get_tree().change_scene_to_file(scene_path)
+
+#func reload_room(new_y_position: float = -170.0):
+	#var current_scene = get_tree().current_scene
+	#var player = current_scene.get_node_or_null("Player")
+	#if player and player.has_method("player"):
+		#PlayerData.player_start_position = Vector2(player.position.x, new_y_position)
+	#else:
+		#PlayerData.player_start_position = Vector2.ZERO
+	#get_tree().reload_current_scene()
