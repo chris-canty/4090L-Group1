@@ -120,7 +120,7 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	deck = $Player.deck
+	deck = PlayerData.deck
 	deck.shuffle()
 	alt_deck = PlayerData.alt_deck
 	alt_deck.shuffle()
