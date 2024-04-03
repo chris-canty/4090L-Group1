@@ -45,7 +45,19 @@ var active_card : Button
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
-	pass # Replace with function body.
+	deck = $Player.deck
+	deck.shuffle()
+	
+	#Still working
+	#var loot_scene = preload("res://Scenes/Characters/loot_drop.tscn")
+#
+	## Instance several child scenes and connect their signals
+	#for i in range(3):  # Say, you want to instance it 3 times
+		#var instance = loot_scene.instance()
+		#add_child(instance)
+		## Connect the signal to the handler method
+		#instance.connect("picked", self, "_on_loot_drop_2_picked")
+	#pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -113,6 +125,9 @@ func _process(delta):
 	for i in range(len(alt_hand_ui)):
 		alt_hand_ui[i].position.x = lerp(alt_hand_ui[i].position.x,alt_card_pos[i].x,card_speed * delta)
 		alt_hand_ui[i].position.y = lerp(alt_hand_ui[i].position.y,alt_card_pos[i].y,card_speed * delta)
+		
+		
+		
 func initiate_combat():
 	_state = States.COMBAT
 	$Camera2D.limit_left = -100000
@@ -120,7 +135,9 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	deck = $Player.deck
+	for items in deck:
+		print (items)
+	#deck = $Player.deck
 	deck.shuffle()
 	alt_deck = PlayerData.alt_deck
 	alt_deck.shuffle()
@@ -143,6 +160,7 @@ func initiate_combat():
 	
 	print(combatants)
 	print(initiative)
+	
 	for i in range(len(combatants)):
 		var turn = load("res://Scenes/UI/turn.tscn")
 		var turn_i = turn.instantiate()
@@ -255,6 +273,9 @@ func find_turn():
 	return combatant
 
 func player_turn():
+	
+	hand.shuffle()
+	
 	print("Player Turn")
 	var scene
 	var instance
@@ -810,3 +831,41 @@ func execute_action():
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
 	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 	next_turn()
+
+
+func _on_loot_drop_picked():
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
+	var randomInt = randi( )% len(randomLoot)
+	
+	for items in deck:
+		print(items)
+	deck.append(randomLoot[randomInt])
+	print("After")
+	for items in deck:
+		print(items)
+
+
+func _on_loot_drop_2_picked():
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
+	var randomInt = randi( )% len(randomLoot)
+	
+	for items in deck:
+		print(items)
+	deck.append(randomLoot[randomInt])
+	print("After")
+	for items in deck:
+		print(items)
+
+
+func _on_loot_drop_3_picked():
+	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
+	var randomInt = randi( )% len(randomLoot)
+	
+	for items in deck:
+		print(items)
+	deck.append(randomLoot[randomInt])
+	print("After")
+	for items in deck:
+		print(items)
+		
+
