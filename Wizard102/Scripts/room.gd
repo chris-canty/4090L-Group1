@@ -47,9 +47,9 @@ var active_card : Button
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
-	deck = $Player.deck
-	deck.shuffle()
-	
+	#deck = $Player.deck
+	#deck.shuffle()
+	pass
 	
 	#Still working
 	#var loot_scene = preload("res://Scenes/Characters/loot_drop.tscn")
@@ -884,41 +884,4 @@ func execute_action():
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
 	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 	next_turn()
-
-
-func _on_loot_drop_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
-	var randomInt = randi( )% len(randomLoot)
-	
-	for items in deck:
-		print(items)
-	deck.append(randomLoot[randomInt])
-	print("After")
-	for items in deck:
-		print(items)
-
-
-func _on_loot_drop_2_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
-	var randomInt = randi( )% len(randomLoot)
-	
-	for items in deck:
-		print(items)
-	deck.append(randomLoot[randomInt])
-	print("After")
-	for items in deck:
-		print(items)
-
-
-func _on_loot_drop_3_picked():
-	var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
-	var randomInt = randi( )% len(randomLoot)
-	
-	for items in deck:
-		print(items)
-	deck.append(randomLoot[randomInt])
-	print("After")
-	for items in deck:
-		print(items)
-		
 

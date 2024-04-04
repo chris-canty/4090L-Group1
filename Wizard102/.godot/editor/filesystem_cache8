@@ -1,5 +1,5 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1712263013
+::res://::1712263118
 icon.svg::CompressedTexture2D::6343777367713966123::1712161105::1712161105::1::::<><>::
 wizard102.png::CompressedTexture2D::5245643625377403235::1712161105::1712161304::1::::<><>::
 ::res://Assets/::1712161104
@@ -94,9 +94,9 @@ ray_card.tscn::PackedScene::5279847147794309648::1712161104::0::1::::<><>::res:/
 stone_card.tscn::PackedScene::3422208522969579869::1712161104::0::1::::<><>::res://Scripts/card.gd<>uid://dt5426cet3vgg::::res://Assets/Card/Stone.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 stun_card.tscn::PackedScene::8374863318085746227::1712164139::0::1::::<><>::res://Scripts/card.gd<>uid://c4m627leeqwys::::res://Assets/Card/Stun.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 surge_card.tscn::PackedScene::337650736560010707::1712161104::0::1::::<><>::res://Scripts/alt_card.gd<>uid://774re20qc5hj::::res://Assets/Card/Surge.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
-::res://Scenes/Characters/::1712164139
+::res://Scenes/Characters/::1712263038
 loot_drop.gd::GDScript::-1::1712161104::0::1::::<>Node2D<>::
-loot_drop.tscn::PackedScene::5855249003925053681::1712164139::0::1::::<><>::res://Scenes/Characters/loot_drop.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
+loot_drop.tscn::PackedScene::5855249003925053681::1712263038::0::1::::<><>::res://Scenes/Characters/loot_drop.gd<>uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
 player.tscn::PackedScene::3533054757929886243::1712161104::0::1::::<><>::res://Scripts/player.gd<>uid://cb8rvv4yb7tn2::::res://Assets/SpriteFrames/player.tres
 slime.tscn::PackedScene::2119252492763441584::1712161104::0::1::::<><>::res://Scripts/Enemy/slime.gd<>uid://dimxiwpq5r6og::::res://Assets/SpriteFrames/slime.tres
 ::res://Scenes/Effects/::1712161104
@@ -108,25 +108,25 @@ ice.tscn::PackedScene::8191049946442410551::1712161104::0::1::::<><>::uid://cp1n
 light.tscn::PackedScene::5194110628973824398::1712161104::0::1::::<><>::uid://ki471i6jqklm::::res://Assets/Effects/light.png<>res://Scripts/effect.gd<>uid://14l77vp2v4vo::::res://Sounds/Sound_Effects/Ember.mp3
 lightning.tscn::PackedScene::3996343242619018458::1712161104::0::1::::<><>::uid://dt477vooy5yn5::::res://Assets/Effects/Lightning.png<>res://Scripts/effect.gd<>uid://c7117b4pgoalf::::res://Sounds/Sound_Effects/Thunder_Shock.mp3
 ultima.tscn::PackedScene::8247635318892753608::1712161104::0::1::::<><>::uid://c8gt63brxrxqn::::res://Assets/Effects/Fire-bomb.png<>res://Scripts/effect.gd<>uid://dsy7qudh8nrwr::::res://Sounds/Sound_Effects/Outrage_part_2.mp3
-::res://Scenes/Rooms/::1712164163
-room.tscn::PackedScene::4888644054509191608::1712164163::0::1::::<><>::res://Scripts/room.gd<>uid://bmqcj2ry0kcxi::::res://Scenes/Rooms/tile_map.tscn<>uid://dtmvyi1buue65::::res://Scenes/Rooms/tile_map_2.tscn<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://df1mihbiltebh::::res://Scenes/Rooms/tile_map_3.tscn<>uid://c8ymlkv06dbrf::::res://Scenes/Rooms/tile_map_4.tscn<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav<>uid://vardvul8qtwv::::res://Sounds/Sound_Effects/cancel.wav<>res://Scripts/Area2D.gd<>res://Scripts/Area2D2.gd<>uid://bhqovyy55gd0d::::res://Sounds/Sound_Effects/enchant.ogg<>uid://cpoldisytgwur::::res://Scenes/Characters/loot_drop.tscn
+::res://Scenes/Rooms/::1712263071
+room.tscn::PackedScene::4888644054509191608::1712263071::0::1::::<><>::res://Scripts/room.gd<>uid://bmqcj2ry0kcxi::::res://Scenes/Rooms/tile_map.tscn<>uid://dtmvyi1buue65::::res://Scenes/Rooms/tile_map_2.tscn<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://5gt1qpbcghv1::::res://Scenes/Characters/slime.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://df1mihbiltebh::::res://Scenes/Rooms/tile_map_3.tscn<>uid://c8ymlkv06dbrf::::res://Scenes/Rooms/tile_map_4.tscn<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav<>uid://vardvul8qtwv::::res://Sounds/Sound_Effects/cancel.wav<>res://Scripts/Area2D.gd<>res://Scripts/Area2D2.gd<>uid://bhqovyy55gd0d::::res://Sounds/Sound_Effects/enchant.ogg<>uid://cpoldisytgwur::::res://Scenes/Characters/loot_drop.tscn
 room_without_enemies.tscn::PackedScene::2247457881363410343::1712161104::0::1::::<><>::res://Scripts/room.gd<>uid://bmqcj2ry0kcxi::::res://Scenes/Rooms/tile_map.tscn<>uid://dtmvyi1buue65::::res://Scenes/Rooms/tile_map_2.tscn<>uid://bqlo5pnx4653l::::res://Scenes/Characters/player.tscn<>uid://df1mihbiltebh::::res://Scenes/Rooms/tile_map_3.tscn<>uid://c8ymlkv06dbrf::::res://Scenes/Rooms/tile_map_4.tscn<>uid://dgi65k307okto::::res://Sounds/Music/Impatience.mp3<>uid://3wkhpdmjh7vs::::res://Sounds/Sound_Effects/select.wav<>uid://vardvul8qtwv::::res://Sounds/Sound_Effects/cancel.wav<>res://Scripts/Area2D.gd<>res://Scripts/Area2D2.gd<>uid://bhqovyy55gd0d::::res://Sounds/Sound_Effects/enchant.ogg<>uid://llo8tqnku3cd::::res://Scenes/UI/pause_menu.tscn
 tile_map.tscn::PackedScene::3261855803061506750::1712161104::0::1::::<><>::uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
 tile_map_2.tscn::PackedScene::8518940989577118924::1712161104::0::1::::<><>::uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
 tile_map_3.tscn::PackedScene::7564623350726645953::1712161104::0::1::::<><>::uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
 tile_map_4.tscn::PackedScene::7139367080036682675::1712161104::0::1::::<><>::uid://beo24tjxdq3vy::::res://Assets/Tilesets/dungeon_tiles_2.png
-::res://Scenes/UI/::1712164163
+::res://Scenes/UI/::1712263025
 damage.tscn::PackedScene::6572246406174361592::1712161104::0::1::::<><>::res://Scripts/damage _text.gd<>uid://cqplmnuvjfh7d::::res://Sounds/Sound_Effects/hitHurt.wav
 effect.tscn::PackedScene::2427929616597540087::1712161104::0::1::::<><>::res://Scripts/effect_text.gd<>uid://b2xujg3ype3n::::res://Sounds/Sound_Effects/boost.wav
 main_menu.tscn::PackedScene::4042110293234795928::1712161104::0::1::::<><>::res://Scripts/main_menu.gd<>uid://b7rev6hmerabe::::res://Assets/Background Images/an-unlocked-entrance-at-a-historic-temple-in-pitsunda-free-photo.jpg<>uid://bey0cawg5tbcq::::res://Assets/Background Images/Cool Text - Wizard102 451535921826968.png<>uid://bkam3wnj62fi7::::res://Scenes/UI/orange_button_theme.tres
 orange_button_theme.tres::Theme::3089088902263532652::1712161104::0::1::::<><>::
 pass_card.tscn::PackedScene::7949228046041054368::1712161104::0::1::::<><>::res://Scripts/pass_card.gd<>uid://y8pt72laxafr::::res://Assets/Card/Pass.png<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 PauseMenu.gd::GDScript::-1::1712161104::0::1::::<>Control<>::
-pause_menu.gdshader::Shader::-1::1712164163::0::1::::<><>::
+pause_menu.gdshader::Shader::-1::1712263025::0::1::::<><>::
 pause_menu.tscn::PackedScene::795695427675971607::1712161104::0::1::::<><>::res://Scenes/UI/PauseMenu.gd<>res://Scenes/UI/pause_menu.gdshader
 target.tscn::PackedScene::5534563366495192607::1712161104::0::1::::<><>::res://Scripts/target.gd<>uid://cmcelkb8gcdpl::::res://Sounds/Sound_Effects/flipcard.wav
 turn.tscn::PackedScene::2702166647937680705::1712161104::0::1::::<><>::
-::res://Scripts/::1712163978
+::res://Scripts/::1712263071
 alt_card.gd::GDScript::-1::1712161104::0::1::::<>Button<>::
 Area2D2.gd::GDScript::-1::1712161104::0::1::::<>Area2D<>::
 Area2D.gd::GDScript::-1::1712161104::0::1::::<>Area2D<>::
@@ -138,9 +138,9 @@ effect.gd::GDScript::-1::1712161104::0::1::::<>AnimatedSprite2D<>::
 effect_text.gd::GDScript::-1::1712161104::0::1::::<>CharacterBody2D<>::
 main_menu.gd::GDScript::-1::1712161105::0::1::::<>Control<>::
 pass_card.gd::GDScript::-1::1712161105::0::1::::<>Button<>::
-player.gd::GDScript::-1::1712161105::0::1::::<>CharacterBody2D<>::
-player_data.gd::GDScript::-1::1712161105::0::1::::<>Node<>::
-room.gd::GDScript::-1::1712163978::0::1::::<>Node2D<>::
+player.gd::GDScript::-1::1712263071::0::1::::<>CharacterBody2D<>::
+player_data.gd::GDScript::-1::1712263071::0::1::::<>Node<>::
+room.gd::GDScript::-1::1712263090::0::1::::<>Node2D<>::
 target.gd::GDScript::-1::1712161105::0::1::::<>Button<>::
 ::res://Scripts/Enemy/::1712161104
 pathfinding.gd::GDScript::-1::1712161104::0::1::::<>CharacterBody2D<>::
