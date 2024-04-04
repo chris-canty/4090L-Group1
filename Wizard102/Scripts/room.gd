@@ -20,6 +20,8 @@ var temp_init = 0
 
 #Variables for Combat
 enum Combat {Idle,P_Select,P_Enchant,P_Target,P_Action,Enemy}
+enum Inventory {open,closed}
+var _iState: int = Inventory.closed
 var _cState: int = Combat.Idle
 var rng = RandomNumberGenerator.new()
 var combatants: Array = []
@@ -47,6 +49,7 @@ var active_card : Button
 func _ready():
 	deck = $Player.deck
 	deck.shuffle()
+	
 	
 	#Still working
 	#var loot_scene = preload("res://Scenes/Characters/loot_drop.tscn")
@@ -125,9 +128,60 @@ func _process(delta):
 	for i in range(len(alt_hand_ui)):
 		alt_hand_ui[i].position.x = lerp(alt_hand_ui[i].position.x,alt_card_pos[i].x,card_speed * delta)
 		alt_hand_ui[i].position.y = lerp(alt_hand_ui[i].position.y,alt_card_pos[i].y,card_speed * delta)
+	
+	if Input.is_action_just_pressed("i"):
+		show_card()
+		#pass
 		
-		
-		
+
+func show_card():
+	if _state != States.EXPLORE:
+		return
+	if _iState == Inventory.open:
+		#DO STUFF
+		_iState = Inventory.closed
+		return
+	_iState = Inventory.open
+	print("Player Turn")
+	var scene
+	var instance
+	#cam_pos = combatants[curr_turn].position - Vector2(0,40)
+	#cam_zoom = 6
+	for card: String in deck:
+		var load_str = card.replace(' ', '')
+		load_str = load_str.to_lower()
+		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
+		scene = load(load_str)
+		instance = scene.instantiate()
+		$Player.add_child(instance)
+		await instance._ready()
+		instance.position = Vector2(0,0)
+		instance.get_node("Card").scale = Vector2(0,0)
+		hand_ui.push_back(instance)
+	for i in range(len(hand_ui)):
+		if hand_enchants[i] != "":
+			enchant_card(hand_ui[i],hand_enchants[i])
+	for card: String in alt_hand:
+		var mp_cost
+		var load_str = card.replace(' ', '')
+		load_str = load_str.to_lower()
+		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
+		scene = load(load_str)
+		instance = scene.instantiate()
+		mp_cost = instance.mp_cost
+		$Player.add_child(instance)
+		await instance._ready()
+		instance.position = Vector2(0,0)
+		if $Player.MP < mp_cost:
+			instance.modulate = Color("3b3b3b")
+		instance.get_node("Card").scale = Vector2(0,0)
+		alt_hand_ui.push_back(instance)
+			
+			
+	#pass_ui.position = pass_pos
+	#pass_ui.get_node("Card").scale = Vector2(0,0)
+	#pass_ui.visible = true
+
 func initiate_combat():
 	_state = States.COMBAT
 	$Camera2D.limit_left = -100000
@@ -353,7 +407,8 @@ func enchant_card(button: Button, alt_a_id: String):
 	
 			
 func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
-	
+	if _state != States.COMBAT:
+		return
 	#Enchanting Cards
 	if _cState == Combat.P_Enchant:
 		if button.modulate == Color("ffffff"):

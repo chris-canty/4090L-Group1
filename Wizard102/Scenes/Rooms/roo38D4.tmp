@@ -1,0 +1,134 @@
+[gd_scene load_steps=15 format=3 uid="uid://cbwdiu4gula2k"]
+
+[ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
+[ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
+[ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
+[ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
+[ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
+[ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_5rje6"]
+[ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_ojv2w"]
+[ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
+[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
+[ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
+[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
+[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
+[ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_jc4y6"]
+[ext_resource type="PackedScene" uid="uid://cpoldisytgwur" path="res://Scenes/Characters/loot_drop.tscn" id="14_p7118"]
+
+[node name="basic_room" type="Node2D"]
+script = ExtResource("1_6p8ux")
+
+[node name="TileMap" parent="." instance=ExtResource("2_g2xdv")]
+
+[node name="TileMap2" parent="." instance=ExtResource("3_61yxp")]
+
+[node name="Player" parent="." instance=ExtResource("3_w1mit")]
+position = Vector2(-1, -17)
+deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
+alt_deck = ["Surge", "Surge", "Surge"]
+MaxMP = 3
+SPD = 60
+
+[node name="TileMap3" parent="." instance=ExtResource("5_ojv2w")]
+
+[node name="TileMap4" parent="." instance=ExtResource("6_e77aj")]
+
+[node name="TankySlime" parent="." instance=ExtResource("4_hqk4e")]
+position = Vector2(80, -143)
+MaxHP = 50
+SPD = 10
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(-204, 32, -172, 32, 220, 30, 219, -192, -220, -191, -220, 12, -245, -48, -241, -127, -227, -235, -153, -229, -39, -229, 53, -230, 140, -229, 242, -226, 244, -184, 253, -121, 239, -60, 237, -1, 238, 38, 160, 44, 93, 38, 3, 40, -81, 39, -125, 37, -203, 35, -219, 12)
+
+[node name="BGM" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_5rje6")
+volume_db = -80.0
+
+[node name="Select" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -100)
+stream = ExtResource("6_tnkya")
+
+[node name="cancel" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(68, -25)
+stream = ExtResource("7_iasap")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -100)
+offset = Vector2(0, 18.22)
+zoom = Vector2(5, 5)
+process_callback = 0
+limit_left = -223
+limit_top = -219
+limit_right = 223
+limit_bottom = 11
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 23.395
+
+[node name="CText" type="Label" parent="Camera2D"]
+offset_left = -114.0
+offset_top = -64.0
+offset_right = 115.0
+offset_bottom = -41.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="TurnUI" type="CanvasLayer" parent="."]
+
+[node name="Initiative" type="VBoxContainer" parent="TurnUI"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 341.0
+offset_bottom = 114.0
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI/Initiative"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b][u]Turn:[/u][/b]"
+
+[node name="Label" type="Label" parent="TurnUI"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("11_ckco5")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+position = Vector2(4.68189, -1.00005)
+scale = Vector2(0.84938, 1)
+polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
+
+[node name="Area2D2" type="Area2D" parent="."]
+script = ExtResource("12_du7ju")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D2"]
+position = Vector2(4.79303, 394.647)
+scale = Vector2(0.781342, 2.01041)
+polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
+
+[node name="enchant" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_jc4y6")
+volume_db = -11.143
+
+[node name="lootDrop" parent="." instance=ExtResource("14_p7118")]
+position = Vector2(-93, -87)
+
+[node name="lootDrop2" parent="." instance=ExtResource("14_p7118")]
+position = Vector2(-133.802, -134.953)
+
+[node name="lootDrop3" parent="." instance=ExtResource("14_p7118")]
+position = Vector2(-35, -119)
+
+[connection signal="picked" from="lootDrop" to="." method="_on_loot_drop_picked"]
+[connection signal="picked" from="lootDrop2" to="." method="_on_loot_drop_2_picked"]
+[connection signal="picked" from="lootDrop3" to="." method="_on_loot_drop_3_picked"]
