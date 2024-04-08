@@ -23,8 +23,6 @@ script = ExtResource("1_ddip5")
 
 [node name="Player" parent="." instance=ExtResource("4_n3srr")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
-alt_deck = ["Surge", "Surge", "Surge"]
 MaxMP = 3
 SPD = 60
 
