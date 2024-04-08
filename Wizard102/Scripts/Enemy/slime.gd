@@ -1,9 +1,12 @@
 extends "res://Scripts/character.gd"
 var rng = RandomNumberGenerator.new()
-
+const speed = 3000
 #SKILLS
 @onready var frost = load("res://Scenes/Cards/frost_card.tscn").instantiate()
 @onready var cooldown = load("res://Scenes/Cards/cooldown_card.tscn").instantiate()
+@onready var player : Node2D = get_parent().get_node("Player")
+
+@onready var nav_agent : NavigationAgent2D = $NavigationAgent2D
 
 
 func _physics_process(_delta):
@@ -15,6 +18,16 @@ func _physics_process(_delta):
 			velocity.x = 0
 			in_position = false
 		move_and_slide()
+	elif not nav_agent.is_navigation_finished():
+		nav_agent.target_position = player.global_position
+		var movement_delta = speed * _delta
+		var current_agent_position = global_position
+		var next_path_position = nav_agent.get_next_path_position()
+		velocity = (next_path_position - current_agent_position).normalized() * movement_delta
+		move_and_slide()
+
+
+
 
 
 func _on_hitbox_entered(body):
