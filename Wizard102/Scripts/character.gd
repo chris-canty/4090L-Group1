@@ -163,7 +163,7 @@ func run_status():
 		else:
 			counter += 1
 
-func take_damage(dmg: int):
+func take_damage(dmg: int, element: String):	
 	if dmg == 0:
 		return
 	$AnimatedSprite2D.play("hurt")
