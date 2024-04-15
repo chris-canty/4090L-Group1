@@ -31,7 +31,7 @@ func _process(delta):
 			var load_str = "res://Scenes/Cards/" + chosenLoot + "_card.tscn"
 			var scene = load(load_str)
 			var lootInstance = scene.instantiate()
-
+			add_child(lootInstance)  # Ensure this is called before setting position if using global_position
 			# Set position and add to the scene tree
 			# Assuming lootInstance is a Node2D and $AnimatedSprite2D is its intended reference point
 			lootInstance.position = $AnimatedSprite2D.position  # Use local position relative to the parent if same parent
@@ -39,7 +39,7 @@ func _process(delta):
 			lootInstance.global_position.x -= 15  # Adjust position down by 5 units on y-axis
 			
 
-			add_child(lootInstance)  # Ensure this is called before setting position if using global_position
+
 			await get_tree().create_timer(2.0).timeout
 			queue_free()  # Ensure this is safe to call here, might need repositioning based on context
 			

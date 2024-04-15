@@ -34,6 +34,11 @@ position = Vector2(-133.802, -134.953)
 y_sort_enabled = true
 position = Vector2(-35, -119)
 
+[node name="TankySlime" parent="." instance=ExtResource("4_hqk4e")]
+position = Vector2(80, -143)
+MaxHP = 50
+SPD = 10
+
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
 MaxMP = 3
@@ -42,11 +47,6 @@ SPD = 60
 [node name="TileMap3" parent="." instance=ExtResource("5_ojv2w")]
 
 [node name="TileMap4" parent="." instance=ExtResource("6_e77aj")]
-
-[node name="TankySlime" parent="." instance=ExtResource("4_hqk4e")]
-position = Vector2(80, -143)
-MaxHP = 50
-SPD = 10
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
