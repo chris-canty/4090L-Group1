@@ -31,8 +31,6 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 
 [node name="Player" parent="." instance=ExtResource("4_n3srr")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
-alt_deck = ["Surge", "Surge", "Surge"]
 MaxMP = 3
 SPD = 60
 

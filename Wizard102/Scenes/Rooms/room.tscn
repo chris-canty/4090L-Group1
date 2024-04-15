@@ -1,3 +1,4 @@
+
 [gd_scene load_steps=18 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
@@ -18,6 +19,12 @@
 [ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vbblp"]
 [ext_resource type="Script" path="res://Scripts/RightHall.gd" id="15_rw4es"]
 
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_nmok0"]
+vertices = PackedVector2Array(211, -183, 214, 9, -214, 8, -214, -185)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-224, -196, 221, -193, 225, 20, -224, 18)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
 [node name="basic_room" type="Node2D"]
 script = ExtResource("1_6p8ux")
 
@@ -32,8 +39,6 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
-deck = ["Ember", "Ember", "Heat Up", "Ember", "Burn", "Burn", "Heat Up"]
-alt_deck = ["Surge", "Surge", "Surge"]
 MaxMP = 3
 SPD = 60
 
@@ -148,3 +153,6 @@ visible = false
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("14_vbblp")]
 metadata/_edit_use_anchors_ = true
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_nmok0")
