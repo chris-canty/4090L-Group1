@@ -479,7 +479,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 20.0
+"speed": 40.0
 }]
 
 [node name="arcane" type="AnimatedSprite2D"]

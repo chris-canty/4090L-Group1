@@ -13,7 +13,7 @@
 [ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
 [ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
 [ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_jc4y6"]
-[ext_resource type="PackedScene" uid="uid://cpoldisytgwur" path="res://Scenes/Characters/loot_drop.tscn" id="14_p7118"]
+[ext_resource type="PackedScene" uid="uid://q15mhjg46vh1" path="res://Scenes/Characters/loot_drop.tscn" id="14_p7118"]
 
 [node name="basic_room" type="Node2D"]
 script = ExtResource("1_6p8ux")
@@ -21,6 +21,18 @@ script = ExtResource("1_6p8ux")
 [node name="TileMap" parent="." instance=ExtResource("2_g2xdv")]
 
 [node name="TileMap2" parent="." instance=ExtResource("3_61yxp")]
+
+[node name="lootDrop" parent="." instance=ExtResource("14_p7118")]
+y_sort_enabled = true
+position = Vector2(-93, -87)
+
+[node name="lootDrop2" parent="." instance=ExtResource("14_p7118")]
+y_sort_enabled = true
+position = Vector2(-133.802, -134.953)
+
+[node name="lootDrop3" parent="." instance=ExtResource("14_p7118")]
+y_sort_enabled = true
+position = Vector2(-35, -119)
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
@@ -117,16 +129,3 @@ polygon = PackedVector2Array(-25, -181, 14.5025, -181, 14.5025, -193, -25, -193)
 [node name="enchant" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_jc4y6")
 volume_db = -11.143
-
-[node name="lootDrop" parent="." instance=ExtResource("14_p7118")]
-position = Vector2(-93, -87)
-
-[node name="lootDrop2" parent="." instance=ExtResource("14_p7118")]
-position = Vector2(-133.802, -134.953)
-
-[node name="lootDrop3" parent="." instance=ExtResource("14_p7118")]
-position = Vector2(-35, -119)
-
-[connection signal="picked" from="lootDrop" to="." method="_on_loot_drop_picked"]
-[connection signal="picked" from="lootDrop2" to="." method="_on_loot_drop_2_picked"]
-[connection signal="picked" from="lootDrop3" to="." method="_on_loot_drop_3_picked"]

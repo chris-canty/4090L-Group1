@@ -177,6 +177,8 @@ func take_damage(dmg: int):
 	
 func death():
 	$AnimatedSprite2D.play("death")
+	await get_tree().create_timer(1).timeout
+	
 	is_dead = true
 	dropLoot()
 	
@@ -185,5 +187,4 @@ func dropLoot():
 	lootInstance.global_position = $AnimatedSprite2D.global_position
 	get_parent().add_child(lootInstance)
 
-	await $AnimatedSprite2D.animation_finished
 	queue_free()

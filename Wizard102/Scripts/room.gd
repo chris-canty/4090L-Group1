@@ -136,51 +136,53 @@ func _process(delta):
 
 func show_card():
 	if _state != States.EXPLORE:
+		# If not in EXPLORE state, do not show cards.
 		return
+
 	if _iState == Inventory.open:
-		#DO STUFF
+		# If the inventory is already open, close it by clearing all cards.
+		for card_instance in hand_ui:
+			card_instance.queue_free()
+		hand_ui.clear()
 		_iState = Inventory.closed
+		print("Inventory closed")
 		return
+
 	_iState = Inventory.open
-	print("Player Turn")
-	var scene
-	var instance
-	#cam_pos = combatants[curr_turn].position - Vector2(0,40)
-	#cam_zoom = 6
-	for card: String in deck:
-		var load_str = card.replace(' ', '')
-		load_str = load_str.to_lower()
-		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
-		scene = load(load_str)
-		instance = scene.instantiate()
-		$Player.add_child(instance)
-		await instance._ready()
-		instance.position = Vector2(0,0)
-		instance.get_node("Card").scale = Vector2(0,0)
-		hand_ui.push_back(instance)
-	for i in range(len(hand_ui)):
-		if hand_enchants[i] != "":
-			enchant_card(hand_ui[i],hand_enchants[i])
-	for card: String in alt_hand:
-		var mp_cost
-		var load_str = card.replace(' ', '')
-		load_str = load_str.to_lower()
-		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
-		scene = load(load_str)
-		instance = scene.instantiate()
-		mp_cost = instance.mp_cost
-		$Player.add_child(instance)
-		await instance._ready()
-		instance.position = Vector2(0,0)
-		if $Player.MP < mp_cost:
-			instance.modulate = Color("3b3b3b")
-		instance.get_node("Card").scale = Vector2(0,0)
-		alt_hand_ui.push_back(instance)
-			
-			
-	#pass_ui.position = pass_pos
-	#pass_ui.get_node("Card").scale = Vector2(0,0)
-	#pass_ui.visible = true
+	print("Inventory open")
+
+	# Load and display each card from the player's deck to the UI
+	for card in deck:
+		var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		var scene = load(load_str)
+		if scene:
+			var instance = scene.instantiate()
+			$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			hand_ui.append(instance)
+		else:
+			print("Failed to load scene: ", load_str)
+
+	# Display alternative cards from alt_hand
+	for card in alt_hand:
+		var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		var scene = load(load_str)
+		if scene:
+			var instance = scene.instantiate()
+			$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			if $Player.MP < instance.mp_cost:  # Assuming `mp_cost` exists on the card instance
+				instance.modulate = Color("3b3b3b")  # Dim the card if not enough MP
+			alt_hand_ui.append(instance)
+		else:
+			print("Failed to load scene: ", load_str)
+
+	# To close inventory when 'i' is pressed again, you may need to handle this toggle outside of this loop,
+	# depending on how you manage input. Typically, this would be managed in `_process()` or `_input()`.
+
+	
 
 func initiate_combat():
 	_state = States.COMBAT
@@ -556,9 +558,6 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	#Damage Calculations
 	var text = load(addrText)
 	var text_instance = text.instantiate()
-	#print("CURRENT TURN:")
-	#print(curr_turn)
-	# Having some problems with curr_turn cause combatants out of bounds
 	if roll <= accuracy:
 		damage = combatants[curr_turn].atk_status(rawDamage,element)
 		combatants[curr_turn].MP -= mp_cost
@@ -748,7 +747,7 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(50, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
 			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
