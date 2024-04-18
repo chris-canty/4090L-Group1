@@ -2,8 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://c3iabsvtmprda" path="res://Assets/Background Images/Cool Text - Game Over 455492565604706.png" id="1_7pgtr"]
 [ext_resource type="Script" path="res://Scenes/UI/game_over.gd" id="1_uwhep"]
-
-[sub_resource type="Theme" id="Theme_f12ab"]
+[ext_resource type="Theme" uid="uid://bkam3wnj62fi7" path="res://Scenes/UI/orange_button_theme.tres" id="3_1jpsa"]
 
 [sub_resource type="SystemFont" id="SystemFont_q5c8w"]
 font_names = PackedStringArray("Impact")
@@ -74,9 +73,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -526.0
-offset_top = -371.0
+offset_top = -355.0
 offset_right = 10.0
-offset_bottom = -199.0
+offset_bottom = -191.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(1.965, 1.965)
@@ -90,13 +89,14 @@ layout_mode = 2
 [node name="Yes" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../No")
-theme = SubResource("Theme_f12ab")
+theme = ExtResource("3_1jpsa")
 theme_override_fonts/font = SubResource("SystemFont_q5c8w")
 text = "Yes"
 
 [node name="No" type="Button" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_bottom = NodePath("../Yes")
+theme = ExtResource("3_1jpsa")
 theme_override_fonts/font = SubResource("SystemFont_5ahdc")
 text = "No"
 
