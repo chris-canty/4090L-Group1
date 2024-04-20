@@ -38,6 +38,7 @@ func toggle_tilemaps(entered: bool):
 		tilemap4.visible = false
 
 func load_previous_room():
+	'''
 	 # Move the player up to the next room
 	PlayerData.move_down()
 	var scene_path
@@ -57,6 +58,12 @@ func load_previous_room():
 	
 	# Change to the determined room scene
 	get_tree().change_scene_to_file(scene_path)
+	'''
+	var container = get_parent().get_parent()
+	if RoomInfo.curr_y == 0:
+		return
+	PlayerData.player_start_position = Vector2(0,-180)
+	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y - 1)
 
 #func load_previous_room():
 	#PlayerData.previous_room()  # Adjust the PlayerData to the previous room state

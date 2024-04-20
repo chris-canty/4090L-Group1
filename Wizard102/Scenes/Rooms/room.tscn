@@ -1,4 +1,3 @@
-
 [gd_scene load_steps=18 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
@@ -6,14 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
 [ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
-[ext_resource type="PackedScene" uid="uid://5gt1qpbcghv1" path="res://Scenes/Characters/slime.tscn" id="4_hqk4e"]
 [ext_resource type="AudioStream" uid="uid://dgi65k307okto" path="res://Sounds/Music/Impatience.mp3" id="5_5rje6"]
 [ext_resource type="PackedScene" uid="uid://df1mihbiltebh" path="res://Scenes/Rooms/tile_map_3.tscn" id="5_ojv2w"]
 [ext_resource type="PackedScene" uid="uid://c8ymlkv06dbrf" path="res://Scenes/Rooms/tile_map_4.tscn" id="6_e77aj"]
 [ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="6_tnkya"]
 [ext_resource type="AudioStream" uid="uid://vardvul8qtwv" path="res://Sounds/Sound_Effects/cancel.wav" id="7_iasap"]
-[ext_resource type="Script" path="res://Scripts/Area2D.gd" id="11_ckco5"]
-[ext_resource type="Script" path="res://Scripts/Area2D2.gd" id="12_du7ju"]
+[ext_resource type="Script" path="res://Scripts/UpHall.gd" id="11_ckco5"]
+[ext_resource type="Script" path="res://Scripts/DownHall.gd" id="12_du7ju"]
 [ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="13_jc4y6"]
 [ext_resource type="Script" path="res://Scripts/LeftHall.gd" id="14_ric8e"]
 [ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vbblp"]
@@ -22,7 +20,7 @@
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_nmok0"]
 vertices = PackedVector2Array(211, -183, 214, 9, -214, 8, -214, -185)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-224, -196, 221, -193, 225, 20, -224, 18)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-224, -196, 7.8167, -194.437, 221, -193, 225, 20, -224, 18)])
 source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="basic_room" type="Node2D"]
@@ -47,11 +45,6 @@ layer_1/tile_data = PackedInt32Array(65543, 131072, 1, 65544, 131072, 1, 65545, 
 
 [node name="TileMap4" parent="." instance=ExtResource("6_e77aj")]
 
-[node name="TankySlime" parent="." instance=ExtResource("4_hqk4e")]
-position = Vector2(80, -143)
-MaxHP = 50
-SPD = 10
-
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
@@ -66,7 +59,7 @@ position = Vector2(0, -100)
 stream = ExtResource("6_tnkya")
 
 [node name="cancel" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(68, -25)
+position = Vector2(0, -180)
 stream = ExtResource("7_iasap")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -95,20 +88,22 @@ autowrap_mode = 2
 
 [node name="TurnUI" type="CanvasLayer" parent="."]
 
+[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI"]
+offset_top = 515.0
+offset_right = 341.0
+offset_bottom = 644.0
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b][u]Turn:[/u][/b]"
+
 [node name="Initiative" type="VBoxContainer" parent="TurnUI"]
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -20.0
+offset_top = 4.0
 offset_right = 341.0
-offset_bottom = 114.0
+offset_bottom = 538.0
 grow_vertical = 2
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI/Initiative"]
-layout_mode = 2
-size_flags_vertical = 3
-bbcode_enabled = true
-text = "[b][u]Turn:[/u][/b]"
 
 [node name="Label" type="Label" parent="TurnUI"]
 offset_right = 40.0
