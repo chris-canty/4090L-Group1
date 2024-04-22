@@ -354,6 +354,7 @@ func player_turn():
 	#hand.shuffle()
 	
 	print("Player Turn")
+	print("hello")
 	var scene
 	var instance
 	cam_pos = combatants[curr_turn].position - Vector2(0,40)
