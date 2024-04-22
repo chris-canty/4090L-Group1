@@ -1,14 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://5gt1qpbcghv1"]
+[gd_scene load_steps=5 format=3 uid="uid://5gt1qpbcghv1"]
 
 [ext_resource type="Script" path="res://Scripts/Enemy/slime.gd" id="1_capbs"]
 [ext_resource type="SpriteFrames" uid="uid://dimxiwpq5r6og" path="res://Assets/SpriteFrames/slime.tres" id="2_wenpo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ta53x"]
+radius = 7.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_losrj"]
 
 [node name="Slime" type="CharacterBody2D" groups=["Enemy"]]
 script = ExtResource("1_capbs")
-MaxMP = 6
-SPD = 2
+MaxHP = 6
+SPD = 5
+
+[node name="MoveHitBox" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ta53x")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("2_wenpo")
@@ -96,6 +102,8 @@ layout_mode = 2
 
 [node name="8" type="TextureRect" parent="StatusEffects"]
 layout_mode = 2
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_hitbox_entered"]

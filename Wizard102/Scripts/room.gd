@@ -22,6 +22,7 @@ var temp_init = 0
 enum Combat {Idle,P_Select,P_Enchant,P_Target,P_Action,Enemy}
 enum Inventory {open,closed}
 var _iState: int = Inventory.closed
+var isLoading : bool = true
 var _cState: int = Combat.Idle
 var rng = RandomNumberGenerator.new()
 var combatants: Array = []
@@ -62,13 +63,14 @@ func _ready():
 		## Connect the signal to the handler method
 		#instance.connect("picked", self, "_on_loot_drop_2_picked")
 	#pass # Replace with function body.
+	print("Loading Room")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	$TurnUI/Label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if _state == States.EXPLORE:
-		init_ui.visible = false
+		$TurnUI.visible = false
 		cam_zoom = 5
 		cam_pos = $Player.position
 		for card in hand_ui:
@@ -79,13 +81,13 @@ func _process(delta):
 		card_select = -1
 		action_id = ""
 	elif _state == States.COMBAT:
-		init_ui.visible = true
+		$TurnUI.visible = true
 		var counter = 0
 		for c in range(len(combatants)):
 			if combatants[c] == null:
-				init_ui.get_child(c + 1).queue_free()
+				init_ui.get_child(c).queue_free()
 			else:
-				var init_child = init_ui.get_child(c + 1).get_node("Init_Bar")
+				var init_child = init_ui.get_child(c).get_node("Init_Bar")
 				init_child.value = lerp(init_child.value,float(100 - initiative[c]),10 * delta)
 		while counter < len(combatants):
 			if combatants[counter] == null:
@@ -102,7 +104,7 @@ func _process(delta):
 			$cancel.play()
 			active_card = null
 			initiative[0] = temp_init
-			init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
+			init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffffff")
 			for card in hand_ui:
 				card.queue_free()
 			for card in alt_hand_ui:
@@ -214,9 +216,9 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	deck = PlayerData.deck
+	deck = PlayerData.deck.duplicate(true)
 	deck.shuffle()
-	alt_deck = PlayerData.alt_deck
+	alt_deck = PlayerData.alt_deck.duplicate(true)
 	alt_deck.shuffle()
 	$Player.direction = "right"
 	$Player.move_character(player_spot)
@@ -268,7 +270,7 @@ func next_turn():
 		$Player.in_combat = false
 		PlayerData.alt_deck = alt_deck + alt_hand
 		_state = States.EXPLORE
-		init_ui.get_child(1).queue_free()
+		init_ui.get_child(0).queue_free()
 		$Player.disable_bars()
 		$Player.status_effects.clear()
 		for s in $Player.status_ui.get_children():
@@ -290,13 +292,13 @@ func next_turn():
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
 		initiative.pop_at(curr_turn)
-		init_ui.get_child(curr_turn + 1).queue_free()
+		init_ui.get_child(curr_turn).queue_free()
 		next_turn()
 		return
 	if combatants[curr_turn].is_stun == true:
 		combatants[curr_turn].is_stun = false
 		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-		init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
+		init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
 		next_turn()
 		return
 	#Player
@@ -495,7 +497,7 @@ func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
 			possible_targets.push_back([i,instance])
 	cam_zoom = 4.5
 	cam_pos = Vector2(0,-100)
-	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffff51")
+	init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffff51")
 	temp_init = initiative[0]
 	initiative[0] = 100 - $Player.SPD
 	active_card = button
@@ -519,7 +521,7 @@ func select_alt_card(button : Button, a_id: String, mp_cost: int):
 func select_target(target_button):
 	$Select.play()
 	initiative[0] = temp_init
-	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
+	init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffffff")
 	_cState = Combat.P_Action
 	var counter = 0
 	for t in possible_targets:
@@ -608,7 +610,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	if combatants[target].is_dead == true:
 		combatants.pop_at(target)
 		initiative.pop_at(target)
-		init_ui.get_child(curr_turn + 1).queue_free()
+		init_ui.get_child(target).queue_free()
 		print(combatants)
 	return [(roll <= accuracy),float(damage)/rawDamage]
 
@@ -761,7 +763,7 @@ func execute_action():
 		for c in combatants:
 			await c.enable_bars()
 		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-		init_ui.get_child(curr_turn + 1).get_node("Init_Bar").value = 0
+		init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
 		next_turn()
 		return
 	for c in combatants:
@@ -904,6 +906,6 @@ func execute_action():
 	card_select = -1
 	action_id = ""
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
+	init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
 	next_turn()
 
