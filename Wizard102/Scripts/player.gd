@@ -7,7 +7,7 @@ func _ready():
 
 
 func _physics_process(_delta):
-	if in_combat == false and get_parent().isLoading == false:
+	if in_combat == false:
 		if Input.is_action_pressed('move_left'):
 			direction = 'left'
 			velocity.x = -move_speed
