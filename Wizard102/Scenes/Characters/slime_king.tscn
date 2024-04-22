@@ -1,48 +1,47 @@
-[gd_scene load_steps=5 format=3 uid="uid://5gt1qpbcghv1"]
+[gd_scene load_steps=4 format=3 uid="uid://c0d2urkl0v5xn"]
 
-[ext_resource type="Script" path="res://Scripts/Enemy/slime.gd" id="1_capbs"]
-[ext_resource type="SpriteFrames" uid="uid://dimxiwpq5r6og" path="res://Assets/Tilesets/SpriteFrames/slime.tres" id="2_wenpo"]
+[ext_resource type="Script" path="res://Scripts/Enemy/slime_king.gd" id="1_a7ve4"]
+[ext_resource type="PackedScene" uid="uid://bl8vo5dvmucln" path="res://Assets/Character Sprites/slime_king.aseprite" id="2_ooegs"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ta53x"]
-radius = 7.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_acq7p"]
+radius = 18.0
+height = 36.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_losrj"]
+[node name="Slime_king" type="CharacterBody2D" groups=["Enemy"]]
+script = ExtResource("1_a7ve4")
+MaxHP = 50
+MaxMP = 3
+SPD = 15
 
-[node name="Slime" type="CharacterBody2D" groups=["Enemy"]]
-script = ExtResource("1_capbs")
-MaxHP = 6
-SPD = 5
-
-[node name="MoveHitBox" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_ta53x")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = ExtResource("2_wenpo")
+[node name="AnimatedSprite2D" parent="." instance=ExtResource("2_ooegs")]
+position = Vector2(0, -40)
+scale = Vector2(2.085, 2.085)
 animation = &"idle_side"
-autoplay = "idle_side"
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("CircleShape2D_losrj")
+shape = SubResource("CapsuleShape2D_acq7p")
 
 [node name="HP_Bar" type="ProgressBar" parent="."]
 visible = false
 modulate = Color(0.878431, 0.152941, 0.156863, 1)
-offset_left = -27.0
-offset_top = -36.0
-offset_right = 27.0
-offset_bottom = -24.0
+offset_left = -40.0
+offset_top = -68.0
+offset_right = 14.0
+offset_bottom = -56.0
+scale = Vector2(1.5, 1.5)
 max_value = 10.0
 value = 4.79
 show_percentage = false
 
 [node name="HP_Text" type="Label" parent="."]
 visible = false
-offset_left = -20.0
-offset_top = -43.0
-offset_right = 20.0
-offset_bottom = -20.0
+offset_left = -30.0
+offset_top = -78.0
+offset_right = 10.0
+offset_bottom = -55.0
+scale = Vector2(1.5, 1.5)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "10
@@ -53,9 +52,9 @@ horizontal_alignment = 1
 visible = false
 modulate = Color(0, 1, 1, 1)
 offset_left = -26.0
-offset_top = -21.0
+offset_top = -47.0
 offset_right = 26.0
-offset_bottom = -10.0
+offset_bottom = -36.0
 max_value = 1.0
 value = 1.0
 show_percentage = false
@@ -63,19 +62,19 @@ show_percentage = false
 [node name="MP_Text" type="Label" parent="."]
 visible = false
 offset_left = -20.0
-offset_top = -28.0
+offset_top = -54.0
 offset_right = 20.0
-offset_bottom = -5.0
+offset_bottom = -31.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "1"
 horizontal_alignment = 1
 
 [node name="StatusEffects" type="GridContainer" parent="."]
-offset_left = -8.255
-offset_top = 10.12
-offset_right = 246.745
-offset_bottom = 151.12
+offset_left = -20.0
+offset_top = 25.0
+offset_right = 235.0
+offset_bottom = 166.0
 scale = Vector2(0.055, 0.055)
 columns = 4
 
@@ -102,8 +101,6 @@ layout_mode = 2
 
 [node name="8" type="TextureRect" parent="StatusEffects"]
 layout_mode = 2
-
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_hitbox_entered"]

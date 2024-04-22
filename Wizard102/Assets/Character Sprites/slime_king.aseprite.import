@@ -1,0 +1,25 @@
+[remap]
+
+importer="Aseprite AnimatedSprite2D Import"
+type="PackedScene"
+uid="uid://bl8vo5dvmucln"
+path="res://.godot/imported/slime_king.aseprite-80e586a78ac8e2a6163659bc82c4b6bb.scn"
+
+[deps]
+
+source_file="res://Assets/Character Sprites/slime_king.aseprite"
+dest_files=["res://.godot/imported/slime_king.aseprite-80e586a78ac8e2a6163659bc82c4b6bb.scn"]
+
+[params]
+
+spritesheet/layout=0
+spritesheet/fixed_rows_count=1
+spritesheet/fixed_columns_count=1
+spritesheet/border_type=0
+spritesheet/trim=false
+spritesheet/ignore_empty=false
+spritesheet/merge_duplicates=false
+animation/default/name="default"
+animation/default/direction=0
+animation/default/repeat_count=0
+animation/autoplay=""
