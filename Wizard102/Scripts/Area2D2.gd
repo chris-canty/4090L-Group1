@@ -28,25 +28,14 @@ func _on_body_exited(body: Node):
 		toggle_tilemaps(false)
 
 func toggle_tilemaps(entered: bool):
-	if get_parent().is_in_group("Boss Room"):
-		var enemies = get_parent().get_tree().get_nodes_in_group("Enemy")
-		if len(enemies) == 0 and entered:
-			# If the player has entered the area, make the first tilemap invisible and the second one visible
-			tilemap3.visible = false
-			tilemap4.visible = true
-		else:
-			# If the player has left the area, revert the visibility back
-			tilemap3.visible = true
-			tilemap4.visible = false
-	else:	
-		if entered:
-			# If the player has entered the area, make the first tilemap invisible and the second one visible
-			tilemap3.visible = false
-			tilemap4.visible = true
-		else:
-			# If the player has left the area, revert the visibility back
-			tilemap3.visible = true
-			tilemap4.visible = false
+	if entered:
+		# If the player has entered the area, make the first tilemap invisible and the second one visible
+		tilemap3.visible = false
+		tilemap4.visible = true
+	else:
+		# If the player has left the area, revert the visibility back
+		tilemap3.visible = true
+		tilemap4.visible = false
 
 func load_previous_room():
 	PlayerData.previous_room()  # Adjust the PlayerData to the previous room state
@@ -65,34 +54,6 @@ func load_previous_room():
 	
 	# Change to the previous room based on whether it's cleared
 	get_tree().change_scene_to_file(scene_path)
-	'''
-	if get_parent().is_in_group("Boss Room"):
-		var enemies = get_parent().get_tree().get_nodes_in_group("Enemy")
-		if len(enemies) > 0:
-			return
-	var container = get_parent().get_parent()
-	if RoomInfo.curr_y == 0:
-		return
-	PlayerData.player_start_position = Vector2(0,-180)
-	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y - 1)
-
-#func load_previous_room():
-	#PlayerData.previous_room()  # Adjust the PlayerData to the previous room state
-	#var scene_path
-	#if PlayerData.is_current_room_cleared():
-		#scene_path = "res://Scenes/Rooms/room_without_enemies.tscn"  # Load without enemies if cleared
-	#else:
-		#scene_path = "res://Scenes/Rooms/room.tscn"  # Load with enemies if not cleared
-	#var current_scene = get_tree().current_scene
-	#var player = current_scene.get_node_or_null("Player")
-	#if player and player.has_method("player"):
-		## Make sure to update the Y position for the previous room
-		#PlayerData.player_start_position = Vector2(player.position.x, -170)
-	#else:
-		#PlayerData.player_start_position = Vector2.ZERO
-	#
-	## Change to the previous room based on whether it's cleared
-	#get_tree().change_scene_to_file(scene_path)
 
 #func reload_room(new_y_position: float = -170.0):
 	#var current_scene = get_tree().current_scene

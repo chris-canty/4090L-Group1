@@ -88,18 +88,8 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 autowrap_mode = 2
-metadata/_edit_use_anchors_ = true
 
 [node name="TurnUI" type="CanvasLayer" parent="."]
-
-[node name="RichTextLabel" type="RichTextLabel" parent="TurnUI"]
-offset_top = 515.0
-offset_right = 341.0
-offset_bottom = 644.0
-size_flags_vertical = 3
-bbcode_enabled = true
-text = "[b][u]Turn:[/u][/b]"
-metadata/_edit_use_anchors_ = true
 
 [node name="Initiative" type="VBoxContainer" parent="TurnUI"]
 anchors_preset = 4
@@ -109,7 +99,6 @@ offset_top = -20.0
 offset_right = 341.0
 offset_bottom = 114.0
 grow_vertical = 2
-metadata/_edit_use_anchors_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="TurnUI/Initiative"]
 layout_mode = 2
@@ -120,7 +109,6 @@ text = "[b][u]Turn:[/u][/b]"
 [node name="Label" type="Label" parent="TurnUI"]
 offset_right = 40.0
 offset_bottom = 23.0
-metadata/_edit_use_anchors_ = true
 
 [node name="Area2D" type="Area2D" parent="."]
 script = ExtResource("11_ckco5")
