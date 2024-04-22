@@ -9,7 +9,7 @@ var cam_pos: Vector2 = Vector2(0,0)
 var cam_zoom: float = 1
 var cam_speed: float = 10
 var bgm_volume: float = -25.0
-enum States {COMBAT,EXPLORE}
+enum States {COMBAT,EXPLORE,INVENTORY}
 var _state : int = States.EXPLORE
 var player_spot: Vector2 = Vector2(-80,-79)
 var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
@@ -44,12 +44,13 @@ var hand_enchants: Array = ["","","","","","",""]
 var alt_hand_ui: Array = []
 var pass_ui = null
 var active_card : Button
+var isOpened = false
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
-	#deck = $Player.deck
+	deck = PlayerData.deck
 	#deck.shuffle()
-	pass
+	
 	
 	#Still working
 	#var loot_scene = preload("res://Scenes/Characters/loot_drop.tscn")
@@ -116,6 +117,11 @@ func _process(delta):
 			action_id = ""
 			$Camera2D/CText.text = ""
 			player_turn()
+	elif _state == States.INVENTORY:
+		if Input.is_action_just_pressed("i"):
+			show_card()
+			return
+		
 	var card_speed = 20
 	$Camera2D.zoom.x = lerp($Camera2D.zoom.x, cam_zoom, cam_speed * delta)
 	$Camera2D.zoom.y = lerp($Camera2D.zoom.y, cam_zoom, cam_speed * delta)
@@ -135,49 +141,66 @@ func _process(delta):
 		
 
 func show_card():
-	if _state != States.EXPLORE:
+	if _state == States.COMBAT:
 		# If not in EXPLORE state, do not show cards.
 		return
 
-	if _iState == Inventory.open:
+	if isOpened:
 		# If the inventory is already open, close it by clearing all cards.
 		for card_instance in hand_ui:
 			card_instance.queue_free()
 		hand_ui.clear()
-		_iState = Inventory.closed
+		isOpened = false
+		_state = States.EXPLORE
 		print("Inventory closed")
 		return
+	else:
+		_state = States.INVENTORY
+		isOpened = true
+		print("Inventory open")
+		var xPos = -15
+		var deckSize = deck.size()
+		xPos = xPos - deckSize * 5
+		for card in deck:
+			var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+			
+			var scene = load(load_str)
+			var lootInstance = scene.instantiate()
+			$Player.add_child(lootInstance)  # Ensure this is called before setting position if using global_position
+			hand_ui.append(lootInstance)  # Store the instance in the hand_ui array for later reference.
+		await get_tree().create_timer(2).timeout
 
-	_iState = Inventory.open
-	print("Inventory open")
+
+
+
 
 	# Load and display each card from the player's deck to the UI
-	for card in deck:
-		var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
-		var scene = load(load_str)
-		if scene:
-			var instance = scene.instantiate()
-			$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
-			instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
-			instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
-			hand_ui.append(instance)
-		else:
-			print("Failed to load scene: ", load_str)
-
-	# Display alternative cards from alt_hand
-	for card in alt_hand:
-		var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
-		var scene = load(load_str)
-		if scene:
-			var instance = scene.instantiate()
-			$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
-			instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
-			instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
-			if $Player.MP < instance.mp_cost:  # Assuming `mp_cost` exists on the card instance
-				instance.modulate = Color("3b3b3b")  # Dim the card if not enough MP
-			alt_hand_ui.append(instance)
-		else:
-			print("Failed to load scene: ", load_str)
+	#for card in deck:
+		#var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		#var scene = load(load_str)
+		#if scene:
+			#var instance = scene.instantiate()
+			#$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			#instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			#instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			#hand_ui.append(instance)
+		#else:
+			#print("Failed to load scene: ", load_str)
+#
+	## Display alternative cards from alt_hand
+	#for card in alt_hand:
+		#var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		#var scene = load(load_str)
+		#if scene:
+			#var instance = scene.instantiate()
+			#$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			#instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			#instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			#if $Player.MP < instance.mp_cost:  # Assuming `mp_cost` exists on the card instance
+				#instance.modulate = Color("3b3b3b")  # Dim the card if not enough MP
+			#alt_hand_ui.append(instance)
+		#else:
+			#print("Failed to load scene: ", load_str)
 
 	# To close inventory when 'i' is pressed again, you may need to handle this toggle outside of this loop,
 	# depending on how you manage input. Typically, this would be managed in `_process()` or `_input()`.
@@ -328,7 +351,7 @@ func find_turn():
 
 func player_turn():
 	
-	hand.shuffle()
+	#hand.shuffle()
 	
 	print("Player Turn")
 	var scene

@@ -1,22 +1,25 @@
 extends Node2D
 
+var opened = false
 var inPickArea= false
 var item_added = false
 var itemToPick = preload("res://Scenes/Characters/loot_drop.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	$AnimatedSprite2D/AnimationPlayer.play("fadeIn")
+	await get_tree().create_timer(0.5).timeout
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	var deck = PlayerData.deck
 	if inPickArea:
-		if Input.is_action_just_pressed("e"):
+		if Input.is_action_just_pressed("e") and !opened:
+			opened = true
 			var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 			var randomInt = randi( )% len(randomLoot)
 			var chosenLoot = randomLoot[randomInt]
-
+			
 			for items in deck:
 				print(items)
 			deck.append(chosenLoot)
@@ -41,6 +44,9 @@ func _process(delta):
 
 
 			await get_tree().create_timer(2.0).timeout
+			$AnimatedSprite2D/AnimationPlayer.play("fadeAway")
+			await get_tree().create_timer(0.5).timeout
+			
 			queue_free()  # Ensure this is safe to call here, might need repositioning based on context
 			
 			

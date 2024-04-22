@@ -186,5 +186,5 @@ func dropLoot():
 	var lootInstance = loot.instantiate()
 	lootInstance.global_position = $AnimatedSprite2D.global_position
 	get_parent().add_child(lootInstance)
-
+	#$lootInstance/AnimationPlayer.play("fadeIn")
 	queue_free()
