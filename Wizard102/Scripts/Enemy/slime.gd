@@ -19,7 +19,7 @@ func _physics_process(_delta):
 			velocity.x = 0
 			in_position = false
 		move_and_slide()
-	elif not nav_agent.is_navigation_finished():
+	elif not nav_agent.is_navigation_finished() and get_parent().isLoading == false:
 		var movement_delta = speed * _delta
 		var current_agent_position = global_position
 		var next_path_position = nav_agent.get_next_path_position()

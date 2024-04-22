@@ -29,6 +29,7 @@ func is_inside_area():
 
 func load_next_room():
 	# Move the player up to the next room
+	'''
 	PlayerData.move_left()
 	var scene_path
 	# Check if the current room is cleared to decide the scene to load
@@ -47,3 +48,9 @@ func load_next_room():
 	
 	# Change to the determined room scene
 	get_tree().change_scene_to_file(scene_path)
+	'''
+	var container = get_parent().get_parent()
+	if RoomInfo.curr_x == 0:
+		return
+	PlayerData.player_start_position = Vector2(220,-90)
+	container.load_room(RoomInfo.curr_x - 1, RoomInfo.curr_y)

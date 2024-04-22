@@ -1,7 +1,7 @@
 extends Node
 
 # Variable to store the player's start position
-var player_start_position: Vector2 = Vector2.ZERO
+var player_start_position: Vector2
 var deck : Array = ["Ember", "Heat Up", "Ember", "Ember"]
 var alt_deck : Array = ["Surge","Surge","Surge"]
 
@@ -9,7 +9,7 @@ var alt_deck : Array = ["Surge","Surge","Surge"]
 #var current_room_index: int = 0
 
 #2D 5x5 array initialization
-var room_states := Array()
+var room_states : Array = []
 
 # Store current position in the 2D array as a Vector2, starting bottom middle
 var current_room_position: Vector2 = Vector2(2, 0)
