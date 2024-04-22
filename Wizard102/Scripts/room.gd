@@ -505,7 +505,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	#wait for animation
 	await instance.display_damage
 	#perform damage
-	combatants[target].take_damage(int(damage),element)
+	combatants[target].take_damage(int(damage))
 	#show damage
 	combatants[target].add_child(text_instance)
 	await instance.anim_done
@@ -578,7 +578,7 @@ func cardAoeTarget(rawDamage: int ,accuracy : int,
 		damages.push_back(text_instance)
 	await instance.display_damage
 	for i in range(1,len(combatants)):
-		combatants[i].take_damage(dam_vals[i-1],element)
+		combatants[i].take_damage(dam_vals[i-1])
 		combatants[i].add_child(damages[i-1])
 	await instance.anim_done
 	print(combatants)
@@ -591,24 +591,6 @@ func cardBuff(multiplier: float, element: String, info: String, icon: String):
 	var boost = Boost_ATK.new()
 	boost.element = element
 	boost.proc_id = 1
-	boost.rounds = -1
-	boost.augment = multiplier
-	boost.icon = icon
-	combatants[target].status_effects.push_back(boost)
-	if _cState == Combat.P_Action:
-		hand.pop_at(card_select)
-		hand_enchants.pop_at(card_select)
-		hand_enchants.push_back("")
-	text_instance.get_node("Text").text = info
-	combatants[target].add_child(text_instance)
-	return boost
-	
-func cardDebuff(multiplier: float, element: String, info: String, icon: String):
-	var text = load("res://Scenes/UI/effect.tscn")
-	var text_instance = text.instantiate()
-	var boost = Boost_ATK.new()
-	boost.element = element
-	boost.proc_id = 2
 	boost.rounds = -1
 	boost.augment = multiplier
 	boost.icon = icon
@@ -771,13 +753,6 @@ func execute_action():
 			if res[0] == true:
 				print("stun")
 				await cardStun(1)
-		"Shatter":
-			await moveCamAction("single")
-			var res = await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "ice", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
-			if res[0] == true:
-				print("shatter effect")
-				addrScen = "[center]+30% to Next Incoming [img width=12]res://Assets/Icons/Attack.png[/img][/center]"
-				await cardDebuff(1.3, "universal", addrScen, "bad")
 		"Ultima":
 			#Ultima (This is how we used to this)
 			damage = 9999
@@ -811,7 +786,7 @@ func execute_action():
 				text_instance.get_node("Text").text = "Miss"
 				combatants[target].velocity.x = 700
 			await instance.display_damage
-			combatants[target].take_damage(damage,"arcane")
+			combatants[target].take_damage(damage)
 			combatants[target].add_child(text_instance)
 			await instance.anim_done
 			if combatants[target].is_dead == true:
