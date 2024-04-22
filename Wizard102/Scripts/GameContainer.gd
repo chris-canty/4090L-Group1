@@ -23,6 +23,15 @@ func load_room_first():
 		enemy.queue_free()
 	get_node("basic_room").get_node("Player").position = PlayerData.player_start_position
 	screen.play("fade_in")
+	
+func load_boss_room():
+	current_node = await RoomInfo.load_room(2,5)
+	RoomInfo.curr_x = 2
+	RoomInfo.curr_y = 5
+	var player_pos = PlayerData.player_start_position
+	await add_child(current_node)
+	get_node("basic_room").get_node("Player").position = player_pos
+	screen.play("fade_in")
 		
 func load_room(x: int, y: int):
 	screen.play("fade_out")
@@ -30,6 +39,9 @@ func load_room(x: int, y: int):
 	$"Black Screen".visible = true
 	remove_child(current_node)
 	RoomInfo.rooms[RoomInfo.curr_x][RoomInfo.curr_y] = current_node
+	if x == 2 and y == 5:
+		load_boss_room()
+		return
 	current_node = await RoomInfo.load_room(x,y)
 	RoomInfo.curr_x = x
 	RoomInfo.curr_y = y

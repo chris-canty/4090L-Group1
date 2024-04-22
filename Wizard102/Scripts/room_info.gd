@@ -1,6 +1,7 @@
 extends Node
 
 @onready var room_template = preload("res://Scenes/Rooms/room.tscn")
+@onready var boss_room_template = preload("res://Scenes/Rooms/boss_room.tscn")
 @onready var rng = RandomNumberGenerator.new()
 
 const Y_UPPER = -50
@@ -10,6 +11,7 @@ const X_LOWER = -150
 
 var curr_floor = 1
 var rooms : Array = []
+var boss_room
 var enemy_scenes : Array = []
 
 var curr_x : int
@@ -17,6 +19,10 @@ var curr_y : int
 
 var enemy_types = {
 	1: ["slime"]
+}
+
+var boss_type = {
+	1 : ["slime_king"]
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -43,7 +49,7 @@ func generate_floor():
 			var new_room = room_template.instantiate()
 			var names = []
 			#Spawning in enemies
-			for spawn in range(1,rng.randi_range(0,6)):
+			for spawn in range(1,rng.randi_range(0,3)):
 				var en = enemy_scenes[rng.randi_range(0,len(enemy_scenes) - 1)]
 				var counter = 2
 				en = en.instantiate()
@@ -63,7 +69,11 @@ func generate_floor():
 				new_room.add_child(en)
 			row.append(new_room)
 		rooms.append(row)
+	boss_room = boss_room_template.instantiate()
+	
 				
 func load_room(x: int, y: int):
+	if y == 5:
+		return boss_room
 	return rooms[x][y]
 	

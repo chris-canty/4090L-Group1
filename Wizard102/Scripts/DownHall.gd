@@ -28,14 +28,25 @@ func _on_body_exited(body: Node):
 		toggle_tilemaps(false)
 
 func toggle_tilemaps(entered: bool):
-	if entered:
-		# If the player has entered the area, make the first tilemap invisible and the second one visible
-		tilemap3.visible = false
-		tilemap4.visible = true
-	else:
-		# If the player has left the area, revert the visibility back
-		tilemap3.visible = true
-		tilemap4.visible = false
+	if get_parent().is_in_group("Boss Room"):
+		var enemies = get_parent().get_tree().get_nodes_in_group("Enemy")
+		if len(enemies) == 0 and entered:
+			# If the player has entered the area, make the first tilemap invisible and the second one visible
+			tilemap3.visible = false
+			tilemap4.visible = true
+		else:
+			# If the player has left the area, revert the visibility back
+			tilemap3.visible = true
+			tilemap4.visible = false
+	else:	
+		if entered:
+			# If the player has entered the area, make the first tilemap invisible and the second one visible
+			tilemap3.visible = false
+			tilemap4.visible = true
+		else:
+			# If the player has left the area, revert the visibility back
+			tilemap3.visible = true
+			tilemap4.visible = false
 
 func load_previous_room():
 	'''
@@ -59,6 +70,10 @@ func load_previous_room():
 	# Change to the determined room scene
 	get_tree().change_scene_to_file(scene_path)
 	'''
+	if get_parent().is_in_group("Boss Room"):
+		var enemies = get_parent().get_tree().get_nodes_in_group("Enemy")
+		if len(enemies) > 0:
+			return
 	var container = get_parent().get_parent()
 	if RoomInfo.curr_y == 0:
 		return
