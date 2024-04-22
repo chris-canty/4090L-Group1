@@ -18,6 +18,7 @@ config/icon="res://wizard102.png"
 [autoload]
 
 PlayerData="*res://Scripts/player_data.gd"
+RoomInfo="*res://Scripts/room_info.gd"
 
 [display]
 
