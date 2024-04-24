@@ -12,7 +12,7 @@ func _process(delta):
 
 
 func _on_start_button_pressed():
-	get_tree().change_scene_to_file("res://Scenes/game_container.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Rooms/room.tscn")
 
 
 func _on_player_options_button_pressed():

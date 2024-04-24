@@ -19,7 +19,7 @@ signal damage
 @onready var status_ui = $"StatusEffects"
 
 var status_effects: Array = []
-
+var loot = preload("res://Scenes/Characters/loot_drop.tscn")
 '''
 Not sure if we want to use these
 
@@ -177,6 +177,14 @@ func take_damage(dmg: int):
 	
 func death():
 	$AnimatedSprite2D.play("death")
+	await get_tree().create_timer(1).timeout
+	
 	is_dead = true
-	await $AnimatedSprite2D.animation_finished
+	dropLoot()
+	
+func dropLoot():
+	var lootInstance = loot.instantiate()
+	lootInstance.global_position = $AnimatedSprite2D.global_position
+	get_parent().add_child(lootInstance)
+	#$lootInstance/AnimationPlayer.play("fadeIn")
 	queue_free()

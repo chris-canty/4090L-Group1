@@ -9,7 +9,7 @@ var cam_pos: Vector2 = Vector2(0,0)
 var cam_zoom: float = 1
 var cam_speed: float = 10
 var bgm_volume: float = -25.0
-enum States {COMBAT,EXPLORE}
+enum States {COMBAT,EXPLORE,INVENTORY}
 var _state : int = States.EXPLORE
 var player_spot: Vector2 = Vector2(-80,-79)
 var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
@@ -20,7 +20,8 @@ var temp_init = 0
 
 #Variables for Combat
 enum Combat {Idle,P_Select,P_Enchant,P_Target,P_Action,Enemy}
-var isLoading : bool = true
+enum Inventory {open,closed}
+var _iState: int = Inventory.closed
 var _cState: int = Combat.Idle
 var rng = RandomNumberGenerator.new()
 var combatants: Array = []
@@ -43,9 +44,24 @@ var hand_enchants: Array = ["","","","","","",""]
 var alt_hand_ui: Array = []
 var pass_ui = null
 var active_card : Button
+var isOpened = false
 # Called when the node enters the scene tree for the first time.
 
 func _ready():
+	deck = PlayerData.deck
+	#deck.shuffle()
+	
+	
+	#Still working
+	#var loot_scene = preload("res://Scenes/Characters/loot_drop.tscn")
+#
+	## Instance several child scenes and connect their signals
+	#for i in range(3):  # Say, you want to instance it 3 times
+		#var instance = loot_scene.instance()
+		#add_child(instance)
+		## Connect the signal to the handler method
+		#instance.connect("picked", self, "_on_loot_drop_2_picked")
+	#pass # Replace with function body.
 	print("Loading Room")
 
 
@@ -53,7 +69,7 @@ func _ready():
 func _process(delta):
 	$TurnUI/Label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if _state == States.EXPLORE:
-		$TurnUI.visible = false
+		init_ui.visible = false
 		cam_zoom = 5
 		cam_pos = $Player.position
 		for card in hand_ui:
@@ -64,13 +80,13 @@ func _process(delta):
 		card_select = -1
 		action_id = ""
 	elif _state == States.COMBAT:
-		$TurnUI.visible = true
+		init_ui.visible = true
 		var counter = 0
 		for c in range(len(combatants)):
 			if combatants[c] == null:
-				init_ui.get_child(c).queue_free()
+				init_ui.get_child(c + 1).queue_free()
 			else:
-				var init_child = init_ui.get_child(c).get_node("Init_Bar")
+				var init_child = init_ui.get_child(c + 1).get_node("Init_Bar")
 				init_child.value = lerp(init_child.value,float(100 - initiative[c]),10 * delta)
 		while counter < len(combatants):
 			if combatants[counter] == null:
@@ -87,7 +103,7 @@ func _process(delta):
 			$cancel.play()
 			active_card = null
 			initiative[0] = temp_init
-			init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffffff")
+			init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
 			for card in hand_ui:
 				card.queue_free()
 			for card in alt_hand_ui:
@@ -102,6 +118,11 @@ func _process(delta):
 			action_id = ""
 			$Camera2D/CText.text = ""
 			player_turn()
+	elif _state == States.INVENTORY:
+		if Input.is_action_just_pressed("i"):
+			show_card()
+			return
+		
 	var card_speed = 20
 	$Camera2D.zoom.x = lerp($Camera2D.zoom.x, cam_zoom, cam_speed * delta)
 	$Camera2D.zoom.y = lerp($Camera2D.zoom.y, cam_zoom, cam_speed * delta)
@@ -114,6 +135,79 @@ func _process(delta):
 	for i in range(len(alt_hand_ui)):
 		alt_hand_ui[i].position.x = lerp(alt_hand_ui[i].position.x,alt_card_pos[i].x,card_speed * delta)
 		alt_hand_ui[i].position.y = lerp(alt_hand_ui[i].position.y,alt_card_pos[i].y,card_speed * delta)
+	
+	if Input.is_action_just_pressed("i"):
+		show_card()
+		#pass
+		
+
+func show_card():
+	if _state == States.COMBAT:
+		# If not in EXPLORE state, do not show cards.
+		return
+
+	if isOpened:
+		# If the inventory is already open, close it by clearing all cards.
+		for card_instance in hand_ui:
+			card_instance.queue_free()
+		hand_ui.clear()
+		isOpened = false
+		_state = States.EXPLORE
+		print("Inventory closed")
+		return
+	else:
+		_state = States.INVENTORY
+		isOpened = true
+		print("Inventory open")
+		var xPos = -15
+		var deckSize = deck.size()
+		xPos = xPos - deckSize * 5
+		for card in deck:
+			var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+			
+			var scene = load(load_str)
+			var lootInstance = scene.instantiate()
+			$Player.add_child(lootInstance)  # Ensure this is called before setting position if using global_position
+			hand_ui.append(lootInstance)  # Store the instance in the hand_ui array for later reference.
+		await get_tree().create_timer(2).timeout
+
+
+
+
+
+	# Load and display each card from the player's deck to the UI
+	#for card in deck:
+		#var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		#var scene = load(load_str)
+		#if scene:
+			#var instance = scene.instantiate()
+			#$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			#instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			#instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			#hand_ui.append(instance)
+		#else:
+			#print("Failed to load scene: ", load_str)
+#
+	## Display alternative cards from alt_hand
+	#for card in alt_hand:
+		#var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+		#var scene = load(load_str)
+		#if scene:
+			#var instance = scene.instantiate()
+			#$Player.add_child(instance)  # Consider adding these to a dedicated UI node instead of $Player if available
+			#instance.position = Vector2.ZERO  # Adjust based on your UI layout needs
+			#instance.get_node("Card").scale = Vector2(1, 1)  # Ensure cards are visible
+			#if $Player.MP < instance.mp_cost:  # Assuming `mp_cost` exists on the card instance
+				#instance.modulate = Color("3b3b3b")  # Dim the card if not enough MP
+			#alt_hand_ui.append(instance)
+		#else:
+			#print("Failed to load scene: ", load_str)
+
+	# To close inventory when 'i' is pressed again, you may need to handle this toggle outside of this loop,
+	# depending on how you manage input. Typically, this would be managed in `_process()` or `_input()`.
+
+	
+
 func initiate_combat():
 	_state = States.COMBAT
 	$Camera2D.limit_left = -100000
@@ -121,9 +215,9 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	deck = PlayerData.deck.duplicate(true)
+	deck = PlayerData.deck
 	deck.shuffle()
-	alt_deck = PlayerData.alt_deck.duplicate(true)
+	alt_deck = PlayerData.alt_deck
 	alt_deck.shuffle()
 	$Player.direction = "right"
 	$Player.move_character(player_spot)
@@ -144,6 +238,7 @@ func initiate_combat():
 	
 	print(combatants)
 	print(initiative)
+	
 	for i in range(len(combatants)):
 		var turn = load("res://Scenes/UI/turn.tscn")
 		var turn_i = turn.instantiate()
@@ -174,7 +269,7 @@ func next_turn():
 		$Player.in_combat = false
 		PlayerData.alt_deck = alt_deck + alt_hand
 		_state = States.EXPLORE
-		init_ui.get_child(0).queue_free()
+		init_ui.get_child(1).queue_free()
 		$Player.disable_bars()
 		$Player.status_effects.clear()
 		for s in $Player.status_ui.get_children():
@@ -196,13 +291,13 @@ func next_turn():
 		combatants[curr_turn].disable_bars()
 		combatants.pop_at(curr_turn)
 		initiative.pop_at(curr_turn)
-		init_ui.get_child(curr_turn).queue_free()
+		init_ui.get_child(curr_turn + 1).queue_free()
 		next_turn()
 		return
 	if combatants[curr_turn].is_stun == true:
 		combatants[curr_turn].is_stun = false
 		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-		init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
+		init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 		next_turn()
 		return
 	#Player
@@ -256,7 +351,11 @@ func find_turn():
 	return combatant
 
 func player_turn():
+	
+	#hand.shuffle()
+	
 	print("Player Turn")
+	print("hello")
 	var scene
 	var instance
 	cam_pos = combatants[curr_turn].position - Vector2(0,40)
@@ -333,7 +432,8 @@ func enchant_card(button: Button, alt_a_id: String):
 	
 			
 func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
-	
+	if _state != States.COMBAT:
+		return
 	#Enchanting Cards
 	if _cState == Combat.P_Enchant:
 		if button.modulate == Color("ffffff"):
@@ -397,7 +497,7 @@ func select_card(button: Button, a_id: String, mp_cost: int, target_type: int):
 			possible_targets.push_back([i,instance])
 	cam_zoom = 4.5
 	cam_pos = Vector2(0,-100)
-	init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffff51")
+	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffff51")
 	temp_init = initiative[0]
 	initiative[0] = 100 - $Player.SPD
 	active_card = button
@@ -421,7 +521,7 @@ func select_alt_card(button : Button, a_id: String, mp_cost: int):
 func select_target(target_button):
 	$Select.play()
 	initiative[0] = temp_init
-	init_ui.get_child(0).get_node("Init_Bar").modulate = Color("ffffff")
+	init_ui.get_child(1).get_node("Init_Bar").modulate = Color("ffffff")
 	_cState = Combat.P_Action
 	var counter = 0
 	for t in possible_targets:
@@ -483,9 +583,6 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	#Damage Calculations
 	var text = load(addrText)
 	var text_instance = text.instantiate()
-	#print("CURRENT TURN:")
-	#print(curr_turn)
-	# Having some problems with curr_turn cause combatants out of bounds
 	if roll <= accuracy:
 		damage = combatants[curr_turn].atk_status(rawDamage,element)
 		combatants[curr_turn].MP -= mp_cost
@@ -513,7 +610,7 @@ func cardSingleTarget( 	rawDamage: int ,accuracy : int,
 	if combatants[target].is_dead == true:
 		combatants.pop_at(target)
 		initiative.pop_at(target)
-		init_ui.get_child(target).queue_free()
+		init_ui.get_child(curr_turn + 1).queue_free()
 		print(combatants)
 	return [(roll <= accuracy),float(damage)/rawDamage]
 
@@ -666,7 +763,7 @@ func execute_action():
 		for c in combatants:
 			await c.enable_bars()
 		initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-		init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
+		init_ui.get_child(curr_turn + 1).get_node("Init_Bar").value = 0
 		next_turn()
 		return
 	for c in combatants:
@@ -675,7 +772,7 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(50, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
 			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
@@ -809,5 +906,6 @@ func execute_action():
 	card_select = -1
 	action_id = ""
 	initiative[curr_turn] = 100 - combatants[curr_turn].SPD
-	init_ui.get_child(curr_turn).get_node("Init_Bar").value = 0
+	init_ui.get_child(curr_turn+1).get_node("Init_Bar").value = 0
 	next_turn()
+
