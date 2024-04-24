@@ -180,3 +180,14 @@ func death():
 	is_dead = true
 	await $AnimatedSprite2D.animation_finished
 	queue_free()
+	dropLoot()
+
+
+var loot = preload("res://Scenes/Rooms/loot_drop.tscn")
+
+func dropLoot():
+	var lootInstance = loot.instantiate()
+	lootInstance.global_position = $AnimatedSprite2D.global_position
+	get_parent().add_child(lootInstance)
+	#$lootInstance/AnimationPlayer.play("fadeIn")
+	queue_free()

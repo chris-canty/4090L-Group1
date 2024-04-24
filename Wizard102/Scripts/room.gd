@@ -9,11 +9,12 @@ var cam_pos: Vector2 = Vector2(0,0)
 var cam_zoom: float = 1
 var cam_speed: float = 10
 var bgm_volume: float = -25.0
-enum States {COMBAT,EXPLORE}
+enum States {COMBAT,EXPLORE,INVENTORY}
 var _state : int = States.EXPLORE
 var player_spot: Vector2 = Vector2(-80,-79)
 var enemy_spot: Array = [Vector2(80,-90),Vector2(80,-150),Vector2(80,-30), Vector2(120,-120),Vector2(120,-60)]
 var card_pos = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
+var card_pos1 = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
 var alt_card_pos = [Vector2(20,-12),Vector2(40,-12),Vector2(60,-12)]
 var pass_pos = Vector2(-60,-10)
 var temp_init = 0
@@ -44,13 +45,14 @@ var alt_hand_ui: Array = []
 var pass_ui = null
 var active_card : Button
 # Called when the node enters the scene tree for the first time.
-
+var isOpened = false
 func _ready():
 	print("Loading Room")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	deck = PlayerData.deck.duplicate(true)	
 	$TurnUI/Label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if _state == States.EXPLORE:
 		$TurnUI.visible = false
@@ -63,6 +65,10 @@ func _process(delta):
 		target = -1
 		card_select = -1
 		action_id = ""
+	elif _state == States.INVENTORY:
+		if Input.is_action_just_pressed("i"):
+			show_card()
+			return
 	elif _state == States.COMBAT:
 		$TurnUI.visible = true
 		var counter = 0
@@ -108,12 +114,24 @@ func _process(delta):
 	$Camera2D.position.x = lerp($Camera2D.position.x,cam_pos.x,cam_speed * delta)
 	$Camera2D.position.y = lerp($Camera2D.position.y,cam_pos.y,cam_speed * delta)
 	$BGM.volume_db = lerp($BGM.volume_db,bgm_volume,5 * delta)
+	print(len(hand_ui))
+	print(len(card_pos))
+	
 	for i in range(len(hand_ui)):
-		hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos[i].x,card_speed * delta)
-		hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos[i].y,card_speed * delta)
+		var card_pos2 = Vector2(-70 + 20*i,-85);
+		#card_pos1 = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
+		if isOpened:
+			hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos2.x,card_speed * delta)
+			hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos2.y,card_speed * delta)
+		else:
+			hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos[i].x,card_speed * delta)
+			hand_ui[i].position.y = lerp(hand_ui[i].position.y,card_pos[i].y,card_speed * delta)
 	for i in range(len(alt_hand_ui)):
 		alt_hand_ui[i].position.x = lerp(alt_hand_ui[i].position.x,alt_card_pos[i].x,card_speed * delta)
 		alt_hand_ui[i].position.y = lerp(alt_hand_ui[i].position.y,alt_card_pos[i].y,card_speed * delta)
+	if Input.is_action_just_pressed("i"):
+			show_card()
+			return
 func initiate_combat():
 	_state = States.COMBAT
 	$Camera2D.limit_left = -100000
@@ -121,8 +139,8 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	deck = PlayerData.deck.duplicate(true)
-	deck.shuffle()
+	#deck = PlayerData.deck.duplicate(true)
+	#deck.shuffle()
 	alt_deck = PlayerData.alt_deck.duplicate(true)
 	alt_deck.shuffle()
 	$Player.direction = "right"
@@ -158,6 +176,37 @@ func initiate_combat():
 	cam_zoom = 4.5
 	await get_tree().create_timer(2.0).timeout
 	next_turn()
+	
+func show_card():
+	if _state == States.COMBAT:
+		# If not in EXPLORE state, do not show cards.
+		return
+
+	if isOpened:
+		# If the inventory is already open, close it by clearing all cards.
+		for card_instance in hand_ui:
+			card_instance.queue_free()
+		hand_ui.clear()
+		isOpened = false
+		_state = States.EXPLORE
+		print("Inventory closed")
+		return
+	else:
+		_state = States.INVENTORY
+		isOpened = true
+		print("Inventory open")
+		var xPos = -15
+		var deckSize = deck.size()
+		xPos = xPos - deckSize * 5
+		for card in deck:
+			var load_str = "res://Scenes/Cards/" + card.replace(' ', '').to_lower() + "_card.tscn"
+			
+			var scene = load(load_str)
+			var lootInstance = scene.instantiate()
+			$Player.add_child(lootInstance)  # Ensure this is called before setting position if using global_position
+			hand_ui.append(lootInstance)  # Store the instance in the hand_ui array for later reference.
+		await get_tree().create_timer(2).timeout
+
 	
 func next_turn():
 	'''
@@ -675,7 +724,7 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(50, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
 			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))
