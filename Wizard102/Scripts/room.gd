@@ -62,6 +62,7 @@ func _ready():
 		## Connect the signal to the handler method
 		#instance.connect("picked", self, "_on_loot_drop_2_picked")
 	#pass # Replace with function body.
+	print("Loading Room")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
