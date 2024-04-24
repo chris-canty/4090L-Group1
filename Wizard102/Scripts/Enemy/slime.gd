@@ -10,7 +10,8 @@ const speed = 3000
 
 
 func _physics_process(_delta):
-	nav_agent.target_position = player.global_position
+	if player != null:
+		nav_agent.target_position = player.global_position
 	if in_combat == true:
 		$AnimatedSprite2D.flip_h = true
 		if velocity.x > 0:

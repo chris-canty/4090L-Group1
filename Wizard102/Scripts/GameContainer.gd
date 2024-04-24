@@ -8,7 +8,7 @@ func _ready():
 	print("Loaded Main Game Container")
 	await RoomInfo.generate_floor()
 	load_room_first()
-	
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

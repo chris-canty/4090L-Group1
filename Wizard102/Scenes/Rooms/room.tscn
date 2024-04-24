@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
-[ext_resource type="PackedScene" uid="uid://b6mhwcw7dh4si" path="res://Scenes/Rooms/blacked_out_tile_map.tscn" id="2_ep413"]
+[ext_resource type="PackedScene" path="res://Scenes/Rooms/blacked_out_tile_map.tscn" id="2_ep413"]
 [ext_resource type="PackedScene" uid="uid://bmqcj2ry0kcxi" path="res://Scenes/Rooms/tile_map.tscn" id="2_g2xdv"]
 [ext_resource type="PackedScene" uid="uid://dtmvyi1buue65" path="res://Scenes/Rooms/tile_map_2.tscn" id="3_61yxp"]
 [ext_resource type="PackedScene" uid="uid://bqlo5pnx4653l" path="res://Scenes/Characters/player.tscn" id="3_w1mit"]
@@ -37,6 +37,7 @@ layer_1/tile_data = PackedInt32Array(-786446, 131072, 9, -786445, 131072, 1, -78
 
 [node name="Player" parent="." instance=ExtResource("3_w1mit")]
 position = Vector2(-1, -17)
+MaxHP = 1
 MaxMP = 3
 SPD = 60
 

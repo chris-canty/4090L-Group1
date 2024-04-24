@@ -36,7 +36,7 @@ func _process(delta):
 
 
 func generate_floor():
-	
+	rooms = []
 	#Loading all possible enemies on this floor
 	for enemy in enemy_types[curr_floor]:
 		var en_scn = load("res://Scenes/Characters/" + enemy + ".tscn")
