@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cbwdiu4gula2k"]
+[gd_scene load_steps=19 format=3 uid="uid://cbwdiu4gula2k"]
 
 [ext_resource type="Script" path="res://Scripts/room.gd" id="1_6p8ux"]
 [ext_resource type="PackedScene" path="res://Scenes/Rooms/blacked_out_tile_map.tscn" id="2_ep413"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://Scripts/LeftHall.gd" id="14_ric8e"]
 [ext_resource type="PackedScene" uid="uid://llo8tqnku3cd" path="res://Scenes/UI/pause_menu.tscn" id="14_vbblp"]
 [ext_resource type="Script" path="res://Scripts/RightHall.gd" id="15_rw4es"]
+[ext_resource type="PackedScene" uid="uid://drercpeh3qwi" path="res://Scenes/Rooms/loot_drop.tscn" id="17_oe6n6"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_nmok0"]
 vertices = PackedVector2Array(211, -183, 214, 9, -214, 8, -214, -185)
@@ -156,3 +157,12 @@ metadata/_edit_use_anchors_ = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_nmok0")
+
+[node name="loot_drop" parent="." instance=ExtResource("17_oe6n6")]
+position = Vector2(-85.5145, -55.8746)
+
+[node name="loot_drop2" parent="." instance=ExtResource("17_oe6n6")]
+position = Vector2(130.062, -140.637)
+
+[node name="loot_drop3" parent="." instance=ExtResource("17_oe6n6")]
+position = Vector2(59.9828, -109.935)
