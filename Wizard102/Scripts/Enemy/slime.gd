@@ -21,7 +21,7 @@ var timer : Timer = Timer.new()
 	timer.start()
 	
 	nav_agent.target_position = player.global_position
-	if canExecutePhysics:
+	if executePhysics:
         	if in_combat == true:
 			$AnimatedSprite2D.flip_h = true
 			if velocity.x > 0:
@@ -39,7 +39,7 @@ var timer : Timer = Timer.new()
 
 
 func _timer_Timeout():
-	canExecutePhysics = true 
+	executePhysics = true 
 
 
 func _on_hitbox_entered(body):
