@@ -7,28 +7,38 @@ const speed = 3000
 @onready var player : Node2D = get_parent().get_node("Player")
 
 @onready var nav_agent : NavigationAgent2D = $NavigationAgent2D
+var executePhysics = false
+
 
 
 func _physics_process(_delta):
-	if player != null:
-		nav_agent.target_position = player.global_position
-	if in_combat == true:
-		$AnimatedSprite2D.flip_h = true
-		if velocity.x > 0:
-			velocity.x -= 100
-		elif velocity.x <= 0:
-			velocity.x = 0
-			in_position = false
-		move_and_slide()
-	elif not nav_agent.is_navigation_finished() and get_parent().isLoading == false:
-		var movement_delta = speed * _delta
-		var current_agent_position = global_position
-		var next_path_position = nav_agent.get_next_path_position()
-		velocity = (next_path_position - current_agent_position).normalized() * movement_delta
-		move_and_slide()
+	var timer : Timer = Timer.new()
+	add_child(timer)
+	timer.one_shot = true
+	timer.autostart = false
+	timer.wait_time = 1.5
+	timer.timeout.connect(_timer_Timeout)
+	timer.start()
+	nav_agent.target_position = player.global_position
+	if executePhysics:
+		if in_combat == true:
+			$AnimatedSprite2D.flip_h = true
+			if velocity.x > 0:
+				velocity.x -= 100
+			elif velocity.x <= 0:
+				velocity.x = 0
+				in_position = false
+			move_and_slide()
+		elif not nav_agent.is_navigation_finished() and get_parent().isLoading == false:
+			var movement_delta = speed * _delta
+			var current_agent_position = global_position
+			var next_path_position = nav_agent.get_next_path_position()
+			velocity = (next_path_position - current_agent_position).normalized() * movement_delta
+			move_and_slide()
 
 
-
+func _timer_Timeout():
+	executePhysics = true 
 
 
 func _on_hitbox_entered(body):
