@@ -12,17 +12,16 @@ var executePhysics = false
 
 
 func _physics_process(_delta):
-var timer : Timer = Timer.new()
+	var timer : Timer = Timer.new()
 	add_child(timer)
 	timer.one_shot = true
 	timer.autostart = false
 	timer.wait_time = 1.5
 	timer.timeout.connect(_timer_Timeout)
 	timer.start()
-	
 	nav_agent.target_position = player.global_position
 	if executePhysics:
-        	if in_combat == true:
+		if in_combat == true:
 			$AnimatedSprite2D.flip_h = true
 			if velocity.x > 0:
 				velocity.x -= 100
