@@ -214,11 +214,14 @@ func next_turn():
 	'''
 	_cState = Combat.Idle
 	$Camera2D/CText.text = ""
-	if $Player.is_dead == true:
-		$Camera2D/CText.text = "Game Over"
-		await get_tree().create_timer(3.0).timeout
-		queue_free()
+	var player = $Player
+	if player == null:
+		get_tree().change_scene_to_file("res://Scenes/UI/game_over.tscn")
+		return
 	if combatants.size() == 1:
+		if player == null:
+			get_tree().change_scene_to_file("res://Scenes/UI/game_over.tscn")
+			return
 		PlayerData.clear_current_room()
 		$Player.in_combat = false
 		PlayerData.alt_deck = alt_deck + alt_hand
