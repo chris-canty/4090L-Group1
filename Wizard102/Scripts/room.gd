@@ -115,8 +115,10 @@ func _process(delta):
 	$BGM.volume_db = lerp($BGM.volume_db,bgm_volume,5 * delta)
 	print(len(hand_ui))
 	print(len(card_pos))
+	var vec = -10 - 20*int(len(hand_ui)/2)
 	for i in range(len(hand_ui)):
-		var card_pos2 = Vector2(-70 + 20*i,-85);
+		
+		var card_pos2 = Vector2(vec + 20*i,-65);
 		#card_pos1 = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
 		if isOpened:
 			hand_ui[i].position.x = lerp(hand_ui[i].position.x,card_pos2.x,card_speed * delta)
