@@ -1,0 +1,86 @@
+[gd_scene load_steps=6 format=3 uid="uid://co8p6h2fd5qem"]
+
+[ext_resource type="Script" path="res://Scripts/how_to_play.gd" id="1_i0wre"]
+[ext_resource type="Texture2D" uid="uid://b7rev6hmerabe" path="res://Assets/Background Images/an-unlocked-entrance-at-a-historic-temple-in-pitsunda-free-photo.jpg" id="1_sw4ti"]
+[ext_resource type="Theme" uid="uid://bkam3wnj62fi7" path="res://Scenes/UI/orange_button_theme.tres" id="2_0jjun"]
+[ext_resource type="AudioStream" uid="uid://3wkhpdmjh7vs" path="res://Sounds/Sound_Effects/select.wav" id="4_3688x"]
+
+[sub_resource type="SystemFont" id="SystemFont_f626m"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[node name="HowToPlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_i0wre")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_right = 1806.0
+offset_bottom = 1023.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.515, 0.515)
+texture = ExtResource("1_sw4ti")
+expand_mode = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[center][font_size=100][b][u]HOW TO PLAY[/u][/b][/font_size][/center][p]
+[center][font_size=50]Exploring:[/font_size][/center][p]
+[center][font_size=25]WASD/Arrow Keys - Move Around The Room[/font_size][/center]
+[center][font_size=25]X - Interact With Chests/Doors[/font_size][/center]
+[center][font_size=25]I - View Current Deck[/font_size][/center][p][center][font_size=25]Tab - Pause Current Game[/font_size][/center][p]
+[center][font_size=50]Combat:[/font_size][/center][p]
+[center][font_size=25]Left Click - Select Card[/font_size][/center]
+[center][font_size=25]Right Click - Discard Card In Hand[/font_size][/center]
+[center][font_size=25]ESC - Cancel Action[/font_size][/center][p][center][font_size=50]Rules Of Combat:[/font_size][/center]
+[center][font_size=25]Combat is turn-based, and turns are determined by initiative order.
+Players can cast spells using cards picked up, which allow them to deal damage, empower themselves, or weaken enemies.
+Normal Spell Cards are used once per fight, return to the players deck at the end of combat.
+Item Cards (Cards In Purple) can be used to enchant Spell Cards, improving their effects, however they are one time use,and cannot be reused.
+Defeat the Boss at the end of the dungeon to Win![/font_size][/center]"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -517.0
+offset_top = -181.0
+offset_right = 19.0001
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(1.965, 1.965)
+theme_override_constants/separation = 18
+
+[node name="Seperator" type="Control" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_0jjun")
+theme_override_fonts/font = SubResource("SystemFont_f626m")
+text = "Return To Menu
+"
+
+[node name="select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_3688x")
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
