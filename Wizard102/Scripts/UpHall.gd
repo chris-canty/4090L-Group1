@@ -79,6 +79,7 @@ func load_next_room():
 	if RoomInfo.curr_y == 4 and not RoomInfo.curr_x == 2:
 		return
 	PlayerData.player_start_position = Vector2(0,0)
+	PlayerData.player_start_direction = "up"
 	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y + 1)
 
 

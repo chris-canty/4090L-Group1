@@ -68,8 +68,10 @@ func load_room(x: int, y: int):
 	RoomInfo.curr_x = x
 	RoomInfo.curr_y = y
 	var player_pos = PlayerData.player_start_position
+	var player_dir = PlayerData.player_start_direction
 	await add_child(current_node)
 	get_node("basic_room").get_node("Player").position = player_pos
+	get_node("basic_room").get_node("Player").direction = player_dir
 	set_ui()
 	screen.play("fade_in")
 	print(x,y)

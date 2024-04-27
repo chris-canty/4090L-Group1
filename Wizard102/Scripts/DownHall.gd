@@ -78,6 +78,7 @@ func load_previous_room():
 	if RoomInfo.curr_y == 0:
 		return
 	PlayerData.player_start_position = Vector2(0,-180)
+	PlayerData.player_start_direction = "down"
 	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y - 1)
 
 #func load_previous_room():
