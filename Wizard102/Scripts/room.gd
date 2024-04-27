@@ -52,7 +52,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	deck = PlayerData.deck.duplicate(true)	
 	$TurnUI/Label.text = "FPS: " + str(Engine.get_frames_per_second())
 	if _state == States.EXPLORE:
 		$TurnUI.visible = false
@@ -116,7 +115,6 @@ func _process(delta):
 	$BGM.volume_db = lerp($BGM.volume_db,bgm_volume,5 * delta)
 	print(len(hand_ui))
 	print(len(card_pos))
-	
 	for i in range(len(hand_ui)):
 		var card_pos2 = Vector2(-70 + 20*i,-85);
 		#card_pos1 = [Vector2(-70,-85),Vector2(-50,-85),Vector2(-30,-85),Vector2(-10,-85),Vector2(10,-85),Vector2(30,-85),Vector2(50,-85)]
@@ -139,8 +137,8 @@ func initiate_combat():
 	$Camera2D.limit_top = -10000
 	$Camera2D.limit_bottom = 10000
 	$BGM.play()
-	#deck = PlayerData.deck.duplicate(true)
-	#deck.shuffle()
+	deck = PlayerData.deck.duplicate(true)
+	deck.shuffle()
 	alt_deck = PlayerData.alt_deck.duplicate(true)
 	alt_deck.shuffle()
 	$Player.direction = "right"
@@ -193,6 +191,7 @@ func show_card():
 		return
 	else:
 		_state = States.INVENTORY
+		deck = PlayerData.deck.duplicate(true)
 		isOpened = true
 		print("Inventory open")
 		var xPos = -15
@@ -329,6 +328,7 @@ func player_turn():
 		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
 		scene = load(load_str)
 		instance = scene.instantiate()
+		instance.z_index = 5
 		mp_cost = instance.mp_cost
 		$Player.add_child(instance)
 		await instance._ready()
@@ -347,6 +347,7 @@ func player_turn():
 		load_str = "res://Scenes/Cards/" + load_str + "_card.tscn"
 		scene = load(load_str)
 		instance = scene.instantiate()
+		instance.z_index = 5
 		mp_cost = instance.mp_cost
 		$Player.add_child(instance)
 		await instance._ready()
@@ -727,7 +728,7 @@ func execute_action():
 	match action_id:
 		"Ember":
 			await moveCamAction("single")
-			await cardSingleTarget(50, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "fire", "res://Scenes/Effects/fire.tscn",Vector2(0,0))
 		"Bolt":
 			await moveCamAction("single")
 			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "lightning", "res://Scenes/Effects/lightning.tscn", Vector2(0,58))

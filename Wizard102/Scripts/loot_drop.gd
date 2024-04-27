@@ -4,6 +4,7 @@ var opened = false
 var inPickArea= false
 var item_added = false
 var itemToPick = preload("res://Scenes/Rooms/loot_drop.tscn")
+@export var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$AnimatedSprite2D/AnimationPlayer.play("fadeIn")
@@ -16,7 +17,6 @@ func _process(delta):
 	if inPickArea:
 		if Input.is_action_just_pressed("e") and !opened:
 			opened = true
-			var randomLoot = ["Bolt", "Frost", "Stone", "Blast", "Dark", "Ray", "Quake", "Chill", "Stun"]
 			var randomInt = randi( )% len(randomLoot)
 			var chosenLoot = randomLoot[randomInt]
 			
@@ -25,11 +25,12 @@ func _process(delta):
 			deck.append(chosenLoot)
 			# Animation for card opening
 			$AnimatedSprite2D.play("opened")
+			$Open.play()
 			
 			# Wait for animation to finish then emit signal and cleanup
 			await get_tree().create_timer(0.6).timeout
 			$AnimatedSprite2D.play("open")
-			
+			$Collect.play()
 			# Load the corresponding scene for the chosen loot card
 			var load_str = "res://Scenes/Cards/" + chosenLoot + "_card.tscn"
 			var scene = load(load_str)

@@ -1,7 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://drercpeh3qwi"]
+[gd_scene load_steps=17 format=3 uid="uid://drercpeh3qwi"]
 
 [ext_resource type="Script" path="res://Scripts/loot_drop.gd" id="1_djo0y"]
 [ext_resource type="Texture2D" uid="uid://beo24tjxdq3vy" path="res://Assets/Tilesets/dungeon_tiles_2.png" id="1_gsw0q"]
+[ext_resource type="AudioStream" uid="uid://dotpu7mcdtw7" path="res://Sounds/Sound_Effects/open.wav" id="3_6dwqk"]
+[ext_resource type="AudioStream" uid="uid://bhqovyy55gd0d" path="res://Sounds/Sound_Effects/enchant.ogg" id="4_cbom0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hcqay"]
 atlas = ExtResource("1_gsw0q")
@@ -131,6 +133,13 @@ debug_color = Color(0, 0.6, 0.701961, 0.419608)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_rc52e")
+
+[node name="Open" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_6dwqk")
+
+[node name="Collect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_cbom0")
+volume_db = -13.0
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

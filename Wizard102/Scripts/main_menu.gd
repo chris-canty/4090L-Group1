@@ -12,12 +12,17 @@ func _process(delta):
 
 
 func _on_start_button_pressed():
+	$select.play()
+	await get_tree().create_timer(0.5).timeout
 	get_tree().change_scene_to_file("res://Scenes/game_container.tscn")
 
 
 func _on_player_options_button_pressed():
-	pass # Replace with function body.
+	$select.play()
+	await get_tree().create_timer(0.5).timeout
 
 
 func _on_quit_button_pressed():
+	$select.play()
+	await get_tree().create_timer(0.5).timeout
 	get_tree().quit()
