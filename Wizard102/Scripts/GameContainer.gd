@@ -38,8 +38,13 @@ func load_room(x: int, y: int):
 	get_node("basic_room").isLoading = true
 	$"Black Screen".visible = true
 	remove_child(current_node)
-	RoomInfo.rooms[RoomInfo.curr_x][RoomInfo.curr_y] = current_node
+	if RoomInfo.curr_y == 5:
+		RoomInfo.boss_room = current_node
+	else:
+		RoomInfo.rooms[RoomInfo.curr_x][RoomInfo.curr_y] = current_node
 	if x == 2 and y == 5:
+		RoomInfo.curr_x = 2
+		RoomInfo.curr_y = 5
 		load_boss_room()
 		return
 	current_node = await RoomInfo.load_room(x,y)

@@ -73,6 +73,9 @@ func load_next_room():
 		if len(enemies) > 0:
 			return
 	var container = get_parent().get_parent()
+	if RoomInfo.curr_y == 5:
+		container.get_tree().change_scene_to_file("res://Scenes/UI/thanks_for_playing.tscn")
+		return
 	if RoomInfo.curr_y == 4 and not RoomInfo.curr_x == 2:
 		return
 	PlayerData.player_start_position = Vector2(0,0)

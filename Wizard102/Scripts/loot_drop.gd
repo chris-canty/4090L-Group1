@@ -15,7 +15,7 @@ func _ready():
 func _process(delta):
 	var deck = PlayerData.deck
 	if inPickArea:
-		if Input.is_action_just_pressed("e") and !opened:
+		if Input.is_action_just_pressed("x") and !opened:
 			opened = true
 			var randomInt = randi( )% len(randomLoot)
 			var chosenLoot = randomLoot[randomInt]
@@ -35,6 +35,7 @@ func _process(delta):
 			var load_str = "res://Scenes/Cards/" + chosenLoot + "_card.tscn"
 			var scene = load(load_str)
 			var lootInstance = scene.instantiate()
+			lootInstance.item_mode = true
 			add_child(lootInstance)  # Ensure this is called before setting position if using global_position
 			# Set position and add to the scene tree
 			# Assuming lootInstance is a Node2D and $AnimatedSprite2D is its intended reference point
@@ -43,10 +44,11 @@ func _process(delta):
 			lootInstance.global_position.x -= 15  # Adjust position down by 5 units on y-axis
 			
 
-
-			await get_tree().create_timer(2.0).timeout
-			$AnimatedSprite2D/AnimationPlayer.play("fadeAway")
-			await get_tree().create_timer(0.5).timeout
+			if get_tree() != null:
+				await get_tree().create_timer(2.0).timeout
+				$AnimatedSprite2D/AnimationPlayer.play("fadeAway")
+			if get_tree() != null:
+				await get_tree().create_timer(0.5).timeout
 			
 			queue_free()  # Ensure this is safe to call here, might need repositioning based on context
 			
