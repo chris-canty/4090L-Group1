@@ -79,6 +79,10 @@ func generate_floor():
 			row.append(new_room)
 		rooms.append(row)
 	boss_room = boss_room_template.instantiate()
+	var en = load("res://Scenes/Characters/" + boss_type[curr_floor][0] + ".tscn")
+	en = en.instantiate()
+	en.position = Vector2(0,-75)
+	boss_room.add_child(en)
 	
 				
 func load_room(x: int, y: int):

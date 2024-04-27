@@ -149,6 +149,8 @@ func initiate_combat():
 	var counter = 0
 	for e in get_tree().get_nodes_in_group("Enemy"):
 		combatants.push_back(e)
+		e.get_node("MoveHitBox").visible = false
+		e.get_node("AnimatedSprite2D").play("idle_side")
 		e.move_character(enemy_spot[counter])
 		counter += 1
 	for c in combatants:
@@ -747,6 +749,9 @@ func execute_action():
 		"Ray":
 			await moveCamAction("single")
 			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "light", "res://Scenes/Effects/light.tscn", Vector2(0,0))
+		"Ice Shard":
+			await moveCamAction("single")
+			await cardSingleTarget(active_card.damage_init, active_card.accuracy, active_card.mp_cost, "ice", "res://Scenes/Effects/ice.tscn", Vector2(0,0))
 		"Burn":
 			#Burn I
 			await moveCamAction("single")
