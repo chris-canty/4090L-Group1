@@ -20,7 +20,6 @@ shape = SubResource("CircleShape2D_ta53x")
 sprite_frames = ExtResource("2_wenpo")
 animation = &"idle_side"
 autoplay = "idle_side"
-flip_h = true
 
 [node name="Area2D" type="Area2D" parent="."]
 

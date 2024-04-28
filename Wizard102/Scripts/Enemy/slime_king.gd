@@ -44,9 +44,9 @@ func _physics_process(_delta):
 				direction = "right"
 			elif velocity.x < 0:
 				direction = "left"
-			if velocity.y > 0:
+			if velocity.y > 0 and velocity.x == 0:
 				direction = "up"
-			elif velocity.y < 0:
+			elif velocity.y < 0 and velocity.x == 0:
 				direction = "down"
 		move_and_slide()
 
