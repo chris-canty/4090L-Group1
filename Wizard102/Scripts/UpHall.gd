@@ -15,13 +15,13 @@ func _process(delta):
 		load_next_room()
 
 func _on_body_entered(body: Node):
-	if body.has_method("player"):
+	if body.has_method("player") && (RoomInfo.curr_y != 4 || RoomInfo.curr_x == 2):
 		#print("Entered")
 		toggle_tilemaps(true)
 
 func _on_body_exited(body: Node):
 	# Again, check if the body is the player
-	if body.has_method("player"):
+	if body.has_method("player") && RoomInfo.curr_y != 4:
 		#print("Exited")
 		toggle_tilemaps(false)
 
