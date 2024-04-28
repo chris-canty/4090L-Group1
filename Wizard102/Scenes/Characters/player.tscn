@@ -22,7 +22,7 @@ sprite_frames = ExtResource("2_obk6d")
 animation = &"idle_side"
 autoplay = "idle_up"
 
-[node name="MoveHitBox" type="CollisionShape2D" parent="."]
+[node name="Movement Box" type="CollisionShape2D" parent="."]
 position = Vector2(0, 5)
 shape = SubResource("CircleShape2D_b4l7c")
 

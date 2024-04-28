@@ -2,7 +2,6 @@ extends Node
 
 # Variable to store the player's start position
 var player_start_position: Vector2
-var player_start_direction : String
 var deck : Array = ["Ember", "Heat Up", "Ember", "Ember"]
 var alt_deck : Array = ["Surge","Surge","Surge"]
 

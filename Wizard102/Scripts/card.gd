@@ -9,7 +9,6 @@ var speed: float = 10
 @export var damage_ot = 0
 @export var accuracy = 100
 var is_enchant : bool = false
-var item_mode = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -31,7 +30,7 @@ func _on_mouse_exited():
 	cardscale = .1
 	
 func _on_gui_input(event):
-	if event is InputEventMouseButton and event.pressed and item_mode == false:
+	if event is InputEventMouseButton and event.pressed:
 		match event.button_index:
 			MOUSE_BUTTON_LEFT:
 				get_parent().get_parent().select_card(self,action_id,mp_cost,target_type)

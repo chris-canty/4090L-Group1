@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://vovnsc5jyijg"]
+[gd_scene load_steps=6 format=3 uid="uid://drj3xbpswxfn4"]
 
 [ext_resource type="Script" path="res://Scripts/GameContainer.gd" id="1_xvyg4"]
 
@@ -56,25 +56,12 @@ _data = {
 "fade_out": SubResource("Animation_dgvc1")
 }
 
-[sub_resource type="Gradient" id="Gradient_ljw5r"]
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_iicw4"]
-gradient = SubResource("Gradient_ljw5r")
-
-[sub_resource type="Gradient" id="Gradient_lt6nh"]
-offsets = PackedFloat32Array(0, 0.78)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_0lfu4"]
-gradient = SubResource("Gradient_lt6nh")
-fill_from = Vector2(0, 1)
-
 [node name="GameContainer" type="Node2D"]
 script = ExtResource("1_xvyg4")
 
 [node name="Black Screen" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="Black Screen"]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -86,129 +73,5 @@ color = Color(0, 0, 0, 1)
 libraries = {
 "": SubResource("AnimationLibrary_vuloe")
 }
-
-[node name="room_ui" type="CanvasLayer" parent="."]
-
-[node name="VBoxContainer" type="VBoxContainer" parent="room_ui"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -266.0
-offset_top = 34.0
-offset_right = 69.9999
-offset_bottom = 438.0
-grow_horizontal = 0
-scale = Vector2(0.685, 0.685)
-
-[node name="Boss" type="TextureRect" parent="room_ui/VBoxContainer"]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 2
-size_flags_horizontal = 4
-texture = SubResource("GradientTexture2D_iicw4")
-
-[node name="rooms" type="GridContainer" parent="room_ui/VBoxContainer"]
-layout_mode = 2
-columns = 5
-
-[node name="0-4" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-modulate = Color(0, 0, 0, 1)
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="1-4" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="2-4" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="3-4" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="4-4" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="0-3" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="1-3" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="2-3" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="3-3" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="4-3" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="0-2" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="1-2" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="2-2" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="3-2" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="4-2" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="0-1" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="1-1" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="2-1" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="3-1" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="4-1" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="0-0" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="1-0" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="2-0" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="3-0" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
-
-[node name="4-0" type="TextureRect" parent="room_ui/VBoxContainer/rooms"]
-layout_mode = 2
-texture = SubResource("GradientTexture2D_0lfu4")
 
 [connection signal="animation_finished" from="Black Screen/Fade" to="." method="_on_fade_animation_finished"]
