@@ -2,7 +2,6 @@ extends Area2D
 
 @onready var tilemap3: Node2D = get_node("../TileMap3")
 @onready var tilemap4: Node2D = get_node("../TileMap4")
-@onready var tilemap7: Node2D = get_node("../TileMap7")
 
 func _ready():
 	if not is_connected("body_entered", Callable(self, "_on_body_entered")):
@@ -18,13 +17,13 @@ func _process(delta):
 		load_previous_room()
 
 func _on_body_entered(body: Node):
-	if body.has_method("player") && RoomInfo.curr_y != 0:
+	if body.has_method("player"):
 		#print("Entered")
 		toggle_tilemaps(true)
 
 func _on_body_exited(body: Node):
 	# Again, check if the body is the player
-	if body.has_method("player") && RoomInfo.curr_y != 0:
+	if body.has_method("player"):
 		#print("Exited")
 		toggle_tilemaps(false)
 
@@ -79,6 +78,7 @@ func load_previous_room():
 	if RoomInfo.curr_y == 0:
 		return
 	PlayerData.player_start_position = Vector2(0,-180)
+	PlayerData.player_start_direction = "down"
 	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y - 1)
 
 #func load_previous_room():

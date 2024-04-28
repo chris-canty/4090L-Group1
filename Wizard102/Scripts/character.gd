@@ -39,6 +39,7 @@ func _ready():
 
 func _process(delta):
 	if in_combat == true:
+		$MoveHitBox.visible = false
 		$HP_Bar.max_value = MaxHP
 		$"HP_Bar".value = HP
 		$"MP_Bar".max_value = MaxMP
@@ -96,6 +97,7 @@ func _process(delta):
 			if position.x >= (combat_spot.x - 2) and position.x <= (combat_spot.x + 2) and position.y >= (combat_spot.y - 2) and position.y <= (combat_spot.y + 2):
 				in_position = true
 	else:
+		$MoveHitBox.visible = true
 		var anim = $AnimatedSprite2D
 		if direction == "right":
 			anim.flip_h = false
@@ -179,4 +181,16 @@ func death():
 	$AnimatedSprite2D.play("death")
 	is_dead = true
 	await $AnimatedSprite2D.animation_finished
+	queue_free()
+	if self.is_in_group("Enemy"):
+		dropLoot()
+
+
+var loot = preload("res://Scenes/Rooms/loot_drop.tscn")
+
+func dropLoot():
+	var lootInstance = loot.instantiate()
+	lootInstance.global_position = $AnimatedSprite2D.global_position
+	get_parent().add_child(lootInstance)
+	#$lootInstance/AnimationPlayer.play("fadeIn")
 	queue_free()

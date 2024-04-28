@@ -15,13 +15,13 @@ func _process(delta):
 		load_next_room()
 
 func _on_body_entered(body: Node):
-	if body.has_method("player") && (RoomInfo.curr_y != 4 || RoomInfo.curr_x == 2):
+	if body.has_method("player"):
 		#print("Entered")
 		toggle_tilemaps(true)
 
 func _on_body_exited(body: Node):
 	# Again, check if the body is the player
-	if body.has_method("player") && RoomInfo.curr_y != 4:
+	if body.has_method("player"):
 		#print("Exited")
 		toggle_tilemaps(false)
 
@@ -73,9 +73,13 @@ func load_next_room():
 		if len(enemies) > 0:
 			return
 	var container = get_parent().get_parent()
+	if RoomInfo.curr_y == 5:
+		container.get_tree().change_scene_to_file("res://Scenes/UI/thanks_for_playing.tscn")
+		return
 	if RoomInfo.curr_y == 4 and not RoomInfo.curr_x == 2:
 		return
 	PlayerData.player_start_position = Vector2(0,0)
+	PlayerData.player_start_direction = "up"
 	container.load_room(RoomInfo.curr_x, RoomInfo.curr_y + 1)
 
 

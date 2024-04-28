@@ -53,4 +53,5 @@ func load_next_room():
 	if RoomInfo.curr_x == 0:
 		return
 	PlayerData.player_start_position = Vector2(220,-90)
+	PlayerData.player_start_direction = "left"
 	container.load_room(RoomInfo.curr_x - 1, RoomInfo.curr_y)

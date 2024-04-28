@@ -4,6 +4,8 @@ const speed = 3000
 #SKILLS
 @onready var frost = load("res://Scenes/Cards/frost_card.tscn").instantiate()
 @onready var cooldown = load("res://Scenes/Cards/cooldown_card.tscn").instantiate()
+@onready var chill = load("res://Scenes/Cards/chill_card.tscn").instantiate()
+@onready var ice_shard = load("res://Scenes/Cards/iceshard_card.tscn").instantiate()
 @onready var player : Node2D = get_parent().get_node("Player")
 
 @onready var nav_agent : NavigationAgent2D = $NavigationAgent2D
@@ -57,6 +59,7 @@ func _on_hitbox_entered(body):
 	if body.has_method("player") and body.in_combat == false and is_dead == false:
 		$AnimatedSprite2D.play("idle_side")
 		get_parent().initiate_combat()
+		$MoveHitBox.visible = false
 
 
 func _on_animated_sprite_2d_animation_finished():
@@ -68,7 +71,8 @@ func enemy_ai(combatants: Array):
 	Slime Skills:
 		Frost: 1 MP - 7 Ice Damage
 		Cooldown: 0 MP - +35% Next Ice Attack
-		Ultima: 6 MP - 9999 Arcane Damage
+		Chill: 0 MP - -25% Next Attack
+		Ice Shard: 2 MP - 12 Ice Damage
 		
 	Returns:
 		[Skill ID, Target]
@@ -76,9 +80,9 @@ func enemy_ai(combatants: Array):
 	
 	match MP:
 		0:
-			return ["",self]
-		6:
-			return ["Ultima",combatants[0]]
+			return [chill,self]
+		2:
+			return [ice_shard,combatants[0]]
 		_:
 			if status_effects.size() > 0:
 				for s in status_effects:
@@ -87,6 +91,8 @@ func enemy_ai(combatants: Array):
 						if s.augment > 1:
 							return [frost,combatants[0]]
 			if rng.randi_range(1,10) < 5:
+				return [chill,combatants[0]]
+			elif rng.randi_range(1,10) < 5:
 				return [frost,combatants[0]]
 			elif rng.randi_range(1,10) < 8:
 				while true:
